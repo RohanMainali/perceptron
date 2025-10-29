@@ -3,7 +3,7 @@ title: Building Production ML Systems
 date: 2024-01-05
 author: Rohan Mainali
 excerpt: Best practices for deploying and maintaining machine learning models in production
-image: /clip-vision-language-model-fine-tuning.jpg
+image: /clip-vision-language-model.jpg
 ---
 
 # Building Production ML Systems

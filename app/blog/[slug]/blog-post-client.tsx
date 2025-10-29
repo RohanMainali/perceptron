@@ -326,31 +326,6 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
           </motion.div>
         </div>
       </section>
-      {/* Related Posts Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-12">
-              <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                More Articles
-              </span>
-            </h2>
-            <div className="text-center">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors font-medium"
-              >
-                View All Posts
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       <Footer />
     </main>

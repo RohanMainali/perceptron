@@ -24,7 +24,7 @@ export default function Projects() {
         "Advanced pose estimation system for human movement analysis and tracking in sports and fitness applications.",
       features: ["Multi-person Detection", "Real-time Processing", "Accuracy Optimization"],
       status: "In Development",
-      image: "/pose-estimation-human-movement-tracking.jpg",
+      image: "/pose-estimation-human-movement.jpg",
       videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     },
     {

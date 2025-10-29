@@ -3,7 +3,7 @@ title: Getting Started with Computer Vision
 date: 2024-01-15
 author: Rohan Mainali
 excerpt: A comprehensive guide to beginning your journey in computer vision and AI
-image: /clip-vision-language-model-fine-tuning.jpg
+image: /computer-vision-neural-networks.jpg
 ---
 
 # Getting Started with Computer Vision

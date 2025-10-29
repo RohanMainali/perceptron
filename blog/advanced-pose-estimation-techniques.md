@@ -3,7 +3,7 @@ title: Advanced Pose Estimation Techniques
 date: 2024-01-10
 author: Rohan Mainali
 excerpt: Exploring state-of-the-art methods for human pose estimation and tracking
-image: /clip-vision-language-model-fine-tuning.jpg
+image: /pose-estimation-human-skeleton-tracking.jpg
 ---
 
 # Advanced Pose Estimation Techniques
