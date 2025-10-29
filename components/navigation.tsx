@@ -5,6 +5,9 @@ import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
+
+import { cn } from "@/lib/utils"
 
 interface NavigationProps {
   scrollY: number
@@ -12,6 +15,13 @@ interface NavigationProps {
 
 export default function Navigation({ scrollY }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
+
+  const isActivePath = (href: string) => {
+    if (!pathname) return false
+    if (href === "/") return pathname === "/"
+    return pathname === href || pathname.startsWith(`${href}/`)
+  }
 
   const navItems = [
     { label: "About", href: "/about" },
@@ -23,7 +33,9 @@ export default function Navigation({ scrollY }: NavigationProps) {
   return (
     <motion.nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrollY > 50 ? "bg-background/80 backdrop-blur-md border-b border-border" : "bg-transparent"
+        scrollY > 50 || pathname !== "/"
+          ? "bg-background/80 backdrop-blur-md border-b border-border"
+          : "bg-transparent"
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -43,23 +55,31 @@ export default function Navigation({ scrollY }: NavigationProps) {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link key={item.label} href={item.href}>
-                <motion.span
-                  className="text-foreground/70 hover:text-foreground transition-colors cursor-pointer"
-                  whileHover={{ color: "#64c8ff" }}
-                >
-                  {item.label}
-                </motion.span>
-              </Link>
-            ))}
-            <motion.button
-              className="px-6 py-2 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-medium hover:shadow-lg hover:shadow-primary/50 transition-all"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Get Started
-            </motion.button>
+            {navItems.map((item) => {
+              const isActive = isActivePath(item.href)
+
+              return (
+                <Link key={item.label} href={item.href} className="relative">
+                  <motion.span
+                    className={cn(
+                      "relative inline-flex items-center pb-1 text-sm font-medium tracking-wide transition-colors duration-200 cursor-pointer",
+                      isActive ? "text-foreground" : "text-foreground/70 hover:text-foreground"
+                    )}
+                    whileHover={{ color: "#64c8ff" }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <motion.span
+                        layoutId="navActiveUnderline"
+                        className="absolute left-0 top-full mt-1 h-[3px] w-full rounded-full bg-gradient-to-r from-primary via-[#7ad0ff] to-secondary shadow-[0_0_12px_rgba(100,200,255,0.45)]"
+                        transition={{ type: "spring", stiffness: 260, damping: 30 }}
+                      />
+                    )}
+                  </motion.span>
+                </Link>
+              )
+            })}
           </div>
 
           {/* Mobile Menu Button */}
@@ -75,16 +95,28 @@ export default function Navigation({ scrollY }: NavigationProps) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            {navItems.map((item) => (
-              <Link key={item.label} href={item.href}>
-                <a
-                  className="block px-4 py-2 text-foreground/70 hover:text-foreground hover:bg-card rounded-lg transition-colors"
+            {navItems.map((item) => {
+              const isActive = isActivePath(item.href)
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={cn(
+                    "block rounded-lg px-4 py-2 text-foreground/70 transition-colors hover:bg-card hover:text-foreground",
+                    isActive && "bg-card/60 text-foreground"
+                  )}
                   onClick={() => setIsOpen(false)}
                 >
-                  {item.label}
-                </a>
-              </Link>
-            ))}
+                  <span className="relative inline-block">
+                    {item.label}
+                    {isActive && (
+                      <span className="absolute left-0 top-full mt-1 h-[3px] w-full rounded-full bg-gradient-to-r from-primary via-[#7ad0ff] to-secondary" />
+                    )}
+                  </span>
+                </Link>
+              )
+            })}
           </motion.div>
         )}
       </div>
