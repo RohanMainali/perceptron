@@ -27,15 +27,14 @@ export default function Navigation({ scrollY }: NavigationProps) {
     { label: "About", href: "/about" },
     { label: "Services", href: "/services" },
     { label: "Projects", href: "/projects" },
+    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ]
 
   return (
     <motion.nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrollY > 50 || pathname !== "/"
-          ? "bg-background/80 backdrop-blur-md border-b border-border"
-          : "bg-transparent"
+        scrollY > 50 || pathname !== "/" ? "bg-background/80 backdrop-blur-md border-b border-border" : "bg-transparent"
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -63,7 +62,7 @@ export default function Navigation({ scrollY }: NavigationProps) {
                   <motion.span
                     className={cn(
                       "relative inline-flex items-center pb-1 text-sm font-medium tracking-wide transition-colors duration-200 cursor-pointer",
-                      isActive ? "text-foreground" : "text-foreground/70 hover:text-foreground"
+                      isActive ? "text-foreground" : "text-foreground/70 hover:text-foreground",
                     )}
                     whileHover={{ color: "#64c8ff" }}
                     transition={{ duration: 0.2 }}
@@ -104,7 +103,7 @@ export default function Navigation({ scrollY }: NavigationProps) {
                   href={item.href}
                   className={cn(
                     "block rounded-lg px-4 py-2 text-foreground/70 transition-colors hover:bg-card hover:text-foreground",
-                    isActive && "bg-card/60 text-foreground"
+                    isActive && "bg-card/60 text-foreground",
                   )}
                   onClick={() => setIsOpen(false)}
                 >
