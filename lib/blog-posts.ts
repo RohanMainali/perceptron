@@ -7,7 +7,7 @@ export interface BlogPost {
   date: string
   author: string
   excerpt: string
-  image: string
+  image?: string
   content: string
 }
 
@@ -70,7 +70,7 @@ function buildPost(slug: string, data: Record<string, string>, content: string):
     date: formattedDate,
     author: data.author ?? "",
     excerpt,
-    image: data.image ?? "/placeholder.svg",
+    image: data.image,
     content,
   }
 }
