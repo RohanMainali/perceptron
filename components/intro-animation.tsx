@@ -19,7 +19,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
     const timer = setTimeout(() => {
       setIsComplete(true)
       onComplete()
-    }, 3500)
+    }, 2000)
 
     return () => clearTimeout(timer)
   }, [onComplete])
@@ -29,7 +29,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
       className="fixed inset-0 z-50 bg-black flex items-center justify-center"
       initial={{ opacity: 1 }}
       animate={{ opacity: isComplete ? 0 : 1 }}
-      transition={{ duration: 0.8, delay: 2.7 }}
+      transition={{ duration: 0.8, delay: 1 }}
       pointerEvents={isComplete ? "none" : "auto"}
     >
       {/* Soft moving light sweep */}
