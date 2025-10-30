@@ -1,12 +1,9 @@
-import { promises as fs } from "fs"
-import { existsSync } from "fs"
-import path from "path"
 import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import { z } from "zod"
 
-const BLOG_DIRECTORY = path.join(process.cwd(), "blog")
 const AUTH_TOKEN_SECRET = process.env.AUTH_TOKEN_SECRET
+const BACKEND_SERVICE_URL = process.env.BACKEND_SERVICE_URL || process.env.NEXT_PUBLIC_AUTH_SERVICE_URL
 
 const blogPayloadSchema = z.object({
   title: z.string().min(3).max(160),
@@ -33,52 +30,16 @@ function sanitizeSlug(value: string) {
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-}
-
-function escapeFrontMatterValue(value: string) {
-  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, " ")
-}
-
-function buildFrontMatter(data: z.infer<typeof blogPayloadSchema>) {
-  const entries: Array<[string, string]> = []
-
-  const normalizedTitle = data.title.trim()
-  if (normalizedTitle) {
-    entries.push(["title", normalizedTitle])
-  }
-
-  if (data.date?.trim()) {
-    entries.push(["date", data.date.trim()])
-  }
-
-  const authorValue = data.author?.trim() || "Perceptron Team"
-  if (authorValue) {
-    entries.push(["author", authorValue])
-  }
-
-  if (data.excerpt?.trim()) {
-    entries.push(["excerpt", data.excerpt.trim()])
-  }
-
-  if (data.image && data.image.trim()) {
-    entries.push(["image", data.image.trim()])
-  }
-
-  if (entries.length === 0) {
-    return ""
-  }
-
-  const frontMatterBody = entries
-    .map(([key, value]) => `${key}: "${escapeFrontMatterValue(value)}"`)
-    .join("\n")
-
-  return `---\n${frontMatterBody}\n---\n\n`
+  .replace(/^-|-$/g, "")
 }
 
 export async function POST(request: NextRequest) {
   if (!AUTH_TOKEN_SECRET) {
     return NextResponse.json({ error: "Server is missing AUTH_TOKEN_SECRET." }, { status: 500 })
+  }
+
+  if (!BACKEND_SERVICE_URL) {
+    return NextResponse.json({ error: "Server is missing BACKEND_SERVICE_URL." }, { status: 500 })
   }
 
   const authorization = request.headers.get("authorization")
@@ -134,21 +95,23 @@ export async function POST(request: NextRequest) {
   payload.excerpt = payload.excerpt?.trim()
   payload.image = payload.image?.trim()
 
-  const blogFilePath = path.join(BLOG_DIRECTORY, `${payload.slug}.md`)
-
-  if (existsSync(blogFilePath)) {
-    return NextResponse.json({ error: "A blog post with this slug already exists." }, { status: 409 })
-  }
-
   try {
-    await fs.mkdir(BLOG_DIRECTORY, { recursive: true })
+    const response = await fetch(`${BACKEND_SERVICE_URL.replace(/\/$/, "")}/blogs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    })
 
-    const frontMatter = buildFrontMatter(payload)
-    const markdown = `${frontMatter}${payload.content.trim()}\n`
+    const body = await response.json().catch(() => ({}))
 
-    await fs.writeFile(blogFilePath, markdown, "utf8")
+    if (!response.ok) {
+      return NextResponse.json(body, { status: response.status })
+    }
 
-    return NextResponse.json({ slug: payload.slug }, { status: 201 })
+    return NextResponse.json(body, { status: 201 })
   } catch (error) {
     console.error("Failed to persist blog post", error)
     return NextResponse.json({ error: "Failed to store the blog post." }, { status: 500 })

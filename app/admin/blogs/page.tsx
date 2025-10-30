@@ -384,7 +384,6 @@ export default function AdminBlogPage() {
       return
     }
 
-    
     const normalizedSecret = secretKey.trim()
     if (!normalizedSecret) {
       toast.error("Enter the secret key before continuing.")
@@ -455,8 +454,8 @@ export default function AdminBlogPage() {
         throw new Error(errorBody.error || "Unable to save the blog post.")
       }
 
-      const { slug } = (await response.json()) as { slug: string }
-      toast.success(`Blog post saved as ${slug}.md`)
+  const { slug } = (await response.json()) as { slug: string }
+  toast.success(`Blog post saved as ${slug}`)
       resetForm()
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to save the blog post."
@@ -559,7 +558,7 @@ export default function AdminBlogPage() {
                     placeholder="building-production-ml-systems"
                     className="w-full rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/40"
                   />
-                  <p className="text-xs text-slate-400">Slug controls the filename stored in the blog directory.</p>
+                  <p className="text-xs text-slate-400">Slug controls the URL path readers will use to access the post.</p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">

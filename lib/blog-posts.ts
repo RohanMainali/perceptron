@@ -1,6 +1,3 @@
-import fs from "fs"
-import path from "path"
-
 export interface BlogPost {
   slug: string
   title: string
@@ -11,105 +8,71 @@ export interface BlogPost {
   content: string
 }
 
-const BLOG_DIRECTORY = path.join(process.cwd(), "blog")
+type FetchInit = RequestInit & { next?: { revalidate?: number } }
 
-function hasFrontMatter(content: string) {
-  return content.startsWith("---")
+type BackendFetchOptions = FetchInit & { allowNotFound?: boolean }
+
+interface BlogListResponse {
+  posts?: BlogPost[]
 }
 
-function parseFrontMatter(fileContent: string): { data: Record<string, string>; content: string } {
-  if (!hasFrontMatter(fileContent)) {
-    return { data: {}, content: fileContent.trim() }
-  }
-
-  const match = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/m.exec(fileContent)
-  if (!match) {
-    return { data: {}, content: fileContent.trim() }
-  }
-
-  const [, frontMatterBlock, markdownContent] = match
-  const lines = frontMatterBlock.split("\n")
-  const data: Record<string, string> = {}
-
-  for (const line of lines) {
-    if (!line.trim()) continue
-    const [rawKey, ...rest] = line.split(":")
-    if (!rawKey || rest.length === 0) continue
-    const key = rawKey.trim()
-    const value = rest.join(":").trim()
-    data[key] = value.replace(/^['"]|['"]$/g, "")
-  }
-
-  return { data, content: markdownContent.trim() }
+interface BlogPostResponse {
+  post?: BlogPost
 }
 
-function formatDate(dateString?: string) {
-  if (!dateString) return ""
-  const parsed = new Date(dateString)
-  if (Number.isNaN(parsed.getTime())) {
-    return dateString
+function getBackendBaseUrl() {
+  const base = (process.env.BACKEND_SERVICE_URL || process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "").trim()
+  if (!base) {
+    throw new Error("Backend service URL is not configured.")
   }
-  return parsed.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+  return base.replace(/\/$/, "")
 }
 
-function summarize(content: string, fallback = "") {
-  if (!content) return fallback
-  const plain = content.replace(/[#>*_`\-]|\[(.*?)\]\((.*?)\)/g, "").replace(/\s+/g, " ").trim()
-  const snippet = plain.slice(0, 180)
-  return snippet + (plain.length > 180 ? "..." : "")
-}
-
-function buildPost(slug: string, data: Record<string, string>, content: string): BlogPost {
-  const title = data.title ?? slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
-  const formattedDate = formatDate(data.date)
-  const excerpt = data.excerpt ?? summarize(content)
-
-  return {
-    slug,
-    title,
-    date: formattedDate,
-    author: data.author ?? "",
-    excerpt,
-    image: data.image,
-    content,
+async function backendFetch<T>(path: string, options?: BackendFetchOptions): Promise<T | null> {
+  const { allowNotFound, headers, ...init } = options ?? {}
+  const baseUrl = getBackendBaseUrl()
+  const normalizedHeaders = new Headers(headers ?? {})
+  if (!normalizedHeaders.has("Accept")) {
+    normalizedHeaders.set("Accept", "application/json")
   }
-}
-
-export function getAllBlogPosts(): BlogPost[] {
-  if (!fs.existsSync(BLOG_DIRECTORY)) {
-    return []
-  }
-
-  const files = fs.readdirSync(BLOG_DIRECTORY).filter((file) => file.endsWith(".md"))
-
-  const posts = files.map((file) => {
-    const slug = file.replace(/\.md$/, "")
-    const filePath = path.join(BLOG_DIRECTORY, file)
-    const fileContent = fs.readFileSync(filePath, "utf8")
-    const { data, content } = parseFrontMatter(fileContent)
-    const post = buildPost(slug, data, content)
-    const sortValue = data.date ?? post.date
-    return { post, sortValue }
+  const response = await fetch(`${baseUrl}${path}`, {
+    ...init,
+    headers: normalizedHeaders,
   })
 
-  return posts
-    .sort((a, b) => {
-      const dateA = new Date(a.sortValue)
-      const dateB = new Date(b.sortValue)
-      const timeA = Number.isNaN(dateA.getTime()) ? 0 : dateA.getTime()
-      const timeB = Number.isNaN(dateB.getTime()) ? 0 : dateB.getTime()
-      return timeB - timeA
-    })
-    .map(({ post }) => post)
-}
-
-export function getBlogPost(slug: string): BlogPost | null {
-  const filePath = path.join(BLOG_DIRECTORY, `${slug}.md`)
-  if (!fs.existsSync(filePath)) {
+  if (allowNotFound && response.status === 404) {
     return null
   }
 
-  const fileContent = fs.readFileSync(filePath, "utf8")
-  const { data, content } = parseFrontMatter(fileContent)
-  return buildPost(slug, data, content)
+  if (!response.ok) {
+    const message = `Failed to fetch ${path} from backend: ${response.status} ${response.statusText}`
+    throw new Error(message)
+  }
+
+  if (response.status === 204) {
+    return null
+  }
+
+  return (await response.json()) as T
+}
+
+export async function getAllBlogPosts(): Promise<BlogPost[]> {
+  const result = await backendFetch<BlogListResponse>("/blogs", {
+    next: { revalidate: 60 },
+  })
+
+  return result?.posts ?? []
+}
+
+export async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  if (!slug) {
+    return null
+  }
+
+  const result = await backendFetch<BlogPostResponse>(`/blogs/${slug}`, {
+    allowNotFound: true,
+    next: { revalidate: 60 },
+  })
+
+  return result?.post ?? null
 }
