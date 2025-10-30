@@ -384,6 +384,7 @@ export default function AdminBlogPage() {
       return
     }
 
+    
     const normalizedSecret = secretKey.trim()
     if (!normalizedSecret) {
       toast.error("Enter the secret key before continuing.")
