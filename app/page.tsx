@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import Hero from "@/components/sections/hero"
 import About from "@/components/sections/about"
 import Services from "@/components/sections/services"
@@ -8,15 +9,21 @@ import Projects from "@/components/sections/projects"
 import Contact from "@/components/sections/contact"
 import Footer from "@/components/sections/footer"
 import Navigation from "@/components/navigation"
+import IntroAnimation from "@/components/intro-animation"
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0)
+  const [showIntro, setShowIntro] = useState(true)
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const handleIntroComplete = () => {
+    setShowIntro(false)
+  }
 
   return (
     <main className="relative overflow-hidden bg-background">
@@ -30,13 +37,28 @@ export default function Home() {
         />
       </div>
 
-      <Navigation scrollY={scrollY} />
-      <Hero />
-      <About />
-      <Services />
-      <Projects />
-      <Contact />
-      <Footer />
+      {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showIntro ? 0 : 1 }}
+        transition={{ duration: 0.8, delay: showIntro ? 0 : 0 }}
+      >
+        <Navigation scrollY={scrollY} />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showIntro ? 0 : 1 }}
+        transition={{ duration: 0.8, delay: showIntro ? 0 : 0 }}
+      >
+        <Hero />
+        <About />
+        <Services />
+        <Projects />
+        <Contact />
+        <Footer />
+      </motion.div>
     </main>
-  )  
+  )
 }
