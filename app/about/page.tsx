@@ -50,7 +50,7 @@ export default function AboutPage() {
     { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
     { name: "Soyam Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/soyam-shrestha.jpg" },
     { name: "Sahajid Rahaman", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/sahajid-rahaman.jpg" },
-    { name: "Abhay Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/abhay-shrestha.jpg" },
+    { name: "Abhay Shrestha", role: "QA Engineer", expertise: "Test Case Development, Manual Testing", image: "/images/team/abhay-shrestha.jpg" },
   ]
 
   const milestones = [
