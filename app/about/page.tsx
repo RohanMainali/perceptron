@@ -37,19 +37,19 @@ export default function AboutPage() {
   const team = [
     { name: "Rohan Mainali", role: "Lead Researcher", expertise: "Computer Vision, Deep Learning", image: "/images/team/rohan-mainali.jpg" },
     { name: "Neha Aryal", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/neha-aryal.jpg" },
-    { name: "Puspa Kutu", role: "Research Engineer", expertise: "NLP, Multimodal Systems", image: "/images/team/puspa-kutu.jpg" },
+    { name: "Puspa Kutu", role: "Data Analyst", expertise: "Data Visualization, Reporting", image: "/images/team/puspa-kutu.jpg" },
     { name: "Aayushman Shrestha", role: "Data Scientist", expertise: "Data Annotation, Analysis", image: "/images/team/aayushman-shrestha.jpg" },
     { name: "Priyokti Manandhar", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/priyokti-manandhar.jpg" },
     { name: "Bibek Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/bibek-shrestha.jpg" },
-    { name: "Pratik Awal", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/pratik-awal.jpg" },
-    { name: "Swornika Rajbhandari", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/swornika-rajbhandari.jpg" },
+    { name: "Pratik Awal", role: "ML Engineer", expertise: "NLP, Optimization", image: "/images/team/pratik-awal.jpg" },
+    { name: "Swornika Rajbhandari", role: "QA Engineer", expertise: "Manual Testing, Automation", image: "/images/team/swornika-rajbhandari.jpg" },
     { name: "Nischal Bhattarai", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/nischal-bhattarai.jpg" },
-    { name: "Rakesh Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/rakesh-shrestha.jpg" },
-    { name: "Samichha Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/samichha-shrestha.jpg" },
+    { name: "Rakesh Shrestha", role: "Data Engineer", expertise: "Data Pipeline Development, ETL", image: "/images/team/rakesh-shrestha.jpg" },
+    { name: "Samichha Shrestha", role: "Full Stack Developer", expertise: "MERN Stack", image: "/images/team/samichha-shrestha.jpg" },
     { name: "Suyog Maharjan", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/suyog-maharjan.jpg" },
     { name: "Soyam Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/soyam-shrestha.jpg" },
     { name: "Sahajid Rahaman", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/sahajid-rahaman.jpg" },
-    { name: "Abhay Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/abhay-shrestha.jpg" },
+    { name: "Abhay Shrestha", role: "QA Engineer", expertise: "Test Case Development, Manual Testing", image: "/images/team/abhay-shrestha.jpg" },
   ]
 
   const milestones = [
