@@ -47,10 +47,10 @@ export default function AboutPage() {
     { name: "Rakesh Shrestha", role: "Data Engineer", expertise: "Data Pipeline Development, ETL", image: "/images/team/rakesh-shrestha.jpg" },
     { name: "Samichha Shrestha", role: "Full Stack Developer", expertise: "MERN Stack", image: "/images/team/samichha-shrestha.jpg" },
     { name: "Suyog Maharjan", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/suyog-maharjan.jpg" },
+    { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
     { name: "Soyam Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/soyam-shrestha.jpg" },
     { name: "Sahajid Rahaman", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/sahajid-rahaman.jpg" },
     { name: "Abhay Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/abhay-shrestha.jpg" },
-    { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
   ]
 
   const milestones = [
