@@ -27,7 +27,7 @@ export default function ProjectsPage() {
       features: ["Dataset Creation", "Model Training", "Real-time Analytics", "Fighter Tracking", "Movement Analysis"],
       status: "Featured Project",
       image: "/placeholder.svg?key=6favz",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      videoUrl: "",
       technologies: ["PyTorch", "OpenCV", "YOLO", "Python"],
     },
     {
@@ -39,7 +39,7 @@ export default function ProjectsPage() {
       features: ["Multi-person Detection", "Real-time Processing", "Accuracy Optimization", "Skeleton Tracking"],
       status: "In Development",
       image: "/placeholder.svg?key=owmn1",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      videoUrl: "",
       technologies: ["TensorFlow", "MediaPipe", "Python", "WebGL"],
     },
     {
@@ -50,7 +50,7 @@ export default function ProjectsPage() {
       features: ["Custom Datasets", "Transfer Learning", "Evaluation Tools", "Model Export"],
       status: "Available",
       image: "/placeholder.svg?key=bbvav",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      videoUrl: "",
       technologies: ["PyTorch", "Hugging Face", "Python", "FastAPI"],
     },
   ]
