@@ -16,7 +16,7 @@ export default function Projects() {
       features: ["Dataset Creation", "Model Training", "Real-time Analytics", "Fighter Tracking"],
       status: "Featured Project",
       image: "/mma-fight-analysis-computer-vision.jpg",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      videoUrl: "",
     },
     {
       title: "Pose Estimation Engine",
@@ -25,7 +25,7 @@ export default function Projects() {
       features: ["Multi-person Detection", "Real-time Processing", "Accuracy Optimization"],
       status: "In Development",
       image: "/pose-estimation-human-movement.jpg",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      videoUrl: "",
     },
     {
       title: "CLIP Fine-tuning Suite",
@@ -33,7 +33,7 @@ export default function Projects() {
       features: ["Custom Datasets", "Transfer Learning", "Evaluation Tools"],
       status: "Available",
       image: "/clip-vision-language-model-fine-tuning.jpg",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      videoUrl: "",
     },
   ]
 
