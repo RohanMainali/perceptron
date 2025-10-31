@@ -50,6 +50,7 @@ export default function AboutPage() {
     { name: "Soyam Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/soyam-shrestha.jpg" },
     { name: "Sahajid Rahaman", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/sahajid-rahaman.jpg" },
     { name: "Abhay Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/abhay-shrestha.jpg" },
+    { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
   ]
 
   const milestones = [
@@ -200,7 +201,7 @@ export default function AboutPage() {
     <div className="space-y-6">
       {/* First 12 members in 4x3 grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {team.slice(0, 12).map((member, index) => (
+        {team.map((member, index) => (
           <motion.div
             key={member.name}
             className="group relative"
@@ -243,55 +244,6 @@ export default function AboutPage() {
             </div>
           </motion.div>
         ))}
-      </div>
-
-      {/* Last few members centered */}
-      <div className="flex justify-center">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto place-items-center">
-          {team.slice(12).map((member, index) => (
-            <motion.div
-              key={member.name}
-              className="group relative"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: (index + 12) * 0.05 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-              <div className="relative p-8 rounded-3xl border border-slate-200 bg-white hover:border-primary/40 transition-all duration-300 text-center h-full flex flex-col shadow-lg hover:shadow-xl hover:shadow-primary/20">
-                {/* Photo with gradient border */}
-                <div className="relative mx-auto mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-primary rounded-3xl blur-md group-hover:blur-lg transition-all duration-300" />
-                  <div className="relative w-40 h-40 rounded-3xl overflow-hidden border-2 border-primary/30 group-hover:border-primary/50 transition-all duration-300">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="160px"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                </div>
-
-                {/* Member info */}
-                <div className="flex-grow flex flex-col">
-                  <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent group-hover:from-primary group-hover:to-secondary transition-all duration-300">
-                    {member.name}
-                  </h3>
-                  <div className="mb-4">
-                    <p className="text-primary text-sm font-semibold mb-1 group-hover:text-secondary transition-colors duration-300">
-                      {member.role}
-                    </p>
-                    <div className="h-0.5 w-12 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full group-hover:w-20 transition-all duration-300" />
-                  </div>
-                  <p className="text-slate-600 text-sm leading-relaxed mt-auto">{member.expertise}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </div>
   </div>
