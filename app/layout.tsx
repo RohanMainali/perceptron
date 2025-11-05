@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   title: "Perceptron - AI Research & Development",
   description: "Building Intelligent Systems That See, Think, and Act",
   generator: "v0.app",
+  icons: {
+    icon: "/perceptron-logo.png",
+    shortcut: "/perceptron-logo.png",
+  },
 }
 
 export default function RootLayout({
