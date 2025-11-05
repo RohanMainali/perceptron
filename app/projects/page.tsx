@@ -71,6 +71,21 @@ export default function ProjectsPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        {/* Hero background image */}
+        <div className="absolute inset-0 z-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ 
+              backgroundImage: "url('/images/other-hero-background.jpg')",
+              transform: "rotate(0deg)"
+            }}
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/50" />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
+        </div>
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <motion.div
             className="text-center space-y-8"
@@ -78,14 +93,11 @@ export default function ProjectsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance">
-              <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-light leading-tight text-balance">
+              <span className="text-white">
                 Featured Projects
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
-              Showcasing our latest AI research and development initiatives with live demos
-            </p>
           </motion.div>
         </div>
       </section>
@@ -177,14 +189,14 @@ export default function ProjectsPage() {
                     <div className="flex gap-4">
                       <motion.button
                         onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors font-medium shadow-sm"
+                        className="cosmic-btn-primary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
                         <Play size={20} /> Watch Demo
                       </motion.button>
                       <motion.button
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-slate-200 text-slate-700 hover:border-primary/40 hover:bg-primary/10 transition-colors font-medium"
+                        className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >

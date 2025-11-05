@@ -44,7 +44,7 @@ export default function Services() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="cosmic-heading-gradient">
               Our Services
             </span>
           </h2>
@@ -68,27 +68,25 @@ export default function Services() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:border-primary/40 hover:shadow-primary/10 transition-all duration-300 h-full flex flex-col">
                 <service.icon className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
-                <p className="text-slate-600 mb-6 flex-grow leading-relaxed">{service.description}</p>
-                <div className="flex flex-wrap gap-2 mb-6">
+                                <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
+                <p className="text-muted-foreground mb-4">{service.description}</p>
+                <ul className="space-y-2 mb-6">
                   {service.features.map((feature) => (
-                    <span
-                      key={feature}
-                      className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
-                    >
-                      {feature}
-                    </span>
+                    <li key={feature} className="flex items-center gap-2 text-sm">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      <span>{feature}</span>
+                    </li>
                   ))}
-                </div>
-                <Link href={service.href}>
+                </ul>
+                <div className="mt-auto">
                   <motion.button
-                    className="w-full px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors font-medium shadow-sm"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    className="cosmic-btn-primary w-full px-6 py-2 rounded-lg font-medium transition-all"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Learn More
                   </motion.button>
-                </Link>
+                </div>
               </div>
             </motion.div>
           ))}

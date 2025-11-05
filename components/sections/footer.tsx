@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
+import { Linkedin, Github, Twitter } from "lucide-react"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -15,8 +16,20 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="relative border-t border-primary/20 bg-gradient-to-b from-background to-background/50 backdrop-blur-sm">
-      <div className="w-full px-6 md:px-12 lg:px-16 py-16">
+    <footer className="relative border-t border-primary/20 overflow-hidden">
+      {/* Footer background image */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/footer-background.jpg')" }}
+        />
+        {/* Higher opacity overlay to not distract visitors */}
+        <div className="absolute inset-0 bg-black/75" />
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/50 to-background/30" />
+      </div>
+      
+      <div className="w-full px-6 md:px-12 lg:px-16 py-16 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             {/* Brand */}
@@ -29,7 +42,7 @@ export default function Footer() {
               <Link href="/">
                 <div className="flex items-center gap-2 mb-4 cursor-pointer">
                   <Image src="/perceptron-logo.png" alt="Perceptron Logo" width={32} height={32} className="w-8 h-8" />
-                  <span className="text-lg font-bold">Perceptron</span>
+                  <span className="text-lg font-normal cosmic-heading-gradient">Perceptron</span>
                 </div>
               </Link>
               <p className="text-foreground/60 text-sm leading-relaxed">
@@ -103,20 +116,23 @@ export default function Footer() {
                 <a
                   href="#"
                   className="w-10 h-10 rounded-lg bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors"
+                  aria-label="LinkedIn"
                 >
-                  <span className="text-sm font-bold">in</span>
+                  <Linkedin size={20} />
                 </a>
                 <a
                   href="#"
                   className="w-10 h-10 rounded-lg bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors"
+                  aria-label="GitHub"
                 >
-                  <span className="text-sm font-bold">gh</span>
+                  <Github size={20} />
                 </a>
                 <a
                   href="#"
                   className="w-10 h-10 rounded-lg bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors"
+                  aria-label="Twitter"
                 >
-                  <span className="text-sm font-bold">tw</span>
+                  <Twitter size={20} />
                 </a>
               </div>
             </motion.div>

@@ -76,6 +76,21 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        {/* Hero background image */}
+        <div className="absolute inset-0 z-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ 
+              backgroundImage: "url('/images/other-hero-background.jpg')",
+              transform: "rotate(0deg)"
+            }}
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/50" />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
+        </div>
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <motion.div
             className="text-center space-y-8"
@@ -83,8 +98,8 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance">
-              <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-light leading-tight text-balance">
+              <span className="text-white">
                 About Perceptron
               </span>
             </h1>
@@ -107,7 +122,7 @@ export default function AboutPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <span className="cosmic-heading-gradient">
                   Our Mission
                 </span>
               </h2>
@@ -148,7 +163,7 @@ export default function AboutPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <span className="cosmic-heading-gradient">
                 Our Core Values
               </span>
             </h2>
@@ -188,7 +203,7 @@ export default function AboutPage() {
       viewport={{ once: true }}
     >
       <h2 className="text-4xl md:text-5xl font-bold mb-6">
-        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        <span className="cosmic-heading-gradient">
           Meet Our Team
         </span>
       </h2>
@@ -211,12 +226,12 @@ export default function AboutPage() {
             viewport={{ once: true }}
             whileHover={{ y: -8 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-            <div className="relative p-8 rounded-3xl border border-slate-200 bg-white hover:border-primary/40 transition-all duration-300 text-center h-full flex flex-col shadow-lg hover:shadow-xl hover:shadow-primary/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#2178C7]/10 via-[#53C5E6]/10 to-[#C26FCF]/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
+            <div className="relative p-8 rounded-3xl border border-slate-200 bg-white hover:border-[#53C5E6]/40 transition-all duration-300 text-center h-full flex flex-col shadow-lg hover:shadow-xl hover:shadow-[#53C5E6]/20">
               {/* Photo with gradient border */}
               <div className="relative mx-auto mb-6">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-primary rounded-3xl blur-md group-hover:blur-lg transition-all duration-300" />
-                <div className="relative w-40 h-40 rounded-3xl overflow-hidden border-2 border-primary/30 group-hover:border-primary/50 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#2178C7] via-[#53C5E6] to-[#C26FCF] rounded-3xl blur-md group-hover:blur-lg transition-all duration-300" />
+                <div className="relative w-40 h-40 rounded-3xl overflow-hidden border-2 border-[#53C5E6]/30 group-hover:border-[#53C5E6]/50 transition-all duration-300">
                   <Image
                     src={member.image}
                     alt={member.name}
@@ -224,20 +239,20 @@ export default function AboutPage() {
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                     sizes="160px"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2178C7]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </div>
 
               {/* Member info */}
               <div className="flex-grow flex flex-col">
-                <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent group-hover:from-primary group-hover:to-secondary transition-all duration-300">
+                <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent group-hover:from-[#2178C7] group-hover:via-[#53C5E6] group-hover:to-[#C26FCF] transition-all duration-300">
                   {member.name}
                 </h3>
                 <div className="mb-4">
-                  <p className="text-primary text-sm font-semibold mb-1 group-hover:text-secondary transition-colors duration-300">
+                  <p className="text-[#2178C7] text-sm font-semibold mb-1 group-hover:text-[#53C5E6] transition-colors duration-300">
                     {member.role}
                   </p>
-                  <div className="h-0.5 w-12 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full group-hover:w-20 transition-all duration-300" />
+                  <div className="h-0.5 w-12 bg-gradient-to-r from-[#2178C7] to-[#53C5E6] mx-auto rounded-full group-hover:w-20 transition-all duration-300" />
                 </div>
                 <p className="text-slate-600 text-sm leading-relaxed mt-auto">{member.expertise}</p>
               </div>
@@ -260,7 +275,7 @@ export default function AboutPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <span className="cosmic-heading-gradient">
                 Our Journey
               </span>
             </h2>
@@ -278,7 +293,7 @@ export default function AboutPage() {
               >
                 <div className="flex gap-8 items-start">
                   <div className="flex-shrink-0 w-24">
-                    <div className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    <div className="text-3xl font-bold cosmic-heading-gradient">
                       {milestone.year}
                     </div>
                   </div>
