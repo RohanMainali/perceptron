@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color scheme for dark futuristic theme with electric blue and neon green */
+  /* Updated color scheme for dark futuristic theme with cosmic grainy texture palette */
   --background: oklch(0.08 0 0);
   --foreground: oklch(0.95 0 0);
   --card: oklch(0.12 0 0);
@@ -38,6 +38,13 @@
   --sidebar-accent-foreground: oklch(0.08 0 0);
   --sidebar-border: oklch(0.18 0 0);
   --sidebar-ring: oklch(0.5 0.2 264);
+  
+  /* Cosmic grainy texture palette */
+  --nebula-blue: #2178C7;
+  --electric-cyan: #53C5E6;
+  --plasma-pink: #C26FCF;
+  --aurora-gold: #F1B646;
+  --cosmic-dark: #0A0E12;
 }
 
 .dark {
@@ -76,7 +83,7 @@
 }
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback";
+  --font-sans: var(--font-poppins), "Poppins", sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -167,4 +174,39 @@
   animation: shimmer 2s infinite;
   background: linear-gradient(90deg, transparent, rgba(100, 200, 255, 0.2), transparent);
   background-size: 1000px 100%;
+}
+
+/* Cosmic theme utility classes */
+.cosmic-heading-gradient {
+  background: linear-gradient(135deg, #2178C7 0%, #53C5E6 50%, #C26FCF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(83, 197, 230, 0.3);
+}
+
+.cosmic-btn-primary {
+  background: linear-gradient(135deg, #2178C7 0%, #53C5E6 100%);
+  color: #FFFFFF;
+  text-shadow: 0 0 6px rgba(83, 197, 230, 0.5);
+  transition: all 0.3s ease;
+}
+
+.cosmic-btn-primary:hover {
+  box-shadow: 0 0 12px rgba(241, 182, 70, 0.6), 0 0 24px rgba(83, 197, 230, 0.4);
+  outline: 2px solid rgba(241, 182, 70, 0.6);
+  outline-offset: 2px;
+}
+
+.cosmic-btn-secondary {
+  background: linear-gradient(135deg, #C26FCF 0%, #53C5E6 100%);
+  color: #FFFFFF;
+  text-shadow: 0 0 6px rgba(83, 197, 230, 0.5);
+  transition: all 0.3s ease;
+}
+
+.cosmic-btn-secondary:hover {
+  box-shadow: 0 0 12px rgba(241, 182, 70, 0.6), 0 0 24px rgba(194, 111, 207, 0.4);
+  outline: 2px solid rgba(241, 182, 70, 0.6);
+  outline-offset: 2px;
 }

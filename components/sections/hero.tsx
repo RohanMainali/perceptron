@@ -7,8 +7,15 @@ import Link from "next/link"
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden ">
-      {/* Animated grid background */}
-      <div className="absolute inset-0 opacity-10">
+      {/* Hero background image */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/hero-background.jpg')" }}
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50" />
+        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
       </div>
 
@@ -25,12 +32,12 @@ export default function Hero() {
 
           {/* Main heading */}
           <motion.h1
-            className="text-5xl md:text-7xl font-bold leading-tight text-balance"
+            className="text-5xl md:text-7xl font-light leading-tight text-balance"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+            <span className="text-white">
               Building Intelligent Systems
             </span>
             <br />
@@ -44,8 +51,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Perceptron specializes in cutting-edge AI research and development, from computer vision to multimodal
-            systems. We transform data into intelligence.
+            Cutting-edge AI research, reimagined.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -57,7 +63,7 @@ export default function Hero() {
           >
             <Link href="/projects">
               <motion.button
-                className="px-8 py-3 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-medium flex items-center gap-2 hover:shadow-lg hover:shadow-primary/50 transition-all"
+                className="cosmic-btn-primary px-8 py-3 rounded-lg font-medium flex items-center gap-2 transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -65,7 +71,7 @@ export default function Hero() {
               </motion.button>
             </Link>
             <motion.button
-              className="px-8 py-3 border border-primary/50 rounded-lg text-foreground font-medium flex items-center gap-2 hover:bg-primary/10 transition-all"
+              className="cosmic-btn-secondary px-8 py-3 rounded-lg font-medium flex items-center gap-2 transition-all"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -73,18 +79,6 @@ export default function Hero() {
             </motion.button>
           </motion.div>
         </div>
-
-        {/* Floating elements */}
-        <motion.div
-          className="absolute top-20 left-10 w-20 h-20 border border-primary/30 rounded-lg"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-32 h-32 border border-secondary/20 rounded-full"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-        />
       </div>
     </section>
   )

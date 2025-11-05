@@ -49,7 +49,7 @@ export default function Projects() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="cosmic-heading-gradient">
               Featured Projects
             </span>
           </h2>
@@ -112,7 +112,7 @@ export default function Projects() {
                   <div className="flex gap-3">
                     <motion.button
                       onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors font-medium text-sm shadow-sm"
+                      className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >

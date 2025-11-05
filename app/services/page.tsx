@@ -97,6 +97,21 @@ export default function ServicesPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        {/* Hero background image */}
+        <div className="absolute inset-0 z-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ 
+              backgroundImage: "url('/images/other-hero-background.jpg')",
+              transform: "rotate(0deg)"
+            }}
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/50" />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
+        </div>
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <motion.div
             className="text-center space-y-8"
@@ -104,8 +119,8 @@ export default function ServicesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance">
-              <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-light leading-tight text-balance">
+              <span className="text-white">
                 Our Services
               </span>
             </h1>
@@ -174,7 +189,7 @@ export default function ServicesPage() {
                     </div>
 
                     <motion.button
-                      className="w-full mt-8 px-6 py-3 bg-primary rounded-lg text-white font-medium hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all"
+                      className="cosmic-btn-primary w-full mt-8 px-6 py-3 rounded-lg font-medium transition-all"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >

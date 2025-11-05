@@ -46,7 +46,7 @@ export default function Navigation({ scrollY }: NavigationProps) {
           <Link href="/">
             <motion.div className="flex items-center gap-2 cursor-pointer" whileHover={{ scale: 1.05 }}>
               <Image src="/perceptron-logo.png" alt="Perceptron Logo" width={32} height={32} className="w-8 h-8" />
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <span className="text-xl font-normal cosmic-heading-gradient">
                 Perceptron
               </span>
             </motion.div>
@@ -71,7 +71,7 @@ export default function Navigation({ scrollY }: NavigationProps) {
                     {isActive && (
                       <motion.span
                         layoutId="navActiveUnderline"
-                        className="absolute left-0 top-full mt-1 h-[3px] w-full rounded-full bg-gradient-to-r from-primary via-[#7ad0ff] to-secondary shadow-[0_0_12px_rgba(100,200,255,0.45)]"
+                        className="absolute left-0 top-full mt-1 h-[3px] w-full rounded-full bg-gradient-to-r from-[#2178C7] via-[#53C5E6] to-[#C26FCF] shadow-[0_0_12px_rgba(83,197,230,0.45)]"
                         transition={{ type: "spring", stiffness: 260, damping: 30 }}
                       />
                     )}
@@ -110,7 +110,7 @@ export default function Navigation({ scrollY }: NavigationProps) {
                   <span className="relative inline-block">
                     {item.label}
                     {isActive && (
-                      <span className="absolute left-0 top-full mt-1 h-[3px] w-full rounded-full bg-gradient-to-r from-primary via-[#7ad0ff] to-secondary" />
+                      <span className="absolute left-0 top-full mt-1 h-[3px] w-full rounded-full bg-gradient-to-r from-[#2178C7] via-[#53C5E6] to-[#C26FCF]" />
                     )}
                   </span>
                 </Link>

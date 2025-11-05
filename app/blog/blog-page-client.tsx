@@ -38,9 +38,19 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Subtle glow overlay for consistency with other hero sections */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-transparent to-transparent" />
+        {/* Hero background image */}
+        <div className="absolute inset-0 z-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ 
+              backgroundImage: "url('/images/other-hero-background.jpg')",
+              transform: "rotate(0deg)"
+            }}
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/50" />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
         </div>
 
         <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
@@ -51,8 +61,8 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance">
-                <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+              <h1 className="text-5xl md:text-7xl font-light leading-tight text-balance">
+                <span className="text-white">
                   Blog & Insights
                 </span>
               </h1>
@@ -62,17 +72,6 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
             </motion.div>
           </div>
         </div>
-
-        <motion.div
-          className="absolute top-24 left-12 w-20 h-20 border border-primary/30 rounded-lg"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute bottom-28 right-16 w-32 h-32 border border-secondary/30 rounded-full"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-        />
       </section>
 
       {/* Blog Posts Section */}
@@ -91,7 +90,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-bold">
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <span className="cosmic-heading-gradient">
                 Latest Insights
               </span>
             </h2>

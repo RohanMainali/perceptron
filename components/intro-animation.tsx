@@ -26,16 +26,26 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
       initial={{ opacity: 1 }}
       animate={{ opacity: isComplete ? 0 : 1 }}
       transition={{ duration: 0.8, delay: 1 }}
       pointerEvents={isComplete ? "none" : "auto"}
     >
+      {/* Background image */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/first-loader.jpg')" }}
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/70" />
+      </div>
+      
       {/* Soft moving light sweep */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-[#53C5E6]/20 to-transparent"
           animate={{ x: ["0%", "100%"] }}
           transition={{ duration: 2, ease: "easeInOut" }}
         />
@@ -71,7 +81,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
           {["P", "e", "r", "c", "e", "p", "t", "r", "o", "n"].map((char, index) => (
             <motion.span
               key={index}
-              className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+              className="text-4xl md:text-5xl font-normal cosmic-heading-gradient"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -93,7 +103,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
         animate={{ opacity: [0, 0.5, 0] }}
         transition={{ duration: 2, delay: 0.5 }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-primary/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#53C5E6]/30 rounded-full blur-3xl" />
       </motion.div>
     </motion.div>
   )

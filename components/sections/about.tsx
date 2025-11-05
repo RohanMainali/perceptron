@@ -33,14 +33,8 @@ export default function About() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              About Perceptron
-            </span>
-          </h2>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            We are a team of AI researchers and engineers dedicated to building the next generation of intelligent
-            systems that solve real-world problems.
+            We specializes in multi-modal and visual AI research & development
           </p>
         </motion.div>
 

@@ -32,8 +32,8 @@ export default function Contact() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Get in Touch
+            <span className="cosmic-heading-gradient">
+              Get In Touch
             </span>
           </h2>
           <p className="text-slate-600 text-lg leading-relaxed">
@@ -100,9 +100,9 @@ export default function Contact() {
             </div>
             <motion.button
               type="submit"
-              className="w-full px-6 py-3 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-medium flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/50 transition-all"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="cosmic-btn-primary w-full px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Send Message <Send size={20} />
             </motion.button>
