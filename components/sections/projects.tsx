@@ -16,7 +16,7 @@ export default function Projects() {
       features: ["Dataset Creation", "Model Training", "Real-time Analytics", "Fighter Tracking"],
       status: "Featured Project",
       image: "/mma-fight-analysis-computer-vision.jpg",
-      videoUrl: "https://www.youtube.com/watch?v=iNBSTdSzWlc",
+      videoUrl: "https://youtu.be/iNBSTdSzWlc?si=lmwuL1PlCIj_pnFW",
     },
     {
       title: "Pose Estimation Engine",
