@@ -27,7 +27,7 @@ export default function ProjectsPage() {
       features: ["Dataset Creation", "Model Training", "Real-time Analytics", "Fighter Tracking", "Movement Analysis"],
       status: "Featured Project",
       image: "/placeholder.svg?key=6favz",
-      videoUrl: "https://www.youtube.com/watch?v=iNBSTdSzWlc",
+      videoUrl: "https://youtu.be/iNBSTdSzWlc?si=lmwuL1PlCIj_pnFW",
       technologies: ["PyTorch", "OpenCV", "YOLO", "Python"],
     },
     {
