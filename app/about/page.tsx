@@ -35,11 +35,11 @@ export default function AboutPage() {
   ]
 
   const team = [
-    { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership, Corporate Governance and Global Expansion", image: "/images/team/rohan-mainali.jpg" },
-    { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy, Sales Enablement, Partnerships & Business Growth", image: "/images/team/neha-aryal.jpg" },
-    { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy, Platform Architecture, and Engineering Leadership", image: "/images/team/soyam-shrestha.jpg" },
-    { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Platform Engineering, DevOps, and Scalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
-    { name: "Pratik Awal", role: "Lead Researcher", expertise: "Applied Research, Advanced Analytics and Algorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
+    { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership & Corporate Governance", image: "/images/team/rohan-mainali.jpg" },
+    { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy & Business Growth", image: "/images/team/neha-aryal.jpg" },
+    { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy & Engineering Leadership", image: "/images/team/soyam-shrestha.jpg" },
+    { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Platform Engineering & Scalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
+    { name: "Pratik Awal", role: "Lead Researcher", expertise: "Applied Research & Algorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
     { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
     { name: "Aayushman Shrestha", role: "Data Scientist", expertise: "Data Annotation, Analysis", image: "/images/team/aayushman-shrestha.jpg" },
     { name: "Puspa Kutu", role: "Data Analyst", expertise: "Data Visualization, Reporting", image: "/images/team/puspa-kutu.jpg" },
