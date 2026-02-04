@@ -35,15 +35,15 @@ export default function AboutPage() {
   ]
 
   const team = [
-    { name: "Rohan Mainali", role: "Lead Researcher", expertise: "Computer Vision, Deep Learning", image: "/images/team/rohan-mainali.jpg" },
-    { name: "Neha Aryal", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/neha-aryal.jpg" },
+    { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership, Corporate Governance and Global Expansion", image: "/images/team/rohan-mainali.jpg" },
+    { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy, Sales Enablement, Partnerships & Business Growth", image: "/images/team/neha-aryal.jpg" },
+    { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy, Platform Architecture, and Engineering Leadership", image: "/images/team/soyam-shrestha.jpg" },
+    { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Platform Engineering, DevOps, and Scalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
+    { name: "Pratik Awal", role: "Lead Researcher", expertise: "Applied Research, Advanced Analytics and Algorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
     { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
     { name: "Aayushman Shrestha", role: "Data Scientist", expertise: "Data Annotation, Analysis", image: "/images/team/aayushman-shrestha.jpg" },
     { name: "Puspa Kutu", role: "Data Analyst", expertise: "Data Visualization, Reporting", image: "/images/team/puspa-kutu.jpg" },
     { name: "Priyokti Manandhar", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/priyokti-manandhar.jpg" },
-    { name: "Bibek Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/bibek-shrestha.jpg" },
-    { name: "Soyam Shrestha", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/soyam-shrestha.jpg" },
-    { name: "Pratik Awal", role: "ML Engineer", expertise: "NLP, Optimization", image: "/images/team/pratik-awal.jpg" },
     { name: "Swornika Rajbhandari", role: "QA Engineer", expertise: "Manual Testing, Automation", image: "/images/team/swornika-rajbhandari.jpg" },
     { name: "Nischal Bhattarai", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/nischal-bhattarai.jpg" },
     { name: "Rakesh Shrestha", role: "Data Engineer", expertise: "Data Pipeline Development, ETL", image: "/images/team/rakesh-shrestha.jpg" },
