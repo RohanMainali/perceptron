@@ -17,7 +17,7 @@ const blogPayloadSchema = z.object({
   excerpt: z.string().max(320).optional(),
   image: z
     .string()
-    .url({ message: "Image must be a valid URL." })
+    .url({ message: "Media URL must be a valid URL (image or video link)." })
     .optional()
     .or(z.literal("")),
   content: z.string().min(20, "Content is too short."),
