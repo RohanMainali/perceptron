@@ -26,7 +26,6 @@ export default function Services() {
       features: ["Bounding Boxes", "Segmentation", "ViT Labeling"],
       href: "/services#data-annotation",
       color: "#53C5E6",
-      number: "01",
     },
     {
       icon: Cpu,
@@ -36,7 +35,6 @@ export default function Services() {
       features: ["Object Detection", "Pose Estimation", "CLIP Fine-tuning"],
       href: "/services#model-development",
       color: "#C26FCF",
-      number: "02",
     },
     {
       icon: BookOpen,
@@ -46,7 +44,6 @@ export default function Services() {
       features: ["Strategy", "Architecture", "Implementation"],
       href: "/services#research-consulting",
       color: "#F1B646",
-      number: "03",
     },
   ]
 
@@ -115,16 +112,10 @@ export default function Services() {
             <motion.div
               key={service.title}
               className="group relative"
-              variants={cardVariants}
               whileHover={{ y: -10 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-400 h-full flex flex-col">
-                {/* Service number */}
-                <span className="absolute top-6 right-6 text-5xl font-black text-slate-100 group-hover:text-[#53C5E6]/10 transition-colors duration-300 select-none">
-                  {service.number}
-                </span>
-
                 {/* Icon */}
                 <div className="relative w-14 h-14 mb-6">
                   <motion.div

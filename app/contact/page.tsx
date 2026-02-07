@@ -23,7 +23,7 @@ export default function ContactPage() {
         subtitle="Have a project in mind or want to collaborate? We'd love to hear from you."
         badge="Let's Connect"
       />
-      <Contact />
+      <Contact hideHeader />
       <Footer />
     </main>
   )

@@ -6,6 +6,7 @@ import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import PageHero from "@/components/page-hero"
 import VideoModal from "@/components/video-modal"
+import Link from "next/link"
 import { Play, ExternalLink } from "lucide-react"
 
 export default function ProjectsPage() {
@@ -20,6 +21,20 @@ export default function ProjectsPage() {
 
   const projects = [
     {
+      title: "Auta — AI Annotation Tool",
+      description:
+        "Chat-driven auto-annotation platform. Drop a .zip, describe the task in natural language, and get a fully annotated dataset in seconds.",
+      fullDescription:
+        "Auta is our flagship open-source auto-annotation platform that reimagines how data annotation works. Instead of manually drawing boxes or masks, you describe your task in natural language — 'Segment all persons in this dataset' — and the AI handles the rest: labels, colors, task types, bounding boxes, and segmentation masks. Built on top of CVAT with SAM3 integration, it brings vibe-coding principles to data annotation.",
+      features: ["Chat-to-Task", "Auto Segmentation", "Batch Annotation", "SAM3 Integration", "Natural Language Planning", "Multi-format Export"],
+      status: "Active Development",
+      image: "/images/auta/auta-demo.gif",
+      videoUrl: "",
+      technologies: ["Python", "PyTorch", "SAM3", "CVAT", "Docker", "React"],
+      color: "#2178C7",
+      href: "/projects/auta",
+    },
+    {
       title: "MMA Vision",
       description:
         "A complete system for in-depth MMA fight analysis using computer vision. From dataset creation to model training and real-time analytics.",
@@ -31,19 +46,6 @@ export default function ProjectsPage() {
       videoUrl: "https://www.youtube.com/embed/iNBSTdSzWlc",
       technologies: ["PyTorch", "OpenCV", "YOLO", "Python"],
       color: "#53C5E6",
-    },
-    {
-      title: "Pose Estimation Engine",
-      description:
-        "Advanced pose estimation system for human movement analysis and tracking in sports and fitness applications.",
-      fullDescription:
-        "Our Pose Estimation Engine leverages deep learning to accurately detect and track human body keypoints in real-time. Perfect for fitness tracking, sports analysis, and rehabilitation monitoring.",
-      features: ["Multi-person Detection", "Real-time Processing", "Accuracy Optimization", "Skeleton Tracking"],
-      status: "In Development",
-      image: "/placeholder.svg?key=owmn1",
-      videoUrl: "",
-      technologies: ["TensorFlow", "MediaPipe", "Python", "WebGL"],
-      color: "#C26FCF",
     },
     {
       title: "CLIP Fine-tuning Suite",
@@ -185,13 +187,25 @@ export default function ProjectsPage() {
                       >
                         <Play size={18} /> Watch Demo
                       </motion.button>
-                      <motion.button
-                        className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
-                        whileHover={{ scale: 1.03, y: -2 }}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        Learn More <ExternalLink size={18} />
-                      </motion.button>
+                      {(project as { href?: string }).href ? (
+                        <Link href={(project as { href: string }).href}>
+                          <motion.span
+                            className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
+                            whileHover={{ scale: 1.03, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
+                            Learn More <ExternalLink size={18} />
+                          </motion.span>
+                        </Link>
+                      ) : (
+                        <motion.button
+                          className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
+                          whileHover={{ scale: 1.03, y: -2 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          Learn More <ExternalLink size={18} />
+                        </motion.button>
+                      )}
                     </div>
                   </motion.div>
                 </div>

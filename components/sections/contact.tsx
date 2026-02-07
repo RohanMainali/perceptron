@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { Mail, Linkedin, Github, Send, ChevronDown } from "lucide-react"
 import { useState } from "react"
 
-export default function Contact() {
+export default function Contact({ hideHeader = false }: { hideHeader?: boolean }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,39 +40,41 @@ export default function Contact() {
 
       <div className="w-full px-6 md:px-12 lg:px-16 relative z-10">
         {/* Section header */}
-        <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true }}
-        >
-          <motion.span
-            className="inline-block text-sm font-medium tracking-widest uppercase text-[#53C5E6] mb-4"
-            initial={{ opacity: 0, y: 10 }}
+        {!hideHeader && (
+          <motion.div
+            className="text-center mb-20"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
           >
-            Let&apos;s Connect
-          </motion.span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="cosmic-heading-gradient">
-              Get In Touch
-            </span>
-          </h2>
-          <p className="text-slate-600 text-lg leading-relaxed">
-            Have a project in mind? Let&apos;s collaborate and build something amazing together.
-          </p>
-          <motion.div
-            className="mt-6 mx-auto h-[1px] rounded-full"
-            style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
-            initial={{ width: 0 }}
-            whileInView={{ width: 120 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            viewport={{ once: true }}
-          />
-        </motion.div>
+            <motion.span
+              className="inline-block text-sm font-medium tracking-widest uppercase text-[#53C5E6] mb-4"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              Let&apos;s Connect
+            </motion.span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="cosmic-heading-gradient">
+                Get In Touch
+              </span>
+            </h2>
+            <p className="text-slate-600 text-lg leading-relaxed">
+              Have a project in mind? Let&apos;s collaborate and build something amazing together.
+            </p>
+            <motion.div
+              className="mt-6 mx-auto h-[1px] rounded-full"
+              style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
+              initial={{ width: 0 }}
+              whileInView={{ width: 120 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              viewport={{ once: true }}
+            />
+          </motion.div>
+        )}
 
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {/* Contact form */}
@@ -168,9 +170,9 @@ export default function Contact() {
               <h3 className="text-xl font-bold mb-6">Contact Information</h3>
               <div className="space-y-5">
                 {[
-                  { icon: Mail, label: "hello@perceptron.ai", href: "mailto:hello@perceptron.ai", color: "#53C5E6" },
-                  { icon: Linkedin, label: "LinkedIn", href: "#", color: "#2178C7" },
-                  { icon: Github, label: "GitHub", href: "#", color: "#C26FCF" },
+                  { icon: Mail, label: "perceptronorg@gmail.com", href: "mailto:perceptronorg@gmail.com", color: "#53C5E6" },
+                  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/perceptronai/", color: "#2178C7" },
+                  { icon: Github, label: "GitHub", href: "https://github.com/perceptronai-org", color: "#C26FCF" },
                 ].map((item, i) => (
                   <motion.div
                     key={item.label}
