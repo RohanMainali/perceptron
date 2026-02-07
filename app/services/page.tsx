@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
+import PageHero from "@/components/page-hero"
 import { Database, Cpu, BookOpen, CheckCircle } from "lucide-react"
 
 export default function ServicesPage() {
@@ -36,6 +37,7 @@ export default function ServicesPage() {
         "Expert quality control",
         "Fast turnaround times",
       ],
+      color: "#53C5E6",
     },
     {
       id: "model-development",
@@ -57,6 +59,7 @@ export default function ServicesPage() {
         "Production-ready models",
         "Ongoing support and updates",
       ],
+      color: "#C26FCF",
     },
     {
       id: "research-consulting",
@@ -78,82 +81,61 @@ export default function ServicesPage() {
         "Risk mitigation",
         "Knowledge transfer",
       ],
+      color: "#F1B646",
     },
   ]
 
   return (
     <main className="relative overflow-hidden bg-background">
-      {/* Animated background gradient */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-      </div>
-
       <Navigation scrollY={scrollY} />
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Hero background image */}
-        <div className="absolute inset-0 z-0">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ 
-              backgroundImage: "url('/images/other-hero-background.jpg')",
-              transform: "rotate(0deg)"
-            }}
-          />
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/50" />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <motion.div
-            className="text-center space-y-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-5xl md:text-7xl font-light leading-tight text-balance">
-              <span className="text-white">
-                Our Services
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive AI solutions tailored to your business needs and technical requirements
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        title="Our Services"
+        subtitle="Comprehensive AI solutions tailored to your business needs and technical requirements"
+        badge="What We Offer"
+      />
 
       {/* Services Detail Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden bg-white text-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-20">
+      <section className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
+        <div className="absolute inset-0 light-mesh pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="space-y-28">
             {services.map((service, index) => (
               <motion.div
                 key={service.id}
                 id={service.id}
                 className="group relative"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
               >
-                <div className="grid md:grid-cols-2 gap-12 items-start">
+                {/* Service number watermark */}
+                <motion.span
+                  className="absolute -top-6 -left-2 text-[8rem] font-black text-slate-100 select-none pointer-events-none leading-none"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </motion.span>
+
+                <div className={`grid md:grid-cols-2 gap-12 items-start ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}>
                   <motion.div
-                    initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                    className={index % 2 === 1 ? "md:col-start-2" : ""}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     viewport={{ once: true }}
                   >
                     <div className="flex items-center gap-4 mb-6">
-                      <service.icon className="w-12 h-12 text-primary" />
+                      <div
+                        className="w-14 h-14 rounded-xl flex items-center justify-center"
+                        style={{ background: `${service.color}10`, border: `1px solid ${service.color}20` }}
+                      >
+                        <service.icon className="w-7 h-7" style={{ color: service.color }} />
+                      </div>
                       <h2 className="text-4xl font-bold text-slate-900">{service.title}</h2>
                     </div>
                     <p className="text-slate-600 text-lg leading-relaxed mb-8">{service.description}</p>
@@ -161,42 +143,77 @@ export default function ServicesPage() {
                     <div className="mb-8">
                       <h3 className="text-xl font-bold mb-4">Key Features</h3>
                       <div className="grid grid-cols-2 gap-3">
-                        {service.features.map((feature) => (
-                          <div key={feature} className="flex items-center gap-2">
-                            <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
+                        {service.features.map((feature, fi) => (
+                          <motion.div
+                            key={feature}
+                            className="flex items-center gap-2"
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 + fi * 0.06 }}
+                            viewport={{ once: true }}
+                          >
+                            <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: service.color }} />
                             <span className="text-slate-600">{feature}</span>
-                          </div>
+                          </motion.div>
                         ))}
                       </div>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="p-8 rounded-2xl border border-slate-200 bg-white shadow-lg"
-                    initial={{ opacity: 0, x: index % 2 === 0 ? 20 : -20 }}
+                    className={`cosmic-card p-8 rounded-2xl border border-slate-200 bg-white shadow-lg ${index % 2 === 1 ? "md:col-start-1" : ""}`}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? 30 : -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     viewport={{ once: true }}
                   >
                     <h3 className="text-xl font-bold mb-6">Benefits</h3>
                     <div className="space-y-4">
-                      {service.benefits.map((benefit) => (
-                        <div key={benefit} className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                      {service.benefits.map((benefit, bi) => (
+                        <motion.div
+                          key={benefit}
+                          className="flex items-start gap-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 + bi * 0.08 }}
+                          viewport={{ once: true }}
+                        >
+                          <div
+                            className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                            style={{ background: service.color }}
+                          />
                           <p className="text-slate-600 leading-relaxed">{benefit}</p>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
 
                     <motion.button
-                      className="cosmic-btn-primary w-full mt-8 px-6 py-3 rounded-lg font-medium transition-all"
-                      whileHover={{ scale: 1.02 }}
+                      className="cosmic-btn-primary w-full mt-8 px-6 py-3 rounded-xl font-medium transition-all"
+                      whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       Get Started
                     </motion.button>
+
+                    {/* Accent line */}
+                    <div
+                      className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full"
+                      style={{ background: `linear-gradient(90deg, ${service.color}40, transparent)` }}
+                    />
                   </motion.div>
                 </div>
+
+                {/* Section divider (not on last item) */}
+                {index < services.length - 1 && (
+                  <motion.div
+                    className="mt-20 mx-auto h-px max-w-md"
+                    style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true }}
+                  />
+                )}
               </motion.div>
             ))}
           </div>

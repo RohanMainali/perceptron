@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
+import PageHero from "@/components/page-hero"
 import VideoModal from "@/components/video-modal"
 import { Play, ExternalLink } from "lucide-react"
 
@@ -29,6 +30,7 @@ export default function ProjectsPage() {
       image: "/placeholder.svg?key=6favz",
       videoUrl: "https://www.youtube.com/embed/iNBSTdSzWlc",
       technologies: ["PyTorch", "OpenCV", "YOLO", "Python"],
+      color: "#53C5E6",
     },
     {
       title: "Pose Estimation Engine",
@@ -41,6 +43,7 @@ export default function ProjectsPage() {
       image: "/placeholder.svg?key=owmn1",
       videoUrl: "",
       technologies: ["TensorFlow", "MediaPipe", "Python", "WebGL"],
+      color: "#C26FCF",
     },
     {
       title: "CLIP Fine-tuning Suite",
@@ -52,122 +55,104 @@ export default function ProjectsPage() {
       image: "/placeholder.svg?key=bbvav",
       videoUrl: "",
       technologies: ["PyTorch", "Hugging Face", "Python", "FastAPI"],
+      color: "#F1B646",
     },
   ]
 
   return (
     <main className="relative overflow-hidden bg-background">
-      {/* Animated background gradient */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-      </div>
-
       <Navigation scrollY={scrollY} />
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Hero background image */}
-        <div className="absolute inset-0 z-0">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ 
-              backgroundImage: "url('/images/other-hero-background.jpg')",
-              transform: "rotate(0deg)"
-            }}
-          />
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/50" />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <motion.div
-            className="text-center space-y-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-5xl md:text-7xl font-light leading-tight text-balance">
-              <span className="text-white">
-                Featured Projects
-              </span>
-            </h1>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        title="Featured Projects"
+        subtitle="Showcasing our latest AI research and development initiatives with live demos and detailed breakdowns"
+        badge="Our Work"
+      />
 
       {/* Projects Detail Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden bg-white text-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-20">
+      <section className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
+        <div className="absolute inset-0 light-mesh pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="space-y-28">
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
                 className="group relative"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
               >
-                <div className="grid md:grid-cols-2 gap-12 items-start">
+                <div className={`grid md:grid-cols-2 gap-12 items-start ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}>
                   {/* Project Image with Video */}
                   <motion.div
-                    className="relative rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-lg group/image"
-                    initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                    className={`cosmic-card relative rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-lg group/image ${index % 2 === 1 ? "md:col-start-2" : ""}`}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     viewport={{ once: true }}
                   >
                     <div className="aspect-video relative overflow-hidden">
-                      <img
+                      <motion.img
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover/image:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-cover"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.5 }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent" />
-                      <motion.button
-                        onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        <div className="w-20 h-20 rounded-full bg-primary text-white shadow-lg flex items-center justify-center hover:bg-secondary transition-colors">
-                          <Play size={40} className="fill-white" />
-                        </div>
-                      </motion.button>
+
+                      {/* Status badge */}
+                      <div className="absolute top-4 right-4">
+                        <span
+                          className="px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md text-white"
+                          style={{ background: `${project.color}60`, border: `1px solid ${project.color}40` }}
+                        >
+                          {project.status}
+                        </span>
+                      </div>
+
+                      {project.videoUrl && (
+                        <motion.button
+                          onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
+                          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors">
+                            <Play size={36} className="fill-white text-white ml-1" />
+                          </div>
+                        </motion.button>
+                      )}
                     </div>
+                    {/* Bottom accent */}
+                    <div className="h-[2px]" style={{ background: `linear-gradient(90deg, ${project.color}, transparent)` }} />
                   </motion.div>
 
                   {/* Project Content */}
                   <motion.div
-                    initial={{ opacity: 0, x: index % 2 === 0 ? 20 : -20 }}
+                    className={index % 2 === 1 ? "md:col-start-1" : ""}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? 30 : -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     viewport={{ once: true }}
                   >
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-medium">
-                        {project.status}
-                      </span>
-                    </div>
                     <h2 className="text-4xl font-bold mb-4">{project.title}</h2>
                     <p className="text-slate-600 text-lg leading-relaxed mb-6">{project.fullDescription}</p>
 
                     <div className="mb-8">
                       <h3 className="text-lg font-bold mb-4">Key Features</h3>
                       <div className="flex flex-wrap gap-2">
-                        {project.features.map((feature) => (
-                          <span
+                        {project.features.map((feature, fi) => (
+                          <motion.span
                             key={feature}
-                            className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
+                            className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-sm font-medium hover:bg-[#53C5E6]/10 hover:text-[#2178C7] transition-colors"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.3 + fi * 0.05 }}
+                            viewport={{ once: true }}
                           >
                             {feature}
-                          </span>
+                          </motion.span>
                         ))}
                       </div>
                     </div>
@@ -175,36 +160,53 @@ export default function ProjectsPage() {
                     <div className="mb-8">
                       <h3 className="text-lg font-bold mb-4">Technologies</h3>
                       <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech) => (
-                          <span
+                        {project.technologies.map((tech, ti) => (
+                          <motion.span
                             key={tech}
-                            className="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium"
+                            className="px-3 py-1 rounded-full text-sm font-medium"
+                            style={{ background: `${project.color}10`, color: project.color }}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.4 + ti * 0.05 }}
+                            viewport={{ once: true }}
                           >
                             {tech}
-                          </span>
+                          </motion.span>
                         ))}
                       </div>
                     </div>
 
                     <div className="flex gap-4">
                       <motion.button
-                        onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                        className="cosmic-btn-primary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        onClick={() => project.videoUrl && setSelectedVideo({ url: project.videoUrl, title: project.title })}
+                        className={`cosmic-btn-primary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${!project.videoUrl ? "opacity-40 cursor-not-allowed" : ""}`}
+                        whileHover={project.videoUrl ? { scale: 1.03, y: -2 } : {}}
+                        whileTap={project.videoUrl ? { scale: 0.97 } : {}}
                       >
-                        <Play size={20} /> Watch Demo
+                        <Play size={18} /> Watch Demo
                       </motion.button>
                       <motion.button
-                        className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
+                        whileHover={{ scale: 1.03, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
                       >
-                        Learn More <ExternalLink size={20} />
+                        Learn More <ExternalLink size={18} />
                       </motion.button>
                     </div>
                   </motion.div>
                 </div>
+
+                {/* Section divider */}
+                {index < projects.length - 1 && (
+                  <motion.div
+                    className="mt-20 mx-auto h-px max-w-md"
+                    style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true }}
+                  />
+                )}
               </motion.div>
             ))}
           </div>
@@ -213,7 +215,6 @@ export default function ProjectsPage() {
 
       <Footer />
 
-      {/* Video Modal */}
       <VideoModal
         isOpen={!!selectedVideo}
         onClose={() => setSelectedVideo(null)}
