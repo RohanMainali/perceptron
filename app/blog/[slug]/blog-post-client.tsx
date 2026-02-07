@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { motion } from "framer-motion"
-import { ArrowLeft, Calendar, User } from "lucide-react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { ArrowLeft, Calendar, User, Clock } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
@@ -18,6 +18,8 @@ interface BlogPostClientProps {
 export default function BlogPostClient({ post }: BlogPostClientProps) {
   const [scrollY, setScrollY] = useState(0)
   const hasHeroImage = Boolean(post.image && !post.image.toLowerCase().includes("placeholder"))
+  const { scrollYProgress } = useScroll()
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -25,107 +27,152 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const readingTime = Math.max(1, Math.ceil((post.content?.length || 0) / 1200))
+
   return (
     <main className="relative overflow-hidden bg-background">
-      {/* Animated background gradient */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-      </div>
+      {/* Reading progress bar */}
+      <motion.div
+        className="fixed top-0 left-0 h-[3px] z-[60]"
+        style={{
+          width: progressWidth,
+          background: "linear-gradient(90deg, #2178C7, #53C5E6, #C26FCF)",
+        }}
+      />
 
       <Navigation scrollY={scrollY} />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-transparent to-transparent" />
+      <section className="relative min-h-[70vh] flex items-end pb-20 pt-32 overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0 z-0">
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/images/other-hero-background.jpg')" }}
+          />
+          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent" />
         </div>
 
-  <div className="relative z-10 mx-auto w-full max-w-[90rem] px-4 sm:px-5 lg:px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        {/* Floating particles */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: 3 + Math.random() * 4,
+              height: 3 + Math.random() * 4,
+              left: `${10 + Math.random() * 80}%`,
+              top: `${20 + Math.random() * 60}%`,
+              background: ["#53C5E6", "#C26FCF", "#F1B646", "#2178C7"][i % 4],
+              opacity: 0.4,
+            }}
+            animate={{
+              y: [-10, 10, -10],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 3,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+          />
+        ))}
 
-            <div
-              className={`grid gap-10 lg:gap-14 ${
-                hasHeroImage ? "lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,560px)] items-start" : ""
-              }`}
+        <div className="relative z-10 mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {/* Back link */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
             >
-              <motion.div
-                className={`${
-                  hasHeroImage ? "text-left" : "text-center max-w-3xl mx-auto"
-                } space-y-6 bg-background/40 rounded-3xl border border-border/80 p-8 shadow-lg shadow-primary/5 backdrop-blur-sm`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-[#53C5E6] transition-colors mb-8 group"
               >
-                <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-primary/70">
-                  Insight
-                </span>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-balance">
-                  <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                    {post.title}
-                  </span>
-                </h1>
+                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                Back to Blog
+              </Link>
+            </motion.div>
 
-                <div
-                  className={`flex flex-wrap gap-4 text-sm text-foreground/70 ${
-                    hasHeroImage ? "justify-start" : "justify-center"
-                  }`}
-                >
-                  <div className="flex items-center gap-2 bg-card/40 px-3 py-2 rounded-full border border-border/60">
-                    <Calendar size={18} />
-                    <span>{post.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-card/40 px-3 py-2 rounded-full border border-border/60">
-                    <User size={18} />
-                    <span>{post.author || "Perceptron Team"}</span>
-                  </div>
-                </div>
+            {/* Badge */}
+            <motion.span
+              className="inline-block text-xs uppercase tracking-[0.3em] text-[#53C5E6] font-medium mb-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Insight
+            </motion.span>
 
-                <p className="text-lg md:text-xl text-foreground/80 leading-relaxed">
-                  {post.excerpt || "Explore key insights from our research and engineering teams."}
-                </p>
-              </motion.div>
+            {/* Title */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white mb-6">
+              {post.title}
+            </h1>
 
-              {hasHeroImage && (
-                <motion.div
-                  className="relative"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.25 }}
-                >
-                  <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/15 via-secondary/10 to-primary/5 blur-3xl" />
-                  <div className="relative rounded-3xl overflow-hidden border border-border/80 shadow-2xl shadow-primary/15">
-                    <img
-                      src={post.image || "/placeholder.svg"}
-                      alt={post.title}
-                      className="w-full aspect-[16/10] object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
-                  </div>
-                </motion.div>
-              )}
+            {/* Meta */}
+            <div className="flex flex-wrap gap-3 mb-6">
+              <div className="flex items-center gap-2 text-sm text-white/70 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                <Calendar size={14} className="text-[#53C5E6]" />
+                <span>{post.date}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-white/70 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                <User size={14} className="text-[#C26FCF]" />
+                <span>{post.author || "Perceptron Team"}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-white/70 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                <Clock size={14} className="text-[#F1B646]" />
+                <span>{readingTime} min read</span>
+              </div>
             </div>
+
+            {/* Excerpt */}
+            <p className="text-lg text-white/60 leading-relaxed max-w-3xl">
+              {post.excerpt || "Explore key insights from our research and engineering teams."}
+            </p>
           </motion.div>
         </div>
+
+        {/* Bottom gradient fade to white */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent z-10" />
       </section>
+
+      {/* Hero Image (below hero, in white area) */}
+      {hasHeroImage && (
+        <section className="relative bg-white -mt-16 z-20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-2xl"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <img
+                src={post.image || "/placeholder.svg"}
+                alt={post.title}
+                className="w-full aspect-[21/9] object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Blog Content Section */}
       <section className="relative py-20 md:py-28 overflow-hidden bg-white text-slate-900">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-32 right-0 w-96 h-96 rounded-full bg-secondary/8 blur-3xl" />
-          <div className="absolute -bottom-40 left-10 w-[28rem] h-[28rem] rounded-full bg-primary/8 blur-3xl" />
-        </div>
+        <div className="absolute inset-0 light-mesh pointer-events-none" />
 
         <div className="relative z-10 mx-auto w-full max-w-[75rem] px-6 sm:px-8 lg:px-12">
           <motion.div
             className="prose prose-lg max-w-none text-slate-700"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <style>{`
               .prose {

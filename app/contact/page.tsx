@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import Contact from "@/components/sections/contact"
+import PageHero from "@/components/page-hero"
 
 export default function ContactPage() {
   const [scrollY, setScrollY] = useState(0)
@@ -16,17 +17,12 @@ export default function ContactPage() {
 
   return (
     <main className="relative overflow-hidden bg-background">
-      {/* Animated background gradient */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-      </div>
-
       <Navigation scrollY={scrollY} />
+      <PageHero
+        title="Get In Touch"
+        subtitle="Have a project in mind or want to collaborate? We'd love to hear from you."
+        badge="Let's Connect"
+      />
       <Contact />
       <Footer />
     </main>

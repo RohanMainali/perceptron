@@ -210,3 +210,103 @@
   outline: 2px solid rgba(241, 182, 70, 0.6);
   outline-offset: 2px;
 }
+
+/* ─── Section Decorators ─── */
+.section-glow-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent);
+}
+
+.cosmic-card {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cosmic-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 40%, rgba(83,197,230,0.3), rgba(194,111,207,0.2), transparent 80%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.cosmic-card:hover::before {
+  opacity: 1;
+}
+
+/* Animated gradient border on hover */
+@keyframes borderRotate {
+  to { --border-angle: 360deg; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(83,197,230,0.15); }
+  50% { box-shadow: 0 0 40px rgba(83,197,230,0.3), 0 0 60px rgba(194,111,207,0.1); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* Section divider with gradient */
+.section-divider {
+  position: relative;
+}
+.section-divider::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent);
+}
+
+/* Floating dots background pattern */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(83,197,230,0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Light section subtle mesh */
+.light-mesh {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(33,120,199,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(194,111,207,0.03) 0%, transparent 50%);
+}
+
+/* Dark section subtle mesh */  
+.dark-mesh {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(33,120,199,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(194,111,207,0.05) 0%, transparent 50%);
+}
