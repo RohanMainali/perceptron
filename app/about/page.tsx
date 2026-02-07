@@ -156,85 +156,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="relative py-24 md:py-36 overflow-hidden bg-slate-50 text-slate-900">
-        <div className="absolute inset-0 dot-pattern pointer-events-none" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C26FCF]/15 to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-          >
-            <motion.span
-              className="inline-block text-sm font-medium tracking-widest uppercase text-[#C26FCF] mb-4"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              What Drives Us
-            </motion.span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="cosmic-heading-gradient">
-                Our Core Values
-              </span>
-            </h2>
-            <motion.div
-              className="mt-4 mx-auto h-[1px] rounded-full"
-              style={{ background: "linear-gradient(90deg, transparent, #C26FCF, #53C5E6, transparent)" }}
-              initial={{ width: 0 }}
-              whileInView={{ width: 120 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-            />
-          </motion.div>
-
-          <motion.div
-            ref={valuesRef}
-            className="grid md:grid-cols-3 gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate={valuesInView ? "visible" : "hidden"}
-          >
-            {values.map((value, index) => (
-              <motion.div
-                key={value.title}
-                className="group relative"
-                variants={cardVariants}
-                whileHover={{ y: -8 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full">
-                  <div className="relative w-14 h-14 mb-6">
-                    <motion.div
-                      className="absolute inset-0 rounded-xl bg-[#53C5E6]/5 border border-[#53C5E6]/15"
-                      whileHover={{ rotate: 90, scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <value.icon className="w-7 h-7 text-[#53C5E6]" />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-[#2178C7] transition-colors duration-300">{value.title}</h3>
-                  <p className="text-slate-600 leading-relaxed">{value.description}</p>
-                  <motion.div
-                    className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full"
-                    style={{ background: "linear-gradient(90deg, #53C5E640, transparent)" }}
-                    initial={{ scaleX: 0, originX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                    viewport={{ once: true }}
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
   {/* Team Section */}
 <section className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
   <div className="absolute inset-0 light-mesh pointer-events-none" />
@@ -454,7 +375,86 @@ export default function AboutPage() {
   </div>
 </section>
 
-  {/* Timeline Section */}
+      {/* Values Section */}
+      <section className="relative py-24 md:py-36 overflow-hidden bg-slate-50 text-slate-900">
+        <div className="absolute inset-0 dot-pattern pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C26FCF]/15 to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            className="text-center mb-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+          >
+            <motion.span
+              className="inline-block text-sm font-medium tracking-widest uppercase text-[#C26FCF] mb-4"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              What Drives Us
+            </motion.span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="cosmic-heading-gradient">
+                Our Core Values
+              </span>
+            </h2>
+            <motion.div
+              className="mt-4 mx-auto h-[1px] rounded-full"
+              style={{ background: "linear-gradient(90deg, transparent, #C26FCF, #53C5E6, transparent)" }}
+              initial={{ width: 0 }}
+              whileInView={{ width: 120 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              viewport={{ once: true }}
+            />
+          </motion.div>
+
+          <motion.div
+            ref={valuesRef}
+            className="grid md:grid-cols-3 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate={valuesInView ? "visible" : "hidden"}
+          >
+            {values.map((value, index) => (
+              <motion.div
+                key={value.title}
+                className="group relative"
+                variants={cardVariants}
+                whileHover={{ y: -8 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="relative w-14 h-14 mb-6">
+                    <motion.div
+                      className="absolute inset-0 rounded-xl bg-[#53C5E6]/5 border border-[#53C5E6]/15"
+                      whileHover={{ rotate: 90, scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                    <div className="relative w-full h-full flex items-center justify-center">
+                      <value.icon className="w-7 h-7 text-[#53C5E6]" />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-[#2178C7] transition-colors duration-300">{value.title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{value.description}</p>
+                  <motion.div
+                    className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full"
+                    style={{ background: "linear-gradient(90deg, #53C5E640, transparent)" }}
+                    initial={{ scaleX: 0, originX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
+                    viewport={{ once: true }}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+  {/* Timeline Section - commented out
   <section className="relative py-24 md:py-36 overflow-hidden bg-slate-50 text-slate-900">
         <div className="absolute inset-0 dot-pattern pointer-events-none" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C26FCF]/15 to-transparent" />
@@ -491,7 +491,6 @@ export default function AboutPage() {
           </motion.div>
 
           <div className="space-y-8 relative">
-            {/* Vertical line */}
             <div className="absolute left-[47px] top-4 bottom-4 w-px bg-gradient-to-b from-[#53C5E6]/30 via-[#C26FCF]/20 to-transparent hidden md:block" />
 
             {milestones.map((milestone, index) => (
@@ -524,6 +523,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+  */}
 
       <Footer />
     </main>
