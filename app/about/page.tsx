@@ -6,7 +6,7 @@ import Image from "next/image"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import PageHero from "@/components/page-hero"
-import { Brain, Zap, Users, Rocket } from "lucide-react"
+import { Brain, Zap, Users, Rocket, Linkedin, Twitter } from "lucide-react"
 
 const containerVariants = {
   hidden: {},
@@ -14,7 +14,7 @@ const containerVariants = {
 }
 const cardVariants = {
   hidden: { opacity: 0, y: 40, scale: 0.96 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 }
 
 export default function AboutPage() {
@@ -49,11 +49,11 @@ export default function AboutPage() {
   ]
 
   const team = [
-    { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership &\nCorporate Governance", image: "/images/team/rohan-mainali.jpg" },
-    { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy &\nBusiness Growth", image: "/images/team/neha-aryal.jpg" },
-    { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy &\nEngineering Leadership", image: "/images/team/soyam-shrestha.jpg" },
-    { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Platform Engineering &\nScalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
-    { name: "Pratik Awal", role: "Lead Researcher", expertise: "Applied Research &\nAlgorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
+    { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership &\nCorporate Governance", image: "/images/team/rohan-mainali.jpg", socials: { linkedin: "https://www.linkedin.com/in/rohanmainali/"} },
+    { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy &\nBusiness Growth", image: "/images/team/neha-aryal.jpg", socials: { linkedin: "https://www.linkedin.com/in/nehaaryal/"} },
+    { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy &\nEngineering Leadership", image: "/images/team/soyam-shrestha.jpg", socials: { linkedin: "https://www.linkedin.com/in/soyam-shrestha-bb1350296/" } },
+    { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Building Scalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
+    { name: "Pratik Awal", role: "Lead Researcher", expertise: "Research & Algorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
     { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
     { name: "Aayushman Shrestha", role: "Data Scientist", expertise: "Data Annotation, Analysis", image: "/images/team/aayushman-shrestha.jpg" },
     { name: "Puspa Kutu", role: "Data Analyst", expertise: "Data Visualization, Reporting", image: "/images/team/puspa-kutu.jpg" },
@@ -64,7 +64,7 @@ export default function AboutPage() {
     { name: "Samichha Shrestha", role: "Full Stack Developer", expertise: "MERN Stack", image: "/images/team/samichha-shrestha.jpg" },
     { name: "Suyog Maharjan", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/suyog-maharjan.jpg" },
     { name: "Sahajid Rahaman", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/sahajid-rahaman.jpg" },
-    { name: "Abhay Shrestha", role: "QA Engineer", expertise: "Test Case Development, Manual Testing", image: "/images/team/abhay-shrestha.jpg" },
+    { name: "Abhay Shrestha", role: "QA Engineer", expertise: "Test Cases & Manual Testing", image: "/images/team/abhay-shrestha.jpg" },
   ]
 
   const milestones = [
@@ -274,65 +274,182 @@ export default function AboutPage() {
       />
     </motion.div>
 
-    {/* Team grid */}
+    {/* Leadership Spotlight */}
     <motion.div
-      ref={teamRef}
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-      variants={containerVariants}
-      initial="hidden"
-      animate={teamInView ? "visible" : "hidden"}
+      className="mb-20"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      viewport={{ once: true }}
     >
-      {team.map((member, index) => (
-        <motion.div
-          key={member.name}
-          className="group relative"
-          variants={cardVariants}
-          whileHover={{ y: -8 }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#2178C7]/5 via-[#53C5E6]/5 to-[#C26FCF]/5 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-          <div className="cosmic-card relative p-8 rounded-3xl border border-slate-200 bg-white hover:border-[#53C5E6]/30 transition-all duration-300 text-center h-full flex flex-col shadow-lg hover:shadow-xl">
-            {/* Photo with gradient border */}
-            <div className="relative mx-auto mb-6">
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-[#2178C7] via-[#53C5E6] to-[#C26FCF] rounded-3xl"
-                initial={{ opacity: 0.3 }}
-                whileHover={{ opacity: 0.6 }}
-                style={{ filter: "blur(8px)" }}
-                transition={{ duration: 0.3 }}
+      <motion.p
+        className="text-xs uppercase tracking-[0.25em] text-[#C26FCF] font-semibold mb-10 text-center"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        viewport={{ once: true }}
+      >
+        Leadership
+      </motion.p>
+      <div className="grid md:grid-cols-3 gap-8">
+        {team.slice(0, 3).map((member, index) => {
+          const accentColors = ["#2178C7", "#C26FCF", "#53C5E6"]
+          const accent = accentColors[index]
+          return (
+            <motion.div
+              key={member.name}
+              className="group relative"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] as const }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8 }}
+            >
+              {/* Outer glow on hover */}
+              <div
+                className="absolute -inset-3 rounded-3xl blur-2xl opacity-0 group-hover:opacity-15 transition-opacity duration-700"
+                style={{ background: accent }}
               />
-              <div className="relative w-40 h-40 rounded-3xl overflow-hidden border-2 border-[#53C5E6]/20 group-hover:border-[#53C5E6]/40 transition-all duration-300">
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  sizes="160px"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#2178C7]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-            </div>
 
-            {/* Member info */}
-            <div className="flex-grow flex flex-col">
-              <h3 className="text-xl font-bold mb-2 group-hover:text-[#2178C7] transition-colors duration-300">
+              <div className="relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 bg-white">
+                {/* Photo area */}
+                <div className="relative h-[340px] overflow-hidden">
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+                  {/* Colored accent line at top */}
+                  <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accent }} />
+                </div>
+
+                {/* Info panel below photo */}
+                <div className="relative bg-white px-6 py-5">
+                  {/* Subtle top highlight */}
+                  <div className="absolute top-0 left-6 right-6 h-px" style={{ background: `linear-gradient(90deg, transparent, ${accent}25, transparent)` }} />
+
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-bold text-slate-900 mb-1 truncate">{member.name}</h3>
+                      <p className="text-sm font-medium mb-2" style={{ color: accent }}>{member.role}</p>
+                      <p className="text-slate-500 text-xs leading-relaxed whitespace-pre-line">{member.expertise}</p>
+                    </div>
+
+                    {/* Social icons — always visible, right-aligned */}
+                    <div className="flex items-center gap-2 flex-shrink-0 pt-0.5">
+                      {member.socials?.linkedin && (
+                        <a
+                          href={member.socials.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#2178C7] hover:bg-slate-50 hover:border-[#2178C7]/30 transition-all duration-300"
+                        >
+                          <Linkedin size={14} />
+                        </a>
+                      )}
+                      {/* {member.socials?.twitter && (
+                        <a
+                          href={member.socials.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#53C5E6] hover:bg-slate-50 hover:border-[#53C5E6]/30 transition-all duration-300"
+                        >
+                          <Twitter size={14} />
+                        </a>
+                      )} */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
+    </motion.div>
+
+    {/* Divider */}
+    <motion.div
+      className="mx-auto h-px max-w-xs mb-20"
+      style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
+      initial={{ scaleX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+    />
+
+    {/* Rest of the team */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      viewport={{ once: true }}
+    >
+      <motion.p
+        className="text-xs uppercase tracking-[0.25em] text-[#F1B646] font-semibold mb-10 text-center"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        viewport={{ once: true }}
+      >
+        Engineering &amp; Research
+      </motion.p>
+      <motion.div
+        ref={teamRef}
+        className="flex flex-wrap justify-center gap-x-6 gap-y-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate={teamInView ? "visible" : "hidden"}
+      >
+        {team.slice(3).map((member, index) => {
+          const chipColors = ["#53C5E6", "#C26FCF", "#F1B646", "#2178C7"]
+          const chipColor = chipColors[index % chipColors.length]
+          return (
+            <motion.div
+              key={member.name}
+              className="group text-center w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-19.2px)]"
+              variants={cardVariants}
+            >
+              {/* Circular avatar */}
+              <div className="relative mx-auto mb-4 w-28 h-28">
+                <motion.div
+                  className="absolute -inset-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: `conic-gradient(from 0deg, ${chipColor}40, transparent, ${chipColor}40)` }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                />
+                <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-slate-200 group-hover:border-transparent transition-colors duration-300 shadow-md">
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="112px"
+                  />
+                </div>
+              </div>
+              {/* Name */}
+              <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#2178C7] transition-colors duration-300 mb-1">
                 {member.name}
               </h3>
-              <div className="mb-4">
-                <p className="text-[#2178C7] text-sm font-semibold mb-2 group-hover:text-[#53C5E6] transition-colors duration-300">
-                  {member.role}
-                </p>
-                <motion.div
-                  className="h-0.5 w-12 bg-gradient-to-r from-[#2178C7] to-[#53C5E6] mx-auto rounded-full"
-                  whileInView={{ width: [0, 48] }}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.02 }}
-                  viewport={{ once: true }}
-                />
-              </div>
-              <p className="text-slate-600 text-sm leading-relaxed mt-auto">{member.expertise}</p>
-            </div>
-          </div>
-        </motion.div>
-      ))}
+              {/* Role badge */}
+              <span
+                className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium mb-1.5"
+                style={{ background: `${chipColor}12`, color: chipColor }}
+              >
+                {member.role}
+              </span>
+              {/* Expertise — revealed on hover */}
+              <p className="text-slate-500 text-xs leading-relaxed max-h-0 overflow-hidden group-hover:max-h-20 transition-all duration-500">
+                {member.expertise}
+              </p>
+            </motion.div>
+          )
+        })}
+      </motion.div>
     </motion.div>
   </div>
 </section>

@@ -118,7 +118,6 @@ export default function ServicesPage() {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   viewport={{ once: true }}
                 >
-                  {service.number}
                 </motion.span>
 
                 <div className={`grid md:grid-cols-2 gap-12 items-start ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}>
