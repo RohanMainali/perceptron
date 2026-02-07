@@ -180,19 +180,19 @@ export default function Projects() {
                       </motion.span>
                     ))}
                   </div>
-                  <div className="flex gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     <motion.button
                       onClick={() => project.videoUrl && setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                      className={`cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${!project.videoUrl ? "opacity-40 cursor-not-allowed" : ""}`}
+                      className={`cosmic-btn-secondary flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${!project.videoUrl ? "opacity-40 cursor-not-allowed" : ""}`}
                       whileHover={project.videoUrl ? { scale: 1.03 } : {}}
                       whileTap={project.videoUrl ? { scale: 0.97 } : {}}
                     >
                       <Play size={16} /> Watch Demo
                     </motion.button>
                     {project.href ? (
-                      <Link href={project.href}>
+                      <Link href={project.href} className="block">
                         <motion.span
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm w-full"
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.97 }}
                         >
@@ -201,7 +201,7 @@ export default function Projects() {
                       </Link>
                     ) : (
                       <motion.button
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm"
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm w-full"
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                       >

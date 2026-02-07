@@ -178,19 +178,19 @@ export default function ProjectsPage() {
                       </div>
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <motion.button
                         onClick={() => project.videoUrl && setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                        className={`cosmic-btn-primary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${!project.videoUrl ? "opacity-40 cursor-not-allowed" : ""}`}
+                        className={`cosmic-btn-primary flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${!project.videoUrl ? "opacity-40 cursor-not-allowed" : ""}`}
                         whileHover={project.videoUrl ? { scale: 1.03, y: -2 } : {}}
                         whileTap={project.videoUrl ? { scale: 0.97 } : {}}
                       >
                         <Play size={18} /> Watch Demo
                       </motion.button>
                       {(project as { href?: string }).href ? (
-                        <Link href={(project as { href: string }).href}>
+                        <Link href={(project as { href: string }).href} className="block">
                           <motion.span
-                            className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
+                            className="cosmic-btn-secondary flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all w-full"
                             whileHover={{ scale: 1.03, y: -2 }}
                             whileTap={{ scale: 0.97 }}
                           >
@@ -199,7 +199,7 @@ export default function ProjectsPage() {
                         </Link>
                       ) : (
                         <motion.button
-                          className="cosmic-btn-secondary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
+                          className="cosmic-btn-secondary flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all w-full"
                           whileHover={{ scale: 1.03, y: -2 }}
                           whileTap={{ scale: 0.97 }}
                         >

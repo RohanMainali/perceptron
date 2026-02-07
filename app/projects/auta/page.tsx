@@ -165,7 +165,7 @@ export default function AutaProjectPage() {
         </motion.div>
 
         <motion.div
-          className="relative z-10 w-full px-6 md:px-12 lg:px-16 pt-32 pb-20"
+          className="relative z-10 w-full px-6 md:px-12 lg:px-16 pt-32 pb-44"
           style={{ opacity: heroOpacity }}
         >
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
