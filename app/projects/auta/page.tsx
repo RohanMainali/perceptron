@@ -328,7 +328,7 @@ export default function AutaProjectPage() {
                 className="group relative"
                 variants={cardVariants}
               >
-                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-400 h-full">
+                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full">
                   {/* Step number */}
                   <div
                     className="text-6xl font-black opacity-[0.06] absolute top-4 right-4 leading-none"
@@ -476,7 +476,7 @@ export default function AutaProjectPage() {
                 className="group"
                 variants={cardVariants}
               >
-                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-400 h-full">
+                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#2178C7]/10">
                       <feature.icon className="w-6 h-6 text-[#2178C7]" />
@@ -536,7 +536,7 @@ export default function AutaProjectPage() {
                 transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
               >
-                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-400 h-full">
+                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#F1B646]/10">
                       <feature.icon className="w-6 h-6 text-[#F1B646]" />

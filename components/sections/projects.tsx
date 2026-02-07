@@ -12,7 +12,18 @@ const containerVariants = {
 }
 const cardVariants = {
   hidden: { opacity: 0, y: 50, scale: 0.96 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
+}
+
+interface Project {
+  title: string
+  description: string
+  features: string[]
+  status: string
+  image: string
+  videoUrl: string
+  color: string
+  href?: string
 }
 
 export default function Projects() {
@@ -20,7 +31,7 @@ export default function Projects() {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
-  const projects = [
+  const projects: Project[] = [
     {
       title: "Auta — AI Annotation Tool",
       description:
@@ -106,9 +117,10 @@ export default function Projects() {
             <motion.div
               key={project.title}
               className="group relative h-full"
+              variants={cardVariants}
               whileHover={{ y: -8 }}
             >
-              <div className="cosmic-card relative rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-400 overflow-hidden h-full flex flex-col">
+              <div className="cosmic-card relative rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
                 {/* Project image with overlay effects */}
                 <div className="relative h-56 overflow-hidden">
                   <motion.img
@@ -177,8 +189,8 @@ export default function Projects() {
                     >
                       <Play size={16} /> Watch Demo
                     </motion.button>
-                    {(project as { href?: string }).href ? (
-                      <Link href={(project as { href: string }).href}>
+                    {project.href ? (
+                      <Link href={project.href}>
                         <motion.span
                           className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm"
                           whileHover={{ scale: 1.03 }}

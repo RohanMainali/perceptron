@@ -10,7 +10,7 @@ const containerVariants = {
 }
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 }
 
 export default function Services() {
@@ -112,10 +112,11 @@ export default function Services() {
             <motion.div
               key={service.title}
               className="group relative"
+              variants={cardVariants}
               whileHover={{ y: -10 }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-400 h-full flex flex-col">
+              <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-500 h-full flex flex-col">
                 {/* Icon */}
                 <div className="relative w-14 h-14 mb-6">
                   <motion.div
