@@ -211,7 +211,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
                 animate={{ opacity: [0, 0.8, 0], scale: [0, 2.5, 3] }}
                 transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
               >
-                <div className="w-20 h-20 rounded-full border border-[#53C5E6]/40" />
+                <div className="w-[120px] h-[120px] rounded-full border border-[#53C5E6]/40" />
               </motion.div>
 
               {/* Logo glow backdrop */}
@@ -221,7 +221,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
                 animate={{ opacity: [0, 1, 0.6] }}
                 transition={{ duration: 1.5, delay: 0.3, ease: "easeOut" }}
               >
-                <div className="w-24 h-24 rounded-full bg-[#53C5E6]/25 blur-xl" />
+                <div className="w-36 h-36 rounded-full bg-[#53C5E6]/25 blur-xl" />
               </motion.div>
 
               {/* Actual logo */}
@@ -241,9 +241,9 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
                   <Image
                     src="/perceptron-logo.png"
                     alt="Perceptron Logo"
-                    width={80}
-                    height={80}
-                    className="w-20 h-20 drop-shadow-[0_0_20px_rgba(83,197,230,0.6)]"
+                    width={120}
+                    height={120}
+                    className="w-[120px] h-[120px] drop-shadow-[0_0_20px_rgba(83,197,230,0.6)]"
                   />
                 </motion.div>
               </motion.div>
