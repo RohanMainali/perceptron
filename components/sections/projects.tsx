@@ -15,15 +15,6 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 }
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-}
-const cardVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.96 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-}
-
 export default function Projects() {
   const [selectedVideo, setSelectedVideo] = useState<{ url: string; title: string } | null>(null)
   const ref = useRef<HTMLElement>(null)
