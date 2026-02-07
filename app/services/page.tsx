@@ -110,16 +110,6 @@ export default function ServicesPage() {
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
               >
-                {/* Service number watermark */}
-                <motion.span
-                  className="absolute -top-6 -left-2 text-[8rem] font-black text-slate-100 select-none pointer-events-none leading-none"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </motion.span>
 
                 <div className={`grid md:grid-cols-2 gap-12 items-start ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}>
                   <motion.div

@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion"
 import { ExternalLink, Play } from "lucide-react"
 import { useState, useRef } from "react"
 import VideoModal from "@/components/video-modal"
+import Link from "next/link"
 
 const containerVariants = {
   hidden: {},
@@ -11,7 +12,18 @@ const containerVariants = {
 }
 const cardVariants = {
   hidden: { opacity: 0, y: 50, scale: 0.96 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
+}
+
+interface Project {
+  title: string
+  description: string
+  features: string[]
+  status: string
+  image: string
+  videoUrl: string
+  color: string
+  href?: string
 }
 
 export default function Projects() {
@@ -19,7 +31,18 @@ export default function Projects() {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
-  const projects = [
+  const projects: Project[] = [
+    {
+      title: "Auta — AI Annotation Tool",
+      description:
+        "Chat-driven auto-annotation platform. Drop a .zip, describe the task in natural language, and get a fully annotated dataset in seconds.",
+      features: ["Chat-to-Task", "Auto Segmentation", "Batch Annotation", "SAM3 Integration"],
+      status: "Active Development",
+      image: "/images/auta/auta-demo.gif",
+      videoUrl: "",
+      color: "#2178C7",
+      href: "/projects/auta",
+    },
     {
       title: "MMA Vision",
       description:
@@ -29,16 +52,6 @@ export default function Projects() {
       image: "/mma-fight-analysis-computer-vision.jpg",
       videoUrl: "https://www.youtube.com/embed/iNBSTdSzWlc",
       color: "#53C5E6",
-    },
-    {
-      title: "Pose Estimation Engine",
-      description:
-        "Advanced pose estimation system for human movement analysis and tracking in sports and fitness applications.",
-      features: ["Multi-person Detection", "Real-time Processing", "Accuracy Optimization"],
-      status: "In Development",
-      image: "/pose-estimation-human-movement.jpg",
-      videoUrl: "",
-      color: "#C26FCF",
     },
     {
       title: "CLIP Fine-tuning Suite",
@@ -107,7 +120,7 @@ export default function Projects() {
               variants={cardVariants}
               whileHover={{ y: -8 }}
             >
-              <div className="cosmic-card relative rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-400 overflow-hidden h-full flex flex-col">
+              <div className="cosmic-card relative rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
                 {/* Project image with overlay effects */}
                 <div className="relative h-56 overflow-hidden">
                   <motion.img
@@ -176,13 +189,25 @@ export default function Projects() {
                     >
                       <Play size={16} /> Watch Demo
                     </motion.button>
-                    <motion.button
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      Details <ExternalLink size={14} />
-                    </motion.button>
+                    {project.href ? (
+                      <Link href={project.href}>
+                        <motion.span
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          Details <ExternalLink size={14} />
+                        </motion.span>
+                      </Link>
+                    ) : (
+                      <motion.button
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#53C5E6]/40 hover:bg-[#53C5E6]/5 hover:text-[#2178C7] transition-all font-medium text-sm"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        Details <ExternalLink size={14} />
+                      </motion.button>
+                    )}
                   </div>
                 </div>
 
