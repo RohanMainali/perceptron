@@ -112,15 +112,17 @@ export default function ProjectsPage() {
                         </span>
                       </div>
 
-                      <motion.button
-                        onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors">
-                          <Play size={36} className="fill-white text-white ml-1" />
-                        </div>
-                      </motion.button>
+                      {project.videoUrl && (
+                        <motion.button
+                          onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
+                          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors">
+                            <Play size={36} className="fill-white text-white ml-1" />
+                          </div>
+                        </motion.button>
+                      )}
                     </div>
                     {/* Bottom accent */}
                     <div className="h-[2px]" style={{ background: `linear-gradient(90deg, ${project.color}, transparent)` }} />
@@ -176,10 +178,10 @@ export default function ProjectsPage() {
 
                     <div className="flex gap-4">
                       <motion.button
-                        onClick={() => setSelectedVideo({ url: project.videoUrl, title: project.title })}
-                        className="cosmic-btn-primary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
-                        whileHover={{ scale: 1.03, y: -2 }}
-                        whileTap={{ scale: 0.97 }}
+                        onClick={() => project.videoUrl && setSelectedVideo({ url: project.videoUrl, title: project.title })}
+                        className={`cosmic-btn-primary flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${!project.videoUrl ? "opacity-40 cursor-not-allowed" : ""}`}
+                        whileHover={project.videoUrl ? { scale: 1.03, y: -2 } : {}}
+                        whileTap={project.videoUrl ? { scale: 0.97 } : {}}
                       >
                         <Play size={18} /> Watch Demo
                       </motion.button>

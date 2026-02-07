@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { Linkedin, Github, Twitter } from "lucide-react"
+import { Linkedin, Github, Facebook, MessageCircle } from "lucide-react"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -129,13 +129,16 @@ export default function Footer() {
               <h4 className="font-bold mb-4">Follow Us</h4>
               <div className="flex gap-3">
                 {[
-                  { icon: Linkedin, label: "LinkedIn", color: "#2178C7" },
-                  { icon: Github, label: "GitHub", color: "#53C5E6" },
-                  { icon: Twitter, label: "Twitter", color: "#C26FCF" },
+                  { icon: Linkedin, label: "LinkedIn", color: "#2178C7", href: "https://www.linkedin.com/in/perceptronai/" },
+                  { icon: Github, label: "GitHub", color: "#53C5E6", href: "https://github.com/perceptronai-org" },
+                  { icon: Facebook, label: "Facebook", color: "#C26FCF", href: "https://www.facebook.com/profile.php?id=61586580522261" },
+                  { icon: MessageCircle, label: "Reddit", color: "#F1B646", href: "https://www.reddit.com/user/Intelligent_Cry_3621/" },
                 ].map((social, i) => (
                   <motion.a
                     key={social.label}
-                    href="#"
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 border border-white/10 hover:border-[#53C5E6]/30"
                     style={{ background: `${social.color}15` }}
                     aria-label={social.label}

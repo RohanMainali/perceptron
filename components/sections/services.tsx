@@ -2,7 +2,6 @@
 
 import { motion, useInView } from "framer-motion"
 import { Database, Cpu, BookOpen } from "lucide-react"
-import Link from "next/link"
 import { useRef } from "react"
 
 const containerVariants = {

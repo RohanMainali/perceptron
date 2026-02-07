@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import Link from "next/link"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { ArrowLeft, Calendar, User, Clock } from "lucide-react"
@@ -29,6 +29,16 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
 
   const readingTime = Math.max(1, Math.ceil((post.content?.length || 0) / 1200))
 
+  const particles = useMemo(() =>
+    [...Array(6)].map((_, i) => ({
+      size: 3 + Math.random() * 4,
+      left: `${10 + Math.random() * 80}%`,
+      top: `${20 + Math.random() * 60}%`,
+      color: ["#53C5E6", "#C26FCF", "#F1B646", "#2178C7"][i % 4],
+      duration: 3 + Math.random() * 3,
+    })),
+  [])
+
   return (
     <main className="relative overflow-hidden bg-background">
       {/* Reading progress bar */}
@@ -55,16 +65,16 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
         </div>
 
         {/* Floating particles */}
-        {[...Array(6)].map((_, i) => (
+        {particles.map((p, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: 3 + Math.random() * 4,
-              height: 3 + Math.random() * 4,
-              left: `${10 + Math.random() * 80}%`,
-              top: `${20 + Math.random() * 60}%`,
-              background: ["#53C5E6", "#C26FCF", "#F1B646", "#2178C7"][i % 4],
+              width: p.size,
+              height: p.size,
+              left: p.left,
+              top: p.top,
+              background: p.color,
               opacity: 0.4,
             }}
             animate={{
@@ -72,7 +82,7 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
               opacity: [0.2, 0.5, 0.2],
             }}
             transition={{
-              duration: 3 + Math.random() * 3,
+              duration: p.duration,
               repeat: Infinity,
               delay: i * 0.5,
             }}

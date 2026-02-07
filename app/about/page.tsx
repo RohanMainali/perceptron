@@ -6,7 +6,7 @@ import Image from "next/image"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import PageHero from "@/components/page-hero"
-import { Brain, Zap, Users, Rocket, Linkedin, Twitter } from "lucide-react"
+import { Brain, Zap, Users, Rocket, Linkedin } from "lucide-react"
 
 const containerVariants = {
   hidden: {},
