@@ -80,7 +80,7 @@ export default function AboutPage() {
     { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership &\nCorporate Governance", image: "/images/team/rohan-mainali.jpg", socials: { linkedin: "https://www.linkedin.com/in/rohanmainali/"} },
     { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy &\nBusiness Growth", image: "/images/team/neha-aryal.jpg", socials: { linkedin: "https://www.linkedin.com/in/nehaaryal/"} },
     { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy &\nEngineering Leadership", image: "/images/team/soyam-shrestha.jpg", socials: { linkedin: "https://www.linkedin.com/in/soyam-shrestha-bb1350296/" } },
-    { name: "Manas Mudbari", role: "Chief Operations Officer", expertise: "Operations Management &\nProcess Optimization", image: "/images/team/manas-mudbari.png", socials: { linkedin: "https://www.linkedin.com/in/manas-mudbari/"} },
+    { name: "Manas Mudbari", role: "Chief Operations Officer", expertise: "Operations Management &\nProcess Optimization", image: "/images/team/manas-mudbari.png", socials: { linkedin: "https://www.linkedin.com/in/manasmudbari/"} },
     { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Building Scalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
     { name: "Pratik Awal", role: "Lead Researcher", expertise: "Research & Algorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
     { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
