@@ -1,12 +1,12 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
-import { useEffect, useState, useRef } from "react"
+import { motion, useInView, AnimatePresence } from "framer-motion"
+import { useEffect, useState, useRef, useCallback } from "react"
 import Image from "next/image"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import PageHero from "@/components/page-hero"
-import { Brain, Zap, Users, Rocket, Linkedin } from "lucide-react"
+import { Brain, Zap, Users, Rocket, Linkedin, ChevronLeft, ChevronRight } from "lucide-react"
 
 const containerVariants = {
   hidden: {},
@@ -17,12 +17,40 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 }
 
+const slideVariants = {
+  enter: (dir: number) => ({ x: dir >= 0 ? 280 : -280, opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (dir: number) => ({ x: dir >= 0 ? -280 : 280, opacity: 0 }),
+}
+
+const leaderAccents = ["#2178C7", "#C26FCF", "#53C5E6", "#F1B646"]
+
 export default function AboutPage() {
   const [scrollY, setScrollY] = useState(0)
   const valuesRef = useRef<HTMLDivElement>(null)
   const valuesInView = useInView(valuesRef, { once: true, margin: "-100px" })
   const teamRef = useRef<HTMLDivElement>(null)
   const teamInView = useInView(teamRef, { once: true, margin: "-80px" })
+
+  const [leaderIdx, setLeaderIdx] = useState(0)
+  const [slideDir, setSlideDir] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  const nextLeader = useCallback(() => {
+    setSlideDir(1)
+    setLeaderIdx(prev => (prev + 1) % 4)
+  }, [])
+
+  const prevLeader = useCallback(() => {
+    setSlideDir(-1)
+    setLeaderIdx(prev => (prev - 1 + 4) % 4)
+  }, [])
+
+  useEffect(() => {
+    if (isPaused) return
+    const timer = setInterval(nextLeader, 5000)
+    return () => clearInterval(timer)
+  }, [isPaused, nextLeader])
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -52,6 +80,7 @@ export default function AboutPage() {
     { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership &\nCorporate Governance", image: "/images/team/rohan-mainali.jpg", socials: { linkedin: "https://www.linkedin.com/in/rohanmainali/"} },
     { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy &\nBusiness Growth", image: "/images/team/neha-aryal.jpg", socials: { linkedin: "https://www.linkedin.com/in/nehaaryal/"} },
     { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy &\nEngineering Leadership", image: "/images/team/soyam-shrestha.jpg", socials: { linkedin: "https://www.linkedin.com/in/soyam-shrestha-bb1350296/" } },
+    { name: "Manas Mudbari", role: "Chief Operations Officer", expertise: "Operations Management &\nProcess Optimization", image: "/images/team/manas-mudbari.png", socials: { linkedin: "https://www.linkedin.com/in/manas-mudbari/"} },
     { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Building Scalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
     { name: "Pratik Awal", role: "Lead Researcher", expertise: "Research & Algorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
     { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
@@ -195,7 +224,7 @@ export default function AboutPage() {
       />
     </motion.div>
 
-    {/* Leadership Spotlight */}
+    {/* Leadership Carousel */}
     <motion.div
       className="mb-20"
       initial={{ opacity: 0 }}
@@ -212,83 +241,129 @@ export default function AboutPage() {
       >
         Leadership
       </motion.p>
-      <div className="grid md:grid-cols-3 gap-8">
-        {team.slice(0, 3).map((member, index) => {
-          const accentColors = ["#2178C7", "#C26FCF", "#53C5E6"]
-          const accent = accentColors[index]
-          return (
-            <motion.div
-              key={member.name}
-              className="group relative"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] as const }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-            >
-              {/* Outer glow on hover */}
-              <div
-                className="absolute -inset-3 rounded-3xl blur-2xl opacity-0 group-hover:opacity-15 transition-opacity duration-700"
-                style={{ background: accent }}
-              />
 
-              <div className="relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 bg-white">
-                {/* Photo area */}
-                <div className="relative h-[340px] overflow-hidden">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+      <div
+        className="relative max-w-4xl mx-auto"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        {/* Navigation arrows */}
+        <button
+          onClick={prevLeader}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-14 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-lg flex items-center justify-center text-slate-400 hover:text-[#2178C7] hover:border-[#2178C7]/30 hover:shadow-xl transition-all duration-300"
+          aria-label="Previous leader"
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <button
+          onClick={nextLeader}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-14 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-lg flex items-center justify-center text-slate-400 hover:text-[#2178C7] hover:border-[#2178C7]/30 hover:shadow-xl transition-all duration-300"
+          aria-label="Next leader"
+        >
+          <ChevronRight size={20} />
+        </button>
 
-                  {/* Colored accent line at top */}
-                  <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accent }} />
-                </div>
-
-                {/* Info panel below photo */}
-                <div className="relative bg-white px-6 py-5">
-                  {/* Subtle top highlight */}
-                  <div className="absolute top-0 left-6 right-6 h-px" style={{ background: `linear-gradient(90deg, transparent, ${accent}25, transparent)` }} />
-
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-bold text-slate-900 mb-1 truncate">{member.name}</h3>
-                      <p className="text-sm font-medium mb-2" style={{ color: accent }}>{member.role}</p>
-                      <p className="text-slate-500 text-xs leading-relaxed whitespace-pre-line">{member.expertise}</p>
-                    </div>
-
-                    {/* Social icons — always visible, right-aligned */}
-                    <div className="flex items-center gap-2 flex-shrink-0 pt-0.5">
-                      {member.socials?.linkedin && (
-                        <a
-                          href={member.socials.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#2178C7] hover:bg-slate-50 hover:border-[#2178C7]/30 transition-all duration-300"
-                        >
-                          <Linkedin size={14} />
-                        </a>
-                      )}
-                      {/* {member.socials?.twitter && (
-                        <a
-                          href={member.socials.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#53C5E6] hover:bg-slate-50 hover:border-[#53C5E6]/30 transition-all duration-300"
-                        >
-                          <Twitter size={14} />
-                        </a>
-                      )} */}
-                    </div>
+        {/* Carousel card */}
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
+          <AnimatePresence mode="wait" custom={slideDir}>
+            {(() => {
+              const member = team[leaderIdx]
+              const accent = leaderAccents[leaderIdx]
+              return (
+                <motion.div
+                  key={leaderIdx}
+                  custom={slideDir}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="grid md:grid-cols-2"
+                >
+                  {/* Photo */}
+                  <div className="relative h-72 md:h-[420px] overflow-hidden">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                    <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accent }} />
                   </div>
-                </div>
+
+                  {/* Info */}
+                  <div className="flex flex-col justify-center p-8 md:p-12">
+                    <div className="w-12 h-[3px] rounded-full mb-6" style={{ background: accent }} />
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{member.name}</h3>
+                    <p className="text-base font-semibold mb-4" style={{ color: accent }}>{member.role}</p>
+                    <p className="text-slate-500 text-sm leading-relaxed whitespace-pre-line mb-6">{member.expertise}</p>
+                    {member.socials?.linkedin && (
+                      <a
+                        href={member.socials.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 w-fit px-4 py-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 hover:text-[#2178C7] hover:bg-slate-50 hover:border-[#2178C7]/30 transition-all duration-300 text-sm"
+                      >
+                        <Linkedin size={16} />
+                        <span>LinkedIn</span>
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              )
+            })()}
+          </AnimatePresence>
+        </div>
+
+        {/* Dot indicators with names */}
+        <div className="flex justify-center gap-6 mt-8">
+          {team.slice(0, 4).map((member, idx) => (
+            <button
+              key={member.name}
+              onClick={() => {
+                setSlideDir(idx > leaderIdx ? 1 : -1)
+                setLeaderIdx(idx)
+              }}
+              className="group relative flex flex-col items-center gap-2 outline-none"
+              aria-label={`View ${member.name}`}
+            >
+              {/* Thumbnail */}
+              <div
+                className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 transition-all duration-300 ${
+                  idx === leaderIdx
+                    ? "shadow-lg scale-110"
+                    : "border-slate-200 opacity-60 hover:opacity-100 grayscale hover:grayscale-0"
+                }`}
+                style={idx === leaderIdx ? { borderColor: leaderAccents[idx] } : {}}
+              >
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  className="object-cover"
+                  sizes="48px"
+                />
               </div>
-            </motion.div>
-          )
-        })}
+              <span
+                className={`text-[11px] font-medium transition-all duration-300 ${
+                  idx === leaderIdx ? "text-slate-800" : "text-slate-400 group-hover:text-slate-600"
+                }`}
+              >
+                {member.name.split(" ")[0]}
+              </span>
+              {/* Active indicator bar */}
+              <div
+                className={`h-[2px] rounded-full transition-all duration-300 ${
+                  idx === leaderIdx ? "w-full" : "w-0"
+                }`}
+                style={{ background: leaderAccents[idx] }}
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </motion.div>
 
@@ -325,7 +400,7 @@ export default function AboutPage() {
         initial="hidden"
         animate={teamInView ? "visible" : "hidden"}
       >
-        {team.slice(3).map((member, index) => {
+        {team.slice(4).map((member, index) => {
           const chipColors = ["#53C5E6", "#C26FCF", "#F1B646", "#2178C7"]
           const chipColor = chipColors[index % chipColors.length]
           return (
