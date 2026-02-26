@@ -170,7 +170,7 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
               <h3 className="text-xl font-bold mb-6">Contact Information</h3>
               <div className="space-y-5">
                 {[
-                  { icon: Mail, label: "perceptronorg@gmail.com", href: "mailto:perceptronorg@gmail.com", color: "#53C5E6" },
+                  { icon: Mail, label: "support@perceptronai.org", href: "mailto:support@perceptronai.org", color: "#53C5E6" },
                   { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/perceptronai/", color: "#2178C7" },
                   { icon: Github, label: "GitHub", href: "https://github.com/perceptronai-org", color: "#C26FCF" },
                 ].map((item, i) => (

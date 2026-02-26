@@ -1,175 +1,307 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
-import { Database, Cpu, BookOpen } from "lucide-react"
-import { useRef } from "react"
+import { motion, useInView, AnimatePresence } from "framer-motion"
+import { useState, useRef } from "react"
+import Image from "next/image"
+import { ArrowRight } from "lucide-react"
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-}
-const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
-}
+const features = [
+  {
+    id: "01",
+    title: "Conversational Annotation",
+    description:
+      "Create and run annotation tasks directly from chat. Just say what you want — \"Segment all the monkeys\" or \"Draw bounding boxes around vehicles\" — and the AI builds and executes the task.",
+    visual: "/images/auta/auta-demo.gif",
+    color: "#53C5E6",
+    tag: "Chat-to-Task",
+  },
+  {
+    id: "02",
+    title: "AI Dataset Planner",
+    description:
+      "Upload raw images and describe your goal. The AI analyzes the request, suggests the label schema, picks the right annotation type, and immediately starts processing your dataset.",
+    visual: "/images/auta/interactive-annotation.gif",
+    color: "#C26FCF",
+    tag: "Smart Planning",
+  },
+  {
+    id: "03",
+    title: "Polygon Segmentation",
+    description:
+      "Pixel-perfect segmentation masks powered by state-of-the-art AI. Automated brush and polygon tools for precise object delineation across thousands of images — no manual effort.",
+    visual: "/images/auta/segmentation-demo.gif",
+    color: "#2178C7",
+    tag: "AI Segmentation",
+  },
+  {
+    id: "04",
+    title: "Object Detection",
+    description:
+      "Automatic bounding box annotations using state-of-the-art detection models. From simple objects to dense urban scenes — detect and label everything in a single prompt.",
+    visual: "/images/auta/dataset-demo.gif",
+    color: "#F1B646",
+    tag: "Bounding Boxes",
+  },
+  {
+    id: "05",
+    title: "Video Annotation & Tracking",
+    description:
+      "Upload raw MP4 files and use natural language prompts to annotate entire videos. Integrated tracking pipeline keeps object IDs consistent and movement smooth across the timeline.",
+    visual: "/images/auta/ai-tools.gif",
+    color: "#E05A6D",
+    tag: "Video + NLP",
+  },
+  {
+    id: "06",
+    title: "Zero-Shot Dataset Generation",
+    description:
+      "You don't even need images. Describe the dataset you need — the tool sources images, generates masks, bounding boxes, and labels entirely on its own. Just review and export.",
+    visual: "/images/auta/auto-annotation.png",
+    color: "#53C5E6",
+    tag: "No Images Needed",
+  },
+  {
+    id: "07",
+    title: "Multi-Format Export",
+    description:
+      "Export in COCO, PASCAL VOC, YOLO, Ultralytics YOLO, CVAT XML, Datumaro, LabelMe, ImageNet, MOT, KITTI, CamVid, Cityscapes, Open Images, WIDER Face, and more.",
+    visual: "/images/auta/auta-demo.gif",
+    color: "#C26FCF",
+    tag: "20+ Formats",
+  },
+]
 
 export default function Services() {
   const ref = useRef<HTMLElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-
-  const services = [
-    {
-      icon: Database,
-      title: "Data Annotation",
-      description:
-        "Professional data labeling with bounding boxes, segmentation, and ViT-based labeling for high-quality training datasets.",
-      features: ["Bounding Boxes", "Segmentation", "ViT Labeling"],
-      href: "/services#data-annotation",
-      color: "#53C5E6",
-    },
-    {
-      icon: Cpu,
-      title: "Model Development",
-      description:
-        "Custom AI model development including object detection, pose estimation, and CLIP fine-tuning for your specific needs.",
-      features: ["Object Detection", "Pose Estimation", "CLIP Fine-tuning"],
-      href: "/services#model-development",
-      color: "#C26FCF",
-    },
-    {
-      icon: BookOpen,
-      title: "Research & Consulting",
-      description:
-        "Expert consulting and research services to guide your AI initiatives and solve complex technical challenges.",
-      features: ["Strategy", "Architecture", "Implementation"],
-      href: "/services#research-consulting",
-      color: "#F1B646",
-    },
-  ]
+  const isInView = useInView(ref, { once: true, margin: "-80px" })
+  const [activeIndex, setActiveIndex] = useState(0)
+  const active = features[activeIndex]
 
   return (
-    <section ref={ref} id="services" className="relative py-24 md:py-36 overflow-hidden bg-slate-50 text-slate-900">
-      {/* Background decoration */}
-      <div className="absolute inset-0 dot-pattern pointer-events-none" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C26FCF]/15 to-transparent" />
+    <section ref={ref} id="services" className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
+      {/* Subtle background */}
+      <div className="absolute inset-0 light-mesh pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#53C5E6]/20 to-transparent" />
 
-      {/* Floating accents */}
+      {/* Soft glow behind image panel */}
       <motion.div
-        className="absolute top-1/4 right-0 w-96 h-96 rounded-full bg-[#53C5E6]/[0.02] blur-3xl"
-        animate={{ x: [0, 20, 0], scale: [1, 1.05, 1] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 left-0 w-96 h-96 rounded-full bg-[#C26FCF]/[0.02] blur-3xl"
-        animate={{ x: [0, -20, 0], scale: [1, 1.08, 1] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute right-0 top-1/4 w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none"
+        animate={{ background: `radial-gradient(circle, ${active.color}18, transparent 70%)` }}
+        transition={{ duration: 0.6 }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section header */}
+        {/* Header */}
         <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 30 }}
+          className="mb-16"
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] as const }}
           viewport={{ once: true }}
         >
-          <motion.span
-            className="inline-block text-sm font-medium tracking-widest uppercase text-[#C26FCF] mb-4"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            What We Do
-          </motion.span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="cosmic-heading-gradient">
-              Our Services
-            </span>
-          </h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            Comprehensive AI solutions tailored to your business needs and technical requirements
-          </p>
-          <motion.div
-            className="mt-6 mx-auto h-[1px] rounded-full"
-            style={{ background: "linear-gradient(90deg, transparent, #C26FCF, #53C5E6, transparent)" }}
-            initial={{ width: 0 }}
-            whileInView={{ width: 120 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            viewport={{ once: true }}
-          />
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#C26FCF] mb-3">
+            Features
+          </span>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <h2 className="text-4xl md:text-5xl font-bold">
+              <span className="cosmic-heading-gradient">The Best Choice for Your Vision Task</span>
+            </h2>
+            <p className="text-slate-400 text-sm max-w-xs leading-relaxed md:text-right">
+              Works with images, videos, and every annotation type — no config required.
+            </p>
+          </div>
+          <div className="mt-5 h-px bg-slate-100" />
         </motion.div>
 
-        {/* Services grid */}
-        <motion.div
-          className="grid md:grid-cols-3 gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          {services.map((service, index) => (
-            <motion.div
-              key={service.title}
-              className="group relative"
-              variants={cardVariants}
-              whileHover={{ y: -10 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-500 h-full flex flex-col">
-                {/* Icon */}
-                <div className="relative w-14 h-14 mb-6">
-                  <motion.div
-                    className="absolute inset-0 rounded-xl"
-                    style={{ background: `${service.color}10`, border: `1px solid ${service.color}20` }}
-                    whileHover={{ rotate: 45, scale: 1.1 }}
-                    transition={{ duration: 0.4 }}
-                  />
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <service.icon className="w-7 h-7" style={{ color: service.color }} />
-                  </div>
-                </div>
+        {/* Body — list left, large visual right */}
+        <div className="grid lg:grid-cols-[420px_1fr] gap-10 lg:gap-16 items-start">
 
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-[#2178C7] transition-colors duration-300">{service.title}</h3>
-                <p className="text-slate-500 mb-5 text-sm leading-relaxed">{service.description}</p>
-                <ul className="space-y-2 mb-6">
-                  {service.features.map((feature, fi) => (
-                    <motion.li
-                      key={feature}
-                      className="flex items-center gap-2.5 text-sm text-slate-600"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + fi * 0.08 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: service.color }} />
-                      <span>{feature}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-                <div className="mt-auto">
-                  <motion.button
-                    className="cosmic-btn-primary w-full px-6 py-2.5 rounded-lg font-medium transition-all text-sm"
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    Learn More
-                  </motion.button>
-                </div>
-
-                {/* Bottom accent */}
+          {/* Left — feature list */}
+          <div className="lg:sticky lg:top-28">
+            {features.map((feature, index) => {
+              const isActive = index === activeIndex
+              return (
                 <motion.div
-                  className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full"
-                  style={{ background: `linear-gradient(90deg, ${service.color}50, transparent)` }}
-                  initial={{ scaleX: 0, originX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                  viewport={{ once: true }}
-                />
+                  key={feature.id}
+                  className="relative border-b border-slate-100 last:border-b-0 cursor-pointer group"
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onClick={() => setActiveIndex(index)}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.05 + index * 0.06, ease: [0.22, 1, 0.36, 1] as const }}
+                >
+                  {/* Active left bar */}
+                  <motion.div
+                    className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full"
+                    style={{ background: feature.color }}
+                    animate={{ opacity: isActive ? 1 : 0, scaleY: isActive ? 1 : 0.4 }}
+                    transition={{ duration: 0.22 }}
+                  />
+
+                  <div className={`pl-5 pr-3 py-4 rounded-r-xl transition-colors duration-200 ${isActive ? "bg-slate-50" : "hover:bg-slate-50/60"}`}>
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="text-xs font-mono tabular-nums flex-shrink-0 transition-colors duration-200"
+                        style={{ color: isActive ? feature.color : "#cbd5e1" }}
+                      >
+                        {feature.id}
+                      </span>
+                      <span
+                        className={`text-sm font-semibold transition-colors duration-200 flex-1 ${
+                          isActive ? "text-slate-900" : "text-slate-400 group-hover:text-slate-700"
+                        }`}
+                      >
+                        {feature.title}
+                      </span>
+                      {isActive && (
+                        <span
+                          className="text-[10px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0"
+                          style={{ background: `${feature.color}15`, color: feature.color }}
+                        >
+                          {feature.tag}
+                        </span>
+                      )}
+                    </div>
+
+                    <AnimatePresence>
+                      {isActive && (
+                        <motion.p
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                          transition={{ duration: 0.28, ease: "easeInOut" }}
+                          className="text-xs text-slate-500 leading-relaxed pl-8 overflow-hidden"
+                        >
+                          {feature.description}
+                        </motion.p>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              )
+            })}
+
+            {/* CTA below list */}
+            <motion.div
+              className="mt-6 pl-5"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <a
+                href="/projects/auta"
+                className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200"
+                style={{ color: active.color }}
+              >
+                Explore all features
+                <ArrowRight size={14} />
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Right — large visual panel */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
+          >
+            {/* Card */}
+            <motion.div
+              className="relative rounded-3xl overflow-hidden shadow-2xl"
+              animate={{ boxShadow: `0 25px 80px -12px ${active.color}30` }}
+              transition={{ duration: 0.5 }}
+              style={{ border: `1px solid ${active.color}20` }}
+            >
+              {/* Top accent bar */}
+              <motion.div
+                className="absolute top-0 left-0 right-0 h-[3px] z-20"
+                animate={{ background: `linear-gradient(90deg, ${active.color}, ${active.color}40, transparent)` }}
+                transition={{ duration: 0.4 }}
+              />
+
+              {/* Image — tall and full-width */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, scale: 1.02 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="relative w-full bg-slate-100"
+                  style={{ aspectRatio: "16/10" }}
+                >
+                  <Image
+                    src={active.visual}
+                    alt={active.title}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Bottom info bar */}
+              <div className="relative bg-white border-t border-slate-100 px-6 py-4 flex items-center justify-between">
+                <div>
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={activeIndex + "-title"}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-sm font-bold text-slate-800"
+                    >
+                      {active.title}
+                    </motion.p>
+                  </AnimatePresence>
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={activeIndex + "-tag"}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, delay: 0.05 }}
+                      className="text-xs mt-0.5"
+                      style={{ color: active.color }}
+                    >
+                      {active.tag}
+                    </motion.p>
+                  </AnimatePresence>
+                </div>
+
+                {/* Dot pagination */}
+                <div className="flex items-center gap-1.5">
+                  {features.map((f, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveIndex(i)}
+                      className="rounded-full transition-all duration-300"
+                      style={{
+                        width: i === activeIndex ? 18 : 6,
+                        height: 6,
+                        background: i === activeIndex ? active.color : "#e2e8f0",
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             </motion.div>
-          ))}
-        </motion.div>
+
+            {/* Feature number indicator */}
+            <div className="flex items-center gap-2 mt-4 px-1">
+              <span className="text-xs text-slate-400 tabular-nums">{active.id} / {String(features.length).padStart(2, "0")}</span>
+              <div className="flex-1 h-px bg-slate-100 relative overflow-hidden rounded-full">
+                <motion.div
+                  className="absolute left-0 top-0 bottom-0 rounded-full"
+                  style={{ background: active.color }}
+                  animate={{ width: `${((activeIndex + 1) / features.length) * 100}%` }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )
