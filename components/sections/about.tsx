@@ -1,139 +1,171 @@
 "use client"
 
 import { motion, useInView } from "framer-motion"
-import { Brain, Zap, Users } from "lucide-react"
+import { HeartPulse, Trophy, Car, Check, ArrowRight } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 import { useRef } from "react"
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-}
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-}
+const useCases = [
+  {
+    icon: HeartPulse,
+    domain: "Medical Imaging AI",
+    tagline: "Precision annotation for life-saving diagnostics",
+    color: "#E05A6D",
+    bg: "bg-[#E05A6D]/8",
+    video: "/images/auta/segmentation-demo.gif",
+    capabilities: [
+      "Tumor & lesion segmentation in MRI scans",
+      "Organ detection & labeling in CT scans",
+      "AI-assisted reasoning for anatomical structures",
+      "Surgical video annotation & frame tracking",
+    ],
+    stat: { value: "10×", label: "faster than manual labeling" },
+  },
+  {
+    icon: Trophy,
+    domain: "Sports Analytics",
+    tagline: "Real-time tracking & tactical intelligence",
+    color: "#F1B646",
+    bg: "bg-[#F1B646]/8",
+    video: "/images/auta/ai-tools.gif",
+    capabilities: [
+      "Player position tracking across frames",
+      "Ball trajectory & tactical zone mapping",
+      "Action detection — passes, shots, punches",
+      "Natural language AI reasoning on tactics",
+    ],
+    stat: { value: "Any", label: "sport, any camera angle" },
+  },
+  {
+    icon: Car,
+    domain: "Autonomous Driving",
+    tagline: "Powering the next generation of self-driving AI",
+    color: "#53C5E6",
+    bg: "bg-[#53C5E6]/8",
+    video: "/images/auta/dataset-demo.gif",
+    capabilities: [
+      "Vehicle, pedestrian & traffic sign detection",
+      "Segmentation masks & lane detection",
+      "Compatible with KITTI, Waymo datasets",
+      "Behavior reasoning across urban scenes",
+    ],
+    stat: { value: "20+", label: "export formats supported" },
+  },
+]
 
 export default function About() {
   const ref = useRef<HTMLElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-
-  const values = [
-    {
-      icon: Brain,
-      title: "Innovation",
-      description: "Pushing the boundaries of AI research with cutting-edge techniques and novel approaches.",
-      color: "#53C5E6",
-    },
-    {
-      icon: Zap,
-      title: "Intelligence",
-      description: "Creating systems that understand, learn, and adapt to complex real-world challenges.",
-      color: "#C26FCF",
-    },
-    {
-      icon: Users,
-      title: "Collaboration",
-      description: "Working closely with partners to transform vision into reality through intelligent solutions.",
-      color: "#F1B646",
-    },
-  ]
+  const isInView = useInView(ref, { once: true, margin: "-80px" })
 
   return (
     <section ref={ref} id="about" className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
-      {/* Subtle background decoration */}
       <div className="absolute inset-0 light-mesh pointer-events-none" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#53C5E6]/20 to-transparent" />
 
-      {/* Floating accent circles */}
-      <motion.div
-        className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-[#53C5E6]/[0.03] blur-3xl"
-        animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-[#C26FCF]/[0.03] blur-3xl"
-        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section header */}
+        {/* Section header — left aligned */}
         <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 30 }}
+          className="mb-14"
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] as const }}
           viewport={{ once: true }}
         >
-          <motion.span
-            className="inline-block text-sm font-medium tracking-widest uppercase text-[#53C5E6] mb-4"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            Who We Are
-          </motion.span>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            We specialize in multi-modal and visual AI research & development
-          </p>
-          <motion.div
-            className="mt-6 mx-auto h-[1px] rounded-full"
-            style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
-            initial={{ width: 0 }}
-            whileInView={{ width: 120 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            viewport={{ once: true }}
-          />
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#C26FCF] mb-3">
+            Use Cases
+          </span>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <h2 className="text-4xl md:text-5xl font-bold">
+              <span className="cosmic-heading-gradient">Annotation Across Industries</span>
+            </h2>
+            <p className="text-slate-500 text-sm max-w-xs leading-relaxed md:text-right">
+              From saving lives to training autonomous systems — Auta handles it all.
+            </p>
+          </div>
+          <div className="mt-5 h-px bg-slate-200" />
         </motion.div>
 
-        {/* Values grid */}
-        <motion.div
-          className="grid md:grid-cols-3 gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          {values.map((value, index) => (
+        {/* Cards grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {useCases.map((useCase, index) => (
             <motion.div
-              key={value.title}
-              className="group relative"
-              variants={cardVariants}
-              whileHover={{ y: -8 }}
+              key={useCase.domain}
+              className="group relative flex flex-col rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-shadow duration-500"
+              initial={{ opacity: 0, y: 28 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, delay: 0.1 + index * 0.1, ease: [0.22, 1, 0.36, 1] as const }}
+              whileHover={{ y: -4 }}
             >
-              {/* Glow backdrop on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Image */}
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src={useCase.video}
+                  alt={useCase.domain}
+                  fill
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  unoptimized
+                />
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
-              <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full">
-                {/* Icon container with animated ring */}
-                <div className="relative w-16 h-16 mb-6">
-                  <motion.div
-                    className="absolute inset-0 rounded-xl"
-                    style={{ border: `1px solid ${value.color}20`, background: `${value.color}08` }}
-                    whileHover={{ rotate: 90, scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
-                  />
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <value.icon className="w-8 h-8" style={{ color: value.color }} />
-                  </div>
+                {/* Domain badge — bottom left */}
+                <div
+                  className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-md border"
+                  style={{
+                    background: `${useCase.color}22`,
+                    borderColor: `${useCase.color}40`,
+                    color: useCase.color,
+                  }}
+                >
+                  <useCase.icon size={12} />
+                  {useCase.domain}
                 </div>
 
-                <h3 className="text-xl font-bold mb-3 group-hover:text-[#2178C7] transition-colors duration-300">{value.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{value.description}</p>
-
-                {/* Bottom accent line */}
-                <motion.div
-                  className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full"
-                  style={{ background: `linear-gradient(90deg, ${value.color}40, ${value.color}00)` }}
-                  initial={{ scaleX: 0, originX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                  viewport={{ once: true }}
-                />
+                {/* Stat chip — top right */}
+                <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs text-white font-semibold">
+                  {useCase.stat.value}{" "}
+                  <span className="font-normal text-white/60">{useCase.stat.label}</span>
+                </div>
               </div>
+
+              {/* Content */}
+              <div className="p-5 flex flex-col flex-1">
+                <p className="text-slate-400 text-xs mb-4 leading-relaxed">{useCase.tagline}</p>
+
+                {/* Capabilities */}
+                <ul className="space-y-2 flex-1 mb-5">
+                  {useCase.capabilities.map((cap, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                      <Check size={14} className="mt-0.5 flex-shrink-0" style={{ color: useCase.color }} />
+                      <span>{cap}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                <Link
+                  href="/projects/auta"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors duration-200"
+                  style={{ color: useCase.color }}
+                >
+                  Explore Auta
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
+
+              {/* Bottom color bar */}
+              <motion.div
+                className="h-[3px]"
+                style={{ background: useCase.color }}
+                initial={{ scaleX: 0, originX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                transition={{ duration: 0.7, delay: 0.2 + index * 0.1 }}
+                viewport={{ once: true }}
+              />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

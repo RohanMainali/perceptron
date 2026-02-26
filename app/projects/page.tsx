@@ -25,12 +25,12 @@ export default function ProjectsPage() {
       description:
         "Chat-driven auto-annotation platform. Drop a .zip, describe the task in natural language, and get a fully annotated dataset in seconds.",
       fullDescription:
-        "Auta is our flagship open-source auto-annotation platform that reimagines how data annotation works. Instead of manually drawing boxes or masks, you describe your task in natural language — 'Segment all persons in this dataset' — and the AI handles the rest: labels, colors, task types, bounding boxes, and segmentation masks. Built on top of CVAT with SAM3 integration, it brings vibe-coding principles to data annotation.",
-      features: ["Chat-to-Task", "Auto Segmentation", "Batch Annotation", "SAM3 Integration", "Natural Language Planning", "Multi-format Export"],
+        "Auta is our flagship open-source auto-annotation platform that reimagines how data annotation works. Instead of manually drawing boxes or masks, you describe your task in natural language — 'Segment all persons in this dataset' — and the AI handles the rest: labels, colors, task types, bounding boxes, and segmentation masks. Built to bring vibe-coding principles to data annotation.",
+      features: ["Chat-to-Task", "Auto Segmentation", "Batch Annotation", "AI Annotation Engine", "Natural Language Planning", "Multi-format Export"],
       status: "Active Development",
       image: "/images/auta/auta-demo.gif",
       videoUrl: "",
-      technologies: ["Python", "PyTorch", "SAM3", "CVAT", "Docker", "React"],
+      technologies: ["Python", "PyTorch", "CVAT", "Docker", "React", "TypeScript"],
       color: "#2178C7",
       href: "/projects/auta",
     },

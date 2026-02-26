@@ -91,7 +91,7 @@ export default function AutaProjectPage() {
       step: "04",
       icon: Target,
       title: "Run & Annotate",
-      description: "One click, and the task is created with SAM3-powered annotations applied across your entire dataset in seconds.",
+      description: "One click, and the task is created with AI-powered annotations applied across your entire dataset in seconds.",
       color: "#F1B646",
     },
   ]
@@ -100,7 +100,7 @@ export default function AutaProjectPage() {
     { icon: MessageSquare, title: "Chat-to-Task Creation", description: "Natural language task setup — describe what you want, skip the config menus" },
     { icon: Layers, title: "Auto Label Planning", description: "AI automatically creates labels, assigns colors, and determines annotation types" },
     { icon: Box, title: "Bounding Box Detection", description: "Automatic bounding box annotations powered by state-of-the-art detection models" },
-    { icon: Target, title: "Segmentation Masks", description: "Pixel-perfect segmentation masks using SAM3 (Segment Anything Model 3)" },
+    { icon: Target, title: "Segmentation Masks", description: "Pixel-perfect AI-generated segmentation masks across your entire dataset" },
     { icon: Database, title: "Batch Processing", description: "Process entire datasets at once — not one image at a time" },
     { icon: Workflow, title: "Multi-format Export", description: "Export in COCO, PASCAL VOC, YOLO, and 20+ other annotation formats" },
   ]
@@ -115,7 +115,7 @@ export default function AutaProjectPage() {
   const techStack = [
     { name: "Python", description: "Core backend" },
     { name: "PyTorch", description: "Deep learning" },
-    { name: "SAM3", description: "Segmentation" },
+    { name: "AI Vision", description: "Segmentation" },
     { name: "CVAT", description: "Annotation engine" },
     { name: "Docker", description: "Containerization" },
     { name: "React", description: "Frontend UI" },
@@ -268,7 +268,7 @@ export default function AutaProjectPage() {
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
-                <span className="text-[#53C5E6]">SAM3</span> Powered
+                <span className="text-[#53C5E6]">AI</span> Powered
               </motion.div>
               <motion.div
                 className="absolute -top-4 -right-4 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium"

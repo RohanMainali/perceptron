@@ -166,7 +166,7 @@ export default function Footer() {
           />
           <div className="flex justify-center">
             <p className="text-foreground/50 text-sm">
-              © {currentYear} Perceptron — Shaping the future through intelligent perception.
+              © {currentYear} Perceptron AI Labs Inc.
             </p>
           </div>
         </div>

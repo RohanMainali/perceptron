@@ -6,7 +6,7 @@ import Image from "next/image"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import PageHero from "@/components/page-hero"
-import { Brain, Zap, Users, Rocket, Linkedin, ChevronLeft, ChevronRight } from "lucide-react"
+import { Brain, Zap, Users, Linkedin, ChevronLeft, ChevronRight } from "lucide-react"
 
 const containerVariants = {
   hidden: {},
@@ -158,28 +158,115 @@ export default function AboutPage() {
               />
             </motion.div>
             <motion.div
-              className="relative h-96 rounded-2xl border border-slate-200 bg-gradient-to-br from-[#53C5E6]/5 to-[#C26FCF]/5 overflow-hidden shadow-lg"
+              className="relative h-96 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white overflow-hidden shadow-lg"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
             >
+              {/* Subtle grid background */}
+              <div
+                className="absolute inset-0 opacity-[0.04]"
+                style={{
+                  backgroundImage: "radial-gradient(circle, #2178C7 1px, transparent 1px)",
+                  backgroundSize: "24px 24px",
+                }}
+              />
+
+              {/* Outer orbit ring */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
+                  className="relative"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                 >
-                  <div className="w-40 h-40 rounded-full border border-[#53C5E6]/10" />
+                  <div className="w-72 h-72 rounded-full border border-dashed border-[#53C5E6]/15" />
+                  {/* Orbiting dot 1 */}
+                  <motion.div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#53C5E6] shadow-[0_0_12px_rgba(83,197,230,0.5)]" />
                 </motion.div>
               </div>
+
+              {/* Middle orbit ring */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative"
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                 >
-                  <Rocket className="w-24 h-24 text-[#53C5E6]/20" />
+                  <div className="w-48 h-48 rounded-full border border-[#C26FCF]/12" />
+                  {/* Orbiting dot 2 */}
+                  <motion.div className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#C26FCF] shadow-[0_0_10px_rgba(194,111,207,0.5)]" />
                 </motion.div>
               </div>
+
+              {/* Inner orbit ring */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  className="relative"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                >
+                  <div className="w-28 h-28 rounded-full border border-[#2178C7]/15" />
+                  <motion.div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2178C7] shadow-[0_0_8px_rgba(33,120,199,0.5)]" />
+                </motion.div>
+              </div>
+
+              {/* Center brain icon with pulsing glow */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  className="relative"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  {/* Glow backdrop */}
+                  <motion.div
+                    className="absolute -inset-6 rounded-full bg-gradient-to-br from-[#53C5E6]/20 to-[#C26FCF]/15 blur-xl"
+                    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2178C7] to-[#53C5E6] flex items-center justify-center shadow-lg shadow-[#2178C7]/25">
+                    <Brain className="w-8 h-8 text-white" />
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Floating keyword cards */}
+              <motion.div
+                className="absolute top-8 right-8 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-[#53C5E6]" />
+                  <span className="text-xs font-medium text-slate-600">Computer Vision</span>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="absolute bottom-12 left-6 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"
+                animate={{ y: [0, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-[#C26FCF]" />
+                  <span className="text-xs font-medium text-slate-600">Multimodal AI</span>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="absolute top-12 left-8 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"
+                animate={{ y: [0, -4, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-[#2178C7]" />
+                  <span className="text-xs font-medium text-slate-600">NLP</span>
+                </div>
+              </motion.div>
+
+              {/* Corner gradient accents */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#53C5E6]/8 to-transparent rounded-bl-full" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#C26FCF]/8 to-transparent rounded-tr-full" />
             </motion.div>
           </div>
         </div>
