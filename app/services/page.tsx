@@ -183,7 +183,7 @@ export default function ServicesPage() {
                       className="cosmic-btn-primary w-full mt-8 px-6 py-3 rounded-xl font-medium transition-all cursor-pointer"
                       whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => setWaitlistOpen(true)}
+                      onClick={() => window.location.href = '/contact'}
                     >
                       Get Started
                     </motion.button>
