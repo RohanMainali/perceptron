@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { motion } from "framer-motion"
-import { Mail, Linkedin, Github, Send, ChevronDown } from "lucide-react"
+import { Mail, Linkedin, Facebook, Send, ChevronDown } from "lucide-react"
 import { useState } from "react"
 
 export default function Contact({ hideHeader = false }: { hideHeader?: boolean }) {
@@ -172,7 +172,7 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
                 {[
                   { icon: Mail, label: "support@perceptronai.org", href: "mailto:support@perceptronai.org", color: "#53C5E6" },
                   { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/perceptronai/", color: "#2178C7" },
-                  { icon: Github, label: "GitHub", href: "https://github.com/perceptronai-org", color: "#C26FCF" },
+                  { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/profile.php?id=61586580522261", color: "#C26FCF" },
                 ].map((item, i) => (
                   <motion.div
                     key={item.label}

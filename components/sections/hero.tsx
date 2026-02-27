@@ -1,13 +1,15 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { ArrowRight, Github, Sparkles, Layers, MessageSquare } from "lucide-react"
+import { ArrowRight, BookOpen, Sparkles, Layers, MessageSquare } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import WaitlistModal from "@/components/waitlist-modal"
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
+  const [waitlistOpen, setWaitlistOpen] = useState(false)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -111,24 +113,23 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.55 }}
           >
-            <Link href="/contact">
-              <motion.span
-                className="cosmic-btn-primary inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-semibold text-[15px] shadow-lg shadow-[#2178C7]/20"
-                whileHover={{ scale: 1.04, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                Get Early Access <ArrowRight size={16} strokeWidth={2.5} />
-              </motion.span>
-            </Link>
-            <a href="https://github.com/perceptronai-org" target="_blank" rel="noopener noreferrer">
+            <motion.button
+              className="cosmic-btn-primary inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-semibold text-[15px] shadow-lg shadow-[#2178C7]/20"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setWaitlistOpen(true)}
+            >
+              Get Early Access <ArrowRight size={16} strokeWidth={2.5} />
+            </motion.button>
+            <Link href="/blog">
               <motion.span
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-medium text-[15px] text-white/70 border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm hover:bg-white/[0.08] hover:text-white/90 transition-colors duration-300"
                 whileHover={{ scale: 1.03, y: -1 }}
                 whileTap={{ scale: 0.97 }}
               >
-                <Github size={17} /> View on GitHub
+                <BookOpen size={17} /> Read Our Blog
               </motion.span>
-            </a>
+            </Link>
           </motion.div>
 
           {/* ── Product demo window ── */}
@@ -204,6 +205,7 @@ export default function Hero() {
           </motion.div>
         </div>
       </motion.div>
+      <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} theme="dark" />
     </section>
   )
 }

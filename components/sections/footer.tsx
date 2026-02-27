@@ -3,15 +3,16 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { Linkedin, Github, Facebook, MessageCircle } from "lucide-react"
+import { Linkedin, Youtube, Facebook } from "lucide-react"
+import { SiReddit } from "react-icons/si"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   const footerLinks = [
     { label: "About", href: "/about" },
-    { label: "Services", href: "/services" },
-    { label: "Projects", href: "/projects" },
+    { label: "Solutions", href: "/services" },
+    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ]
 
@@ -95,7 +96,7 @@ export default function Footer() {
               transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
             >
-              <h4 className="font-bold mb-4">Services</h4>
+              <h4 className="font-bold mb-4">Solutions</h4>
               <ul className="space-y-3">
                 {[
                   { label: "Data Annotation", href: "/services#data-annotation" },
@@ -130,9 +131,9 @@ export default function Footer() {
               <div className="flex gap-3">
                 {[
                   { icon: Linkedin, label: "LinkedIn", color: "#2178C7", href: "https://www.linkedin.com/in/perceptronai/" },
-                  { icon: Github, label: "GitHub", color: "#53C5E6", href: "https://github.com/perceptronai-org" },
+                  { icon: Youtube, label: "YouTube", color: "#ff0000", href: "https://www.youtube.com/@Perceptron-ai-labs" },
                   { icon: Facebook, label: "Facebook", color: "#C26FCF", href: "https://www.facebook.com/profile.php?id=61586580522261" },
-                  { icon: MessageCircle, label: "Reddit", color: "#F1B646", href: "https://www.reddit.com/user/Intelligent_Cry_3621/" },
+                  { icon: SiReddit, label: "Reddit", color: "#ee6e13", href: "https://www.reddit.com/user/Intelligent_Cry_3621/" }
                 ].map((social, i) => (
                   <motion.a
                     key={social.label}

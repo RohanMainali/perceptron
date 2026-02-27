@@ -25,7 +25,7 @@ export default function Navigation({ scrollY }: NavigationProps) {
 
   const navItems = [
     { label: "About", href: "/about" },
-    { label: "Services", href: "/services" },
+    { label: "Solutions", href: "/services" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ]
