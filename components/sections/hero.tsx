@@ -1,7 +1,11 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
+<<<<<<< HEAD
 import { ArrowRight, BookOpen, Sparkles, Layers, MessageSquare } from "lucide-react"
+=======
+import { ArrowRight, Github, Sparkles, Layers, MessageSquare } from "lucide-react"
+>>>>>>> cf7e657db659583e64c47d12b316bd1ccc897f75
 import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
