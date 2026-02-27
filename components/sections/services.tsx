@@ -4,6 +4,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion"
 import { useState, useRef } from "react"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
+import WaitlistModal from "@/components/waitlist-modal"
 
 const features = [
   {
@@ -75,6 +76,7 @@ export default function Services() {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-80px" })
   const [activeIndex, setActiveIndex] = useState(0)
+  const [waitlistOpen, setWaitlistOpen] = useState(false)
   const active = features[activeIndex]
 
   return (
@@ -188,14 +190,15 @@ export default function Services() {
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5, delay: 0.6 }}
             >
-              <a
-                href="/projects/auta"
-                className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200"
+              <button
+                type="button"
+                onClick={() => setWaitlistOpen(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200 cursor-pointer"
                 style={{ color: active.color }}
               >
-                Explore all features
+                Try AUTA Now
                 <ArrowRight size={14} />
-              </a>
+              </button>
             </motion.div>
           </div>
 
@@ -303,6 +306,7 @@ export default function Services() {
           </motion.div>
         </div>
       </div>
+      <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} theme="light" />
     </section>
   )
 }

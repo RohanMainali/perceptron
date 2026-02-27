@@ -6,9 +6,11 @@ import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import PageHero from "@/components/page-hero"
 import { Database, Cpu, BookOpen, CheckCircle } from "lucide-react"
+import WaitlistModal from "@/components/waitlist-modal"
 
 export default function ServicesPage() {
   const [scrollY, setScrollY] = useState(0)
+  const [waitlistOpen, setWaitlistOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -90,7 +92,7 @@ export default function ServicesPage() {
       <Navigation scrollY={scrollY} />
 
       <PageHero
-        title="Our Services"
+        title="Our Solutions"
         subtitle="Comprehensive AI solutions tailored to your business needs and technical requirements"
         badge="What We Offer"
       />
@@ -178,9 +180,10 @@ export default function ServicesPage() {
                     </div>
 
                     <motion.button
-                      className="cosmic-btn-primary w-full mt-8 px-6 py-3 rounded-xl font-medium transition-all"
+                      className="cosmic-btn-primary w-full mt-8 px-6 py-3 rounded-xl font-medium transition-all cursor-pointer"
                       whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
+                      onClick={() => setWaitlistOpen(true)}
                     >
                       Get Started
                     </motion.button>
@@ -210,6 +213,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} theme="light" />
       <Footer />
     </main>
   )

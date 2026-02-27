@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useState, useCallback } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Toaster, toast } from "sonner"
+import Link from "next/link"
 import {
   ArrowLeft,
   BookOpen,
@@ -546,6 +547,12 @@ export default function AdminBlogPage() {
                   <Plus size={14} /> New Post
                 </button>
               )}
+              <Link
+                href="/admin/waitlist"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#53C5E6]/30 bg-[#53C5E6]/10 px-4 py-2 text-xs font-medium text-[#53C5E6] transition-all duration-300 hover:bg-[#53C5E6]/20"
+              >
+                Waitlist
+              </Link>
               <button
                 type="button"
                 onClick={handleLogout}

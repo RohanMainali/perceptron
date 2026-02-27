@@ -3,8 +3,8 @@
 import { motion, useInView } from "framer-motion"
 import { HeartPulse, Trophy, Car, Check, ArrowRight } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import WaitlistModal from "@/components/waitlist-modal"
 
 const useCases = [
   {
@@ -57,6 +57,7 @@ const useCases = [
 export default function About() {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-80px" })
+  const [waitlistOpen, setWaitlistOpen] = useState(false)
 
   return (
     <section ref={ref} id="about" className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
@@ -144,14 +145,15 @@ export default function About() {
                 </ul>
 
                 {/* CTA */}
-                <Link
-                  href="/projects/auta"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors duration-200"
+                <button
+                  type="button"
+                  onClick={() => setWaitlistOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors duration-200 cursor-pointer"
                   style={{ color: useCase.color }}
                 >
                   Explore Auta
                   <ArrowRight size={13} />
-                </Link>
+                </button>
               </div>
 
               {/* Bottom color bar */}
@@ -167,6 +169,7 @@ export default function About() {
           ))}
         </div>
       </div>
+      <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} theme="light" />
     </section>
   )
 }
