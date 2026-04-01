@@ -2,7 +2,6 @@
 
 import { motion, useInView } from "framer-motion"
 import { HeartPulse, Trophy, Car, Check, ArrowRight } from "lucide-react"
-import Image from "next/image"
 import { useRef, useState } from "react"
 import WaitlistModal from "@/components/waitlist-modal"
 
@@ -13,7 +12,7 @@ const useCases = [
     tagline: "Precision annotation for life-saving diagnostics",
     color: "#E05A6D",
     bg: "bg-[#E05A6D]/8",
-    video: "/images/auta/segmentation-demo.gif",
+    video: "/images/auta/medical-imaging.mp4",
     capabilities: [
       "Tumor & lesion segmentation in MRI scans",
       "Organ detection & labeling in CT scans",
@@ -28,7 +27,7 @@ const useCases = [
     tagline: "Real-time tracking & tactical intelligence",
     color: "#F1B646",
     bg: "bg-[#F1B646]/8",
-    video: "/images/auta/ai-tools.gif",
+    video: "/images/auta/sports-analytics.mp4",
     capabilities: [
       "Player position tracking across frames",
       "Ball trajectory & tactical zone mapping",
@@ -43,7 +42,7 @@ const useCases = [
     tagline: "Powering the next generation of self-driving AI",
     color: "#53C5E6",
     bg: "bg-[#53C5E6]/8",
-    video: "/images/auta/dataset-demo.gif",
+    video: "/images/auta/autonomous-driving.mp4",
     capabilities: [
       "Vehicle, pedestrian & traffic sign detection",
       "Segmentation masks & lane detection",
@@ -98,15 +97,30 @@ export default function About() {
               transition={{ duration: 0.55, delay: 0.1 + index * 0.1, ease: [0.22, 1, 0.36, 1] as const }}
               whileHover={{ y: -4 }}
             >
-              {/* Image */}
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={useCase.video}
-                  alt={useCase.domain}
-                  fill
-                  className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                  unoptimized
-                />
+              {/* Browser chrome + video */}
+              <div className="bg-white">
+                {/* Browser chrome bar */}
+                <div className="flex items-center gap-2 px-3 py-2 border-b border-slate-200">
+                  <span className="w-2 h-2 rounded-full bg-[#E05A6D]/70" />
+                  <span className="w-2 h-2 rounded-full bg-[#F1B646]/70" />
+                  <span className="w-2 h-2 rounded-full bg-[#53C5E6]/70" />
+                  <div className="flex-1 mx-3">
+                    <div className="max-w-[160px] mx-auto h-4 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center">
+                      <span className="text-[9px] text-slate-400 tracking-wide">auta.perceptronai.org</span>
+                    </div>
+                  </div>
+                </div>
+                {/* Video */}
+                <div className="relative aspect-[4066/2160] overflow-hidden">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                >
+                  <source src={useCase.video} type="video/mp4" />
+                </video>
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
@@ -127,6 +141,7 @@ export default function About() {
                 <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs text-white font-semibold">
                   {useCase.stat.value}{" "}
                   <span className="font-normal text-white/60">{useCase.stat.label}</span>
+                </div>
                 </div>
               </div>
 

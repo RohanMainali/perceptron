@@ -156,20 +156,21 @@ export default function Hero() {
                 <span className="w-2.5 h-2.5 rounded-full bg-[#53C5E6]/70" />
                 <div className="flex-1 mx-4">
                   <div className="max-w-[200px] mx-auto h-5 rounded-md bg-white/[0.04] border border-white/[0.05] flex items-center justify-center">
-                    <span className="text-[10px] text-white/25 tracking-wide">app.auta.ai</span>
+                    <span className="text-[10px] text-white/25 tracking-wide">auta.perceptronai.org</span>
                   </div>
                 </div>
               </div>
 
-              {/* GIF */}
-              <Image
-                src="/images/auta/auta-demo.gif"
-                alt="Auta annotation platform demo"
-                width={1200}
-                height={700}
+              {/* Demo video */}
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
                 className="w-full h-auto"
-                unoptimized
-              />
+              >
+                <source src="/images/auta/auta-demo.mp4" type="video/mp4" />
+              </video>
 
               {/* Bottom fade overlay */}
               <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#050d1a] to-transparent" />
