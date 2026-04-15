@@ -210,7 +210,7 @@ export default function AdminWaitlistPage() {
         const label = STATUS_CONFIG[patch.status as keyof typeof STATUS_CONFIG]?.label
         toast.success(
           patch.status === "approved"
-            ? `Approved! Approval email sent to the user.`
+            ? `Approved! Credentials email sent to the user.`
             : `Entry marked as ${label?.toLowerCase()}.`
         )
       } else {
