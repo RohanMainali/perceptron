@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useState, useCallback } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Toaster, toast } from "sonner"
-import Link from "next/link"
+import { AdminHeader } from "../components/AdminHeader"
 import {
   ArrowLeft,
   BookOpen,
@@ -508,8 +508,32 @@ export default function AdminBlogPage() {
     "w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-slate-100 outline-none transition-all duration-300 focus:border-[#2178C7]/50 focus:ring-1 focus:ring-[#2178C7]/30 placeholder:text-slate-500"
 
   return (
-    <main className="relative min-h-screen bg-[#0a0e1a] text-slate-100">
+    <main className="relative min-h-screen bg-[#0a0e1a] text-slate-100 flex flex-col">
       <Toaster position="top-center" richColors />
+      <AdminHeader
+        actions={
+          authToken ? (
+            <>
+              {viewMode === "list" && (
+                <button
+                  type="button"
+                  onClick={startCreate}
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#2178C7] to-[#53C5E6] px-4 py-2 text-xs font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#2178C7]/25"
+                >
+                  <Plus size={14} /> New Post
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-white/50 hover:text-[#E05A6D] hover:bg-[#E05A6D]/10 transition-all"
+              >
+                <LogOut size={14} /> Sign out
+              </button>
+            </>
+          ) : undefined
+        }
+      />
 
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -525,45 +549,6 @@ export default function AdminBlogPage() {
       </div>
 
       <section className="relative z-10 px-6 py-8 sm:px-10 lg:px-14">
-        {/* Header */}
-        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2178C7] to-[#53C5E6] flex items-center justify-center shadow-lg shadow-[#2178C7]/20">
-              <FileText size={20} className="text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-white">Blog Control Room</h1>
-              <p className="text-xs text-slate-400">Manage, create, edit, and publish blog posts</p>
-            </div>
-          </div>
-          {authToken && (
-            <div className="flex items-center gap-3">
-              {viewMode === "list" && (
-                <button
-                  type="button"
-                  onClick={startCreate}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#2178C7] to-[#53C5E6] px-4 py-2 text-xs font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#2178C7]/25"
-                >
-                  <Plus size={14} /> New Post
-                </button>
-              )}
-              <Link
-                href="/admin/waitlist"
-                className="inline-flex items-center gap-2 rounded-lg border border-[#53C5E6]/30 bg-[#53C5E6]/10 px-4 py-2 text-xs font-medium text-[#53C5E6] transition-all duration-300 hover:bg-[#53C5E6]/20"
-              >
-                Waitlist
-              </Link>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-slate-300 transition-all duration-300 hover:bg-white/10 hover:text-white"
-              >
-                <LogOut size={14} /> Sign out
-              </button>
-            </div>
-          )}
-        </header>
-
         {/* ── AUTH GATE ── */}
         {!authToken ? (
           <div className="mx-auto max-w-md mt-20">

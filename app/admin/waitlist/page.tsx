@@ -18,9 +18,8 @@ import {
   Mail,
   MessageSquare,
   StickyNote,
-  ExternalLink,
 } from "lucide-react"
-import Link from "next/link"
+import { AdminHeader } from "../components/AdminHeader"
 
 /* ── Types ── */
 
@@ -257,44 +256,42 @@ export default function AdminWaitlistPage() {
   /* ── Render: login ── */
   if (!authToken) {
     return (
-      <div className="min-h-screen bg-[#050d1a] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#050d1a] text-white flex flex-col">
         <Toaster richColors position="top-right" />
-        <div className="w-full max-w-sm">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#2178C7]/20 border border-[#2178C7]/30 mb-5">
-              <Shield size={26} className="text-[#53C5E6]" />
+        <AdminHeader />
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="w-full max-w-sm">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#2178C7]/20 border border-[#2178C7]/30 mb-5">
+                <Shield size={26} className="text-[#53C5E6]" />
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-1">Admin — Waitlist</h1>
+              <p className="text-sm text-white/40">Enter your secret key to manage the private beta waitlist.</p>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1">Admin — Waitlist</h1>
-            <p className="text-sm text-white/40">Enter your secret key to manage the private beta waitlist.</p>
-          </div>
-          <form onSubmit={handleLogin} className="flex flex-col gap-3">
-            <input
-              type="password"
-              placeholder="Secret key"
-              value={secretKey}
-              onChange={(e) => setSecretKey(e.target.value)}
-              autoFocus
-              className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-[#2178C7]/60 transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={isAuthenticating}
-              className="w-full py-3 rounded-xl font-semibold text-sm text-white disabled:opacity-50 transition-all"
-              style={{ background: "linear-gradient(135deg, #2178C7, #53C5E6)" }}
-            >
-              {isAuthenticating ? (
-                <span className="flex items-center justify-center gap-2">
-                  <Loader2 size={15} className="animate-spin" /> Authenticating…
-                </span>
-              ) : (
-                "Sign In"
-              )}
-            </button>
-          </form>
-          <div className="mt-6 text-center">
-            <Link href="/admin/blogs" className="text-xs text-white/30 hover:text-white/60 transition-colors">
-              ← Back to Blog Admin
-            </Link>
+            <form onSubmit={handleLogin} className="flex flex-col gap-3">
+              <input
+                type="password"
+                placeholder="Secret key"
+                value={secretKey}
+                onChange={(e) => setSecretKey(e.target.value)}
+                autoFocus
+                className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-[#2178C7]/60 transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={isAuthenticating}
+                className="w-full py-3 rounded-xl font-semibold text-sm text-white disabled:opacity-50 transition-all"
+                style={{ background: "linear-gradient(135deg, #2178C7, #53C5E6)" }}
+              >
+                {isAuthenticating ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <Loader2 size={15} className="animate-spin" /> Authenticating…
+                  </span>
+                ) : (
+                  "Sign In"
+                )}
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -303,29 +300,11 @@ export default function AdminWaitlistPage() {
 
   /* ── Render: dashboard ── */
   return (
-    <div className="min-h-screen bg-[#050d1a] text-white">
+    <div className="min-h-screen bg-[#050d1a] text-white flex flex-col">
       <Toaster richColors position="top-right" />
-
-      {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-white/[0.06] bg-[#050d1a]/95 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#2178C7]/20 flex items-center justify-center">
-                <User size={15} className="text-[#53C5E6]" />
-              </div>
-              <div>
-                <h1 className="text-sm font-semibold text-white leading-none">Waitlist Admin</h1>
-                <p className="text-[11px] text-white/35 mt-0.5">Private Beta Management</p>
-              </div>
-            </div>
-            <div className="h-5 w-px bg-white/[0.08]" />
-            <Link href="/admin/blogs" className="text-xs text-white/40 hover:text-[#53C5E6] transition-colors flex items-center gap-1">
-              <ExternalLink size={12} />
-              Blog Admin
-            </Link>
-          </div>
-          <div className="flex items-center gap-3">
+      <AdminHeader
+        actions={
+          <>
             <button
               onClick={() => fetchEntries()}
               disabled={isLoading}
@@ -341,11 +320,11 @@ export default function AdminWaitlistPage() {
               <LogOut size={13} />
               Sign Out
             </button>
-          </div>
-        </div>
-      </header>
+          </>
+        }
+      />
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="max-w-6xl mx-auto px-6 py-8 w-full">
         {/* Stats row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
           {(["all", "pending", "approved", "rejected"] as StatusFilter[]).map((s) => (
