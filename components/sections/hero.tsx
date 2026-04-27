@@ -169,7 +169,7 @@ export default function Hero() {
                 playsInline
                 className="w-full h-auto"
               >
-                <source src="/images/auta/auta-demo.mp4" type="video/mp4" />
+                <source src="/images/auta/medicaldemo.mp4" type="video/mp4" />
               </video>
 
               {/* Bottom fade overlay */}
