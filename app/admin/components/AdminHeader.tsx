@@ -2,11 +2,12 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { FileText, LayoutDashboard, User, Users } from "lucide-react"
+import { FileText, Inbox, LayoutDashboard, User, Users } from "lucide-react"
 import type { ReactNode } from "react"
 
 const NAV = [
   { href: "/admin/waitlist", label: "Waitlist", icon: User },
+  { href: "/admin/contact", label: "Contact", icon: Inbox },
   { href: "/admin/blogs", label: "Blogs", icon: FileText },
   { href: "/admin/users", label: "Users", icon: Users },
 ]
