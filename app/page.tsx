@@ -6,6 +6,7 @@ import About from "@/components/sections/about"
 import Services from "@/components/sections/services"
 import Comparison from "@/components/sections/comparison"
 import Contact from "@/components/sections/contact"
+import CTA from "@/components/sections/cta"
 import Footer from "@/components/sections/footer"
 import Navigation from "@/components/navigation"
 
@@ -19,17 +20,14 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="relative overflow-hidden">
-      {/* Fixed dark background — visible only behind non-white sections */}
-      <div className="fixed inset-0 -z-10 bg-background" />
-
+    <main style={{ background: "#ffffff" }}>
       <Navigation scrollY={scrollY} />
-
       <Hero />
       <About />
       <Services />
       <Comparison />
       <Contact />
+      <CTA />
       <Footer />
     </main>
   )

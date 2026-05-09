@@ -5,13 +5,22 @@ import { HeartPulse, Trophy, Car, Check, ArrowRight } from "lucide-react"
 import { useRef, useState } from "react"
 import WaitlistModal from "@/components/waitlist-modal"
 
+const FG       = "#0c0c0a"
+const MUTED    = "#5a5a52"
+const FAINT    = "#aaaaaa"
+const MONO     = "'Geist Mono', 'Courier New', monospace"
+const GREEN    = "#16a34a"
+const GREEN_2  = "#15803d"
+const LINE     = "rgba(12,12,10,0.09)"
+const LINE_STR = "rgba(12,12,10,0.14)"
+const PANEL    = "#ffffff"
+const BG       = "#eeecea"   // darker section bg
+
 const useCases = [
   {
     icon: HeartPulse,
     domain: "Medical Imaging AI",
     tagline: "Precision annotation for life-saving diagnostics",
-    color: "#E05A6D",
-    bg: "bg-[#E05A6D]/8",
     video: "/images/auta/medical-imaging.mp4",
     capabilities: [
       "Tumor & lesion segmentation in MRI scans",
@@ -25,8 +34,6 @@ const useCases = [
     icon: Trophy,
     domain: "Sports Analytics",
     tagline: "Real-time tracking & tactical intelligence",
-    color: "#F1B646",
-    bg: "bg-[#F1B646]/8",
     video: "/images/auta/sports-analytics.mp4",
     capabilities: [
       "Player position tracking across frames",
@@ -40,8 +47,6 @@ const useCases = [
     icon: Car,
     domain: "Autonomous Driving",
     tagline: "Powering the next generation of self-driving AI",
-    color: "#53C5E6",
-    bg: "bg-[#53C5E6]/8",
     video: "/images/auta/autonomous-driving.mp4",
     capabilities: [
       "Vehicle, pedestrian & traffic sign detection",
@@ -59,131 +64,187 @@ export default function About() {
   const [waitlistOpen, setWaitlistOpen] = useState(false)
 
   return (
-    <section ref={ref} id="about" className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
-      <div className="absolute inset-0 light-mesh pointer-events-none" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#53C5E6]/20 to-transparent" />
+    <section
+      ref={ref}
+      id="about"
+      style={{
+        padding: "120px 0 110px",
+        background: BG,
+        borderBottom: `1px solid ${LINE_STR}`,
+        color: FG,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section header — left aligned */}
+        {/* Header */}
         <motion.div
-          className="mb-14"
+          style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "60px" }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] as const }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true }}
         >
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#C26FCF] mb-3">
-            Use Cases
-          </span>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl md:text-5xl font-bold">
-              <span className="cosmic-heading-gradient">Annotation Across Industries</span>
+          <div>
+            <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
+              Solutions
+            </div>
+            <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+              Annotation across industries.
             </h2>
-            <p className="text-slate-500 text-sm max-w-xs leading-relaxed md:text-right">
-              From saving lives to training autonomous systems — Auta handles it all.
-            </p>
           </div>
-          <div className="mt-5 h-px bg-slate-200" />
+          <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
+            From saving lives to training autonomous systems — Auta handles it all.
+          </p>
         </motion.div>
 
-        {/* Cards grid */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {useCases.map((useCase, index) => (
-            <motion.div
-              key={useCase.domain}
-              className="group relative flex flex-col rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-shadow duration-500"
-              initial={{ opacity: 0, y: 28 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.1 + index * 0.1, ease: [0.22, 1, 0.36, 1] as const }}
-              whileHover={{ y: -4 }}
-            >
-              {/* Browser chrome + video */}
-              <div className="bg-white">
-                {/* Browser chrome bar */}
-                <div className="flex items-center gap-2 px-3 py-2 border-b border-slate-200">
-                  <span className="w-2 h-2 rounded-full bg-[#E05A6D]/70" />
-                  <span className="w-2 h-2 rounded-full bg-[#F1B646]/70" />
-                  <span className="w-2 h-2 rounded-full bg-[#53C5E6]/70" />
-                  <div className="flex-1 mx-3">
-                    <div className="max-w-[160px] mx-auto h-4 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center">
-                      <span className="text-[9px] text-slate-400 tracking-wide">auta.perceptronai.org</span>
+        {/* Cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px" }}>
+          {useCases.map((uc, i) => {
+            const Icon = uc.icon
+            return (
+              <motion.div
+                key={uc.domain}
+                initial={{ opacity: 0, y: 28 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  background: PANEL,
+                  border: `1px solid ${LINE}`,
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+                  transition: "border-color 200ms, box-shadow 200ms, transform 200ms",
+                  cursor: "default",
+                }}
+                whileHover={{ y: -3 }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = GREEN
+                  el.style.boxShadow = "0 8px 32px rgba(22,163,74,0.12), 0 2px 10px rgba(0,0,0,0.05)"
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = LINE
+                  el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)"
+                }}
+              >
+                {/* Browser chrome */}
+                <div style={{ background: PANEL, borderBottom: `1px solid ${LINE}` }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "10px 12px" }}>
+                    <div style={{ display: "flex", gap: "5px" }}>
+                      <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#fc635d" }} />
+                      <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#fdbc40" }} />
+                      <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#34c749" }} />
+                    </div>
+                    <div style={{ flex: 1, marginLeft: "8px" }}>
+                      <div style={{ maxWidth: "160px", margin: "0 auto", height: "18px", borderRadius: "5px", background: BG, border: `1px solid ${LINE}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ fontFamily: MONO, fontSize: "9px", color: FAINT, letterSpacing: "0.03em" }}>auta.perceptronai.org</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Video */}
+                  <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 700ms ease-out" }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)" }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)" }}
+                    >
+                      <source src={uc.video} type="video/mp4" />
+                    </video>
+                    {/* Dark overlay */}
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.08) 50%, transparent 100%)" }} />
+
+                    {/* Domain badge — bottom left */}
+                    <div style={{
+                      position: "absolute", bottom: "12px", left: "12px",
+                      display: "flex", alignItems: "center", gap: "6px",
+                      padding: "5px 10px", borderRadius: "20px",
+                      background: "rgba(22,163,74,0.18)",
+                      border: "1px solid rgba(22,163,74,0.35)",
+                      backdropFilter: "blur(8px)",
+                      WebkitBackdropFilter: "blur(8px)",
+                    }}>
+                      <Icon size={12} color={GREEN} />
+                      <span style={{ fontFamily: MONO, fontSize: "10px", fontWeight: 600, color: GREEN, letterSpacing: "0.02em" }}>{uc.domain}</span>
+                    </div>
+
+                    {/* Stat chip — top right */}
+                    <div style={{
+                      position: "absolute", top: "12px", right: "12px",
+                      padding: "4px 10px", borderRadius: "20px",
+                      background: "rgba(0,0,0,0.6)",
+                      backdropFilter: "blur(8px)",
+                      WebkitBackdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255,255,255,0.12)",
+                      fontFamily: MONO, fontSize: "11px",
+                    }}>
+                      <span style={{ color: "#fff", fontWeight: 600 }}>{uc.stat.value}</span>
+                      <span style={{ color: "rgba(255,255,255,0.55)", fontWeight: 400 }}> {uc.stat.label}</span>
                     </div>
                   </div>
                 </div>
-                {/* Video */}
-                <div className="relative aspect-[4066/2160] overflow-hidden">
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                >
-                  <source src={useCase.video} type="video/mp4" />
-                </video>
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
-                {/* Domain badge — bottom left */}
-                <div
-                  className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-md border"
-                  style={{
-                    background: `${useCase.color}22`,
-                    borderColor: `${useCase.color}40`,
-                    color: useCase.color,
-                  }}
-                >
-                  <useCase.icon size={12} />
-                  {useCase.domain}
+                {/* Body */}
+                <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
+                  <p style={{ fontSize: "13px", color: FAINT, marginBottom: "14px", lineHeight: 1.5 }}>{uc.tagline}</p>
+
+                  <ul style={{ listStyle: "none", padding: 0, margin: "0 0 auto", display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {uc.capabilities.map((cap, j) => (
+                      <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "13.5px", color: MUTED, lineHeight: 1.45 }}>
+                        <Check size={13} color={GREEN} style={{ flexShrink: 0, marginTop: "2px" }} />
+                        <span>{cap}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Explore CTA */}
+                  <button
+                    type="button"
+                    onClick={() => setWaitlistOpen(true)}
+                    style={{
+                      marginTop: "18px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: GREEN,
+                      background: "none",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                      transition: "gap 150ms",
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.gap = "8px" }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.gap = "5px" }}
+                  >
+                    Explore Auta <ArrowRight size={13} />
+                  </button>
                 </div>
 
-                {/* Stat chip — top right */}
-                <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs text-white font-semibold">
-                  {useCase.stat.value}{" "}
-                  <span className="font-normal text-white/60">{useCase.stat.label}</span>
-                </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-5 flex flex-col flex-1">
-                <p className="text-slate-400 text-xs mb-4 leading-relaxed">{useCase.tagline}</p>
-
-                {/* Capabilities */}
-                <ul className="space-y-2 flex-1 mb-5">
-                  {useCase.capabilities.map((cap, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                      <Check size={14} className="mt-0.5 flex-shrink-0" style={{ color: useCase.color }} />
-                      <span>{cap}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA */}
-                <button
-                  type="button"
-                  onClick={() => setWaitlistOpen(true)}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors duration-200 cursor-pointer"
-                  style={{ color: useCase.color }}
-                >
-                  Explore Auta
-                  <ArrowRight size={13} />
-                </button>
-              </div>
-
-              {/* Bottom color bar */}
-              <motion.div
-                className="h-[3px]"
-                style={{ background: useCase.color }}
-                initial={{ scaleX: 0, originX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                transition={{ duration: 0.7, delay: 0.2 + index * 0.1 }}
-                viewport={{ once: true }}
-              />
-            </motion.div>
-          ))}
+                {/* Bottom accent bar */}
+                <motion.div
+                  style={{ height: "3px", background: GREEN }}
+                  initial={{ scaleX: 0, originX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  transition={{ duration: 0.7, delay: 0.2 + i * 0.1 }}
+                  viewport={{ once: true }}
+                />
+              </motion.div>
+            )
+          })}
         </div>
       </div>
+
       <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} theme="light" />
     </section>
   )

@@ -1,18 +1,24 @@
 "use client"
 
 import type React from "react"
-
 import { motion } from "framer-motion"
 import { Mail, Linkedin, Facebook, Send, ChevronDown, CheckCircle2, Loader2 } from "lucide-react"
 import { useState } from "react"
 
+const FG       = "#0c0c0a"
+const MUTED    = "#5a5a52"
+const FAINT    = "#aaaaaa"
+const MONO     = "'Geist Mono', 'Courier New', monospace"
+const GREEN    = "#16a34a"
+const GREEN_2  = "#15803d"
+const LINE     = "rgba(12,12,10,0.09)"
+const LINE_STR = "rgba(12,12,10,0.14)"
+const PANEL    = "#ffffff"
+const BG2      = "#f6f6f3"
+const SECTION  = "#ffffff"  // light
+
 export default function Contact({ hideHeader = false }: { hideHeader?: boolean }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    projectType: "",
-    message: "",
-  })
+  const [formData, setFormData] = useState({ name: "", email: "", projectType: "", message: "" })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -26,18 +32,10 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          projectType: formData.projectType,
-          message: formData.message,
-        }),
+        body: JSON.stringify(formData),
       })
       const data = await res.json()
-      if (!res.ok) {
-        setError(data.error || "Something went wrong. Please try again.")
-        return
-      }
+      if (!res.ok) { setError(data.error || "Something went wrong. Please try again."); return }
       setSubmitted(true)
       setFormData({ name: "", email: "", projectType: "", message: "" })
     } catch {
@@ -47,241 +45,221 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
     }
   }
 
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "11px 14px",
+    borderRadius: "8px",
+    background: PANEL,
+    border: `1px solid ${LINE_STR}`,
+    color: FG,
+    fontSize: "14px",
+    outline: "none",
+    transition: "border-color 150ms",
+    boxSizing: "border-box",
+    fontFamily: "inherit",
+  }
+
   return (
-    <section id="contact" className="relative py-24 md:py-36 overflow-hidden bg-slate-50 text-slate-900">
-      {/* Background decoration */}
-      <div className="absolute inset-0 dot-pattern pointer-events-none" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#53C5E6]/20 to-transparent" />
+    <section
+      id="contact"
+      style={{
+        padding: "120px 0 110px",
+        background: SECTION,
+        borderBottom: `1px solid ${LINE_STR}`,
+        color: FG,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
 
-      {/* Floating accents */}
-      <motion.div
-        className="absolute top-20 right-10 w-72 h-72 rounded-full bg-[#53C5E6]/[0.03] blur-3xl"
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-20 left-10 w-72 h-72 rounded-full bg-[#C26FCF]/[0.03] blur-3xl"
-        animate={{ scale: [1, 1.15, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <div className="w-full px-6 md:px-12 lg:px-16 relative z-10">
-        {/* Section header */}
+        {/* Header */}
         {!hideHeader && (
           <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
+            style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "64px" }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
           >
-            <motion.span
-              className="inline-block text-sm font-medium tracking-widest uppercase text-[#53C5E6] mb-4"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              Let&apos;s Connect
-            </motion.span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="cosmic-heading-gradient">
-                Get In Touch
-              </span>
-            </h2>
-            <p className="text-slate-600 text-lg leading-relaxed">
+            <div>
+              <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
+                Let&apos;s Connect
+              </div>
+              <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+                Get in touch.
+              </h2>
+            </div>
+            <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
               Have a project in mind? Let&apos;s collaborate and build something amazing together.
             </p>
-            <motion.div
-              className="mt-6 mx-auto h-[1px] rounded-full"
-              style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
-              initial={{ width: 0 }}
-              whileInView={{ width: 120 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-            />
           </motion.div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Contact form */}
+        {/* Two-column layout */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: "56px", alignItems: "start" }}>
+
+          {/* Form */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
           >
             {submitted ? (
               <motion.div
-                className="flex flex-col items-center justify-center text-center py-16 gap-4"
+                style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "80px 0", gap: "16px" }}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.4 }}
               >
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2178C7]/10 to-[#53C5E6]/10 border border-[#53C5E6]/20 flex items-center justify-center">
-                  <CheckCircle2 className="w-8 h-8 text-[#53C5E6]" />
+                <div style={{ width: "56px", height: "56px", borderRadius: "14px", background: "rgba(22,163,74,0.08)", border: `1px solid rgba(22,163,74,0.2)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <CheckCircle2 size={28} color={GREEN} />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">Message Sent!</h3>
-                <p className="text-slate-500 text-sm max-w-xs leading-relaxed">
-                  Thanks for reaching out. We&apos;ll get back to you at <span className="font-medium text-slate-700">{formData.email || "your email"}</span> shortly.
+                <h3 style={{ fontSize: "20px", fontWeight: 500, color: FG, margin: 0 }}>Message Sent!</h3>
+                <p style={{ fontSize: "14px", color: MUTED, maxWidth: "280px", lineHeight: 1.6, margin: 0 }}>
+                  Thanks for reaching out. We&apos;ll get back to you shortly.
                 </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="mt-2 text-xs text-[#53C5E6] hover:underline"
-                >
+                <button onClick={() => setSubmitted(false)} style={{ marginTop: "8px", fontSize: "13px", color: GREEN, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>
                   Send another message
                 </button>
               </motion.div>
             ) : (
-              <form className="space-y-6" onSubmit={handleSubmit}>
-                {[
-                  { label: "Name", type: "text", field: "name" as const, placeholder: "Your name" },
-                  { label: "Email", type: "email", field: "email" as const, placeholder: "your@email.com" },
-                ].map((input, i) => (
-                  <motion.div
-                    key={input.field}
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.08 }}
-                    viewport={{ once: true }}
-                  >
-                    <label className="block text-sm font-medium mb-2 text-slate-700">{input.label}</label>
-                    <input
-                      type={input.type}
-                      value={formData[input.field]}
-                      onChange={(e) => setFormData({ ...formData, [input.field]: e.target.value })}
-                      required
-                      disabled={isSubmitting}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#53C5E6]/50 focus:ring-2 focus:ring-[#53C5E6]/20 transition-all duration-300 hover:border-slate-300 disabled:opacity-60"
-                      placeholder={input.placeholder}
-                    />
-                  </motion.div>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.26 }}
-                  viewport={{ once: true }}
-                >
-                  <label className="block text-sm font-medium mb-2 text-slate-700">Project Type</label>
-                  <div className="relative">
+              <form style={{ display: "flex", flexDirection: "column", gap: "22px" }} onSubmit={handleSubmit}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  {[
+                    { label: "Name", type: "text", field: "name" as const, placeholder: "Your name" },
+                    { label: "Email", type: "email", field: "email" as const, placeholder: "your@email.com" },
+                  ].map(input => (
+                    <div key={input.field}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: MUTED, marginBottom: "8px" }}>{input.label}</label>
+                      <input
+                        type={input.type}
+                        value={formData[input.field]}
+                        onChange={e => setFormData({ ...formData, [input.field]: e.target.value })}
+                        required
+                        disabled={isSubmitting}
+                        placeholder={input.placeholder}
+                        style={inputStyle}
+                        onFocus={e => { e.currentTarget.style.borderColor = GREEN }}
+                        onBlur={e => { e.currentTarget.style.borderColor = LINE_STR }}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: MUTED, marginBottom: "8px" }}>Project Type</label>
+                  <div style={{ position: "relative" }}>
                     <select
                       value={formData.projectType}
-                      onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                      onChange={e => setFormData({ ...formData, projectType: e.target.value })}
                       disabled={isSubmitting}
-                      className="w-full px-4 py-3 pr-10 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[#53C5E6]/50 focus:ring-2 focus:ring-[#53C5E6]/20 transition-all duration-300 appearance-none cursor-pointer hover:border-slate-300 disabled:opacity-60"
+                      style={{ ...inputStyle, paddingRight: "36px", appearance: "none", cursor: "pointer" }}
+                      onFocus={e => { e.currentTarget.style.borderColor = GREEN }}
+                      onBlur={e => { e.currentTarget.style.borderColor = LINE_STR }}
                     >
                       <option value="">Select a project type</option>
                       <option value="data-annotation">Data Annotation</option>
                       <option value="model-development">Model Development</option>
-                      <option value="research-consulting">Research & Consulting</option>
+                      <option value="research-consulting">Research &amp; Consulting</option>
                       <option value="other">Other</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    <ChevronDown size={16} color={FAINT} style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} />
                   </div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.34 }}
-                  viewport={{ once: true }}
-                >
-                  <label className="block text-sm font-medium mb-2 text-slate-700">Message</label>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: MUTED, marginBottom: "8px" }}>Message</label>
                   <textarea
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onChange={e => setFormData({ ...formData, message: e.target.value })}
                     required
                     disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#53C5E6]/50 focus:ring-2 focus:ring-[#53C5E6]/20 transition-all duration-300 resize-none hover:border-slate-300 disabled:opacity-60"
                     placeholder="Tell us about your project..."
-                    rows={5}
+                    rows={6}
+                    style={{ ...inputStyle, resize: "none" }}
+                    onFocus={e => { e.currentTarget.style.borderColor = GREEN }}
+                    onBlur={e => { e.currentTarget.style.borderColor = LINE_STR }}
                   />
-                </motion.div>
+                </div>
+
                 {error && (
-                  <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-xl px-4 py-3">{error}</p>
+                  <p style={{ fontSize: "13px", color: "#dc2626", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "8px", padding: "12px 14px", margin: 0 }}>
+                    {error}
+                  </p>
                 )}
-                <motion.button
+
+                <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="cosmic-btn-primary w-full px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
-                  whileHover={!isSubmitting ? { scale: 1.02, y: -2 } : {}}
-                  whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.42 }}
-                  viewport={{ once: true }}
+                  style={{
+                    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                    padding: "13px 20px", borderRadius: "8px",
+                    background: GREEN, color: "#fff",
+                    border: `1px solid ${GREEN_2}`,
+                    fontSize: "14px", fontWeight: 500,
+                    cursor: isSubmitting ? "not-allowed" : "pointer",
+                    opacity: isSubmitting ? 0.7 : 1,
+                    boxShadow: "0 1px 3px rgba(22,163,74,0.25)",
+                    transition: "background 120ms, transform 100ms",
+                    width: "100%",
+                  }}
+                  onMouseEnter={e => { if (!isSubmitting) { e.currentTarget.style.background = GREEN_2; e.currentTarget.style.transform = "translateY(-1px)" } }}
+                  onMouseLeave={e => { e.currentTarget.style.background = GREEN; e.currentTarget.style.transform = "" }}
                 >
-                  {isSubmitting ? (
-                    <><Loader2 size={18} className="animate-spin" /> Sending…</>
-                  ) : (
-                    <>Send Message <Send size={18} /></>
-                  )}
-                </motion.button>
+                  {isSubmitting ? <><Loader2 size={16} className="animate-spin" /> Sending…</> : <>Send Message <Send size={16} /></>}
+                </button>
               </form>
             )}
           </motion.div>
 
-          {/* Contact info */}
+          {/* Sidebar info */}
           <motion.div
-            className="space-y-8"
-            initial={{ opacity: 0, x: 30 }}
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
           >
-            <div className="cosmic-card p-8 rounded-2xl border border-slate-200 bg-white shadow-lg transition-all">
-              <h3 className="text-xl font-bold mb-6">Contact Information</h3>
-              <div className="space-y-5">
+            {/* Contact info */}
+            <div style={{ padding: "28px", borderRadius: "14px", border: `1px solid ${LINE}`, background: BG2 }}>
+              <h3 style={{ fontSize: "16px", fontWeight: 500, color: FG, margin: "0 0 20px" }}>Contact Information</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                 {[
-                  { icon: Mail, label: "support@perceptronai.org", href: "mailto:support@perceptronai.org", color: "#53C5E6" },
-                  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/perceptronai/", color: "#2178C7" },
-                  { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/profile.php?id=61586580522261", color: "#C26FCF" },
-                ].map((item, i) => (
-                  <motion.div
-                    key={item.label}
-                    className="flex items-center gap-3 group/link"
-                    initial={{ opacity: 0, x: 15 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 group-hover/link:scale-110"
-                      style={{ background: `${item.color}10` }}
-                    >
-                      <item.icon className="w-5 h-5" style={{ color: item.color }} />
+                  { icon: Mail,     label: "support@perceptronai.org", href: "mailto:support@perceptronai.org", color: GREEN },
+                  { icon: Linkedin, label: "LinkedIn",                  href: "https://www.linkedin.com/in/perceptronai/", color: "#2178C7" },
+                  { icon: Facebook, label: "Facebook",                  href: "https://www.facebook.com/profile.php?id=61586580522261", color: "#1877f2" },
+                ].map(item => (
+                  <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ width: "36px", height: "36px", borderRadius: "8px", background: `${item.color}12`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <item.icon size={16} color={item.color} />
                     </div>
-                    <a
-                      href={item.href}
-                      className="text-slate-600 hover:text-[#2178C7] transition-colors duration-300"
+                    <a href={item.href} style={{ fontSize: "14px", color: MUTED, textDecoration: "none", transition: "color 120ms" }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = FG }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = MUTED }}
                     >
                       {item.label}
                     </a>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
 
-            <div className="cosmic-card p-8 rounded-2xl border border-slate-200 bg-white shadow-lg transition-all">
-              <h3 className="text-xl font-bold mb-4">Why Choose Perceptron?</h3>
-              <ul className="space-y-3 text-slate-600">
+            {/* Why card */}
+            <div style={{ padding: "28px", borderRadius: "14px", border: `1px solid ${LINE}`, background: BG2 }}>
+              <h3 style={{ fontSize: "16px", fontWeight: 500, color: FG, margin: "0 0 16px" }}>Why Choose Perceptron?</h3>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "11px" }}>
                 {[
                   "Expert team with years of AI research experience",
                   "Cutting-edge technology and methodologies",
                   "Custom solutions tailored to your needs",
                   "Proven track record with successful projects",
                 ].map((item, i) => (
-                  <motion.li
-                    key={i}
-                    className="flex items-start gap-3"
-                    initial={{ opacity: 0, x: 10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + i * 0.08 }}
-                    viewport={{ once: true }}
-                  >
-                    <span className="text-[#53C5E6] mt-0.5 flex-shrink-0 text-lg">✓</span>
+                  <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "14px", color: MUTED, lineHeight: 1.5 }}>
+                    <span style={{ color: GREEN, fontWeight: 700, flexShrink: 0, marginTop: "1px" }}>✓</span>
                     <span>{item}</span>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
             </div>
