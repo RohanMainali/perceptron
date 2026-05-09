@@ -1,8 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowRight, BookOpen } from "lucide-react"
-import Link from "next/link"
+import { ArrowRight, Play } from "lucide-react"
 import { useState } from "react"
 import WaitlistModal from "@/components/waitlist-modal"
 import MeshCanvas from "@/components/mesh-canvas"
@@ -131,9 +130,9 @@ export default function Hero() {
             maxWidth: "14ch",
           }}
         >
-          Stop Annotating.
+          Annotate Datasets
           <br />
-          <em style={{ color: GREEN, fontStyle: "italic" }}>Start Describing.</em>
+          By <em style={{ color: GREEN, fontStyle: "italic" }}>Describing</em> Them.
         </motion.h1>
 
         {/* Sub-headline */}
@@ -149,8 +148,7 @@ export default function Hero() {
             color: MUTED,
           }}
         >
-          Tell AI what to label in plain language.{" "}
-          Watch it annotate your entire dataset — instantly.
+          Auta reads your dataset and a plain-language instruction, then labels everything — no config, no schema authoring, no clicking.
         </motion.p>
 
         {/* CTAs */}
@@ -193,26 +191,29 @@ export default function Hero() {
             Get Early Access <ArrowRight size={14} />
           </button>
 
-          <Link href="/blog">
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "11px 20px",
-                borderRadius: "8px",
-                fontSize: "14px",
-                fontWeight: 500,
-                border: `1px solid ${LINE_STR}`,
-                background: PANEL,
-                color: FG,
-                cursor: "pointer",
-                transition: "all 140ms cubic-bezier(0.16,1,0.3,1)",
-              }}
-            >
-              <BookOpen size={14} /> Read Our Blog
-            </span>
-          </Link>
+          <button
+            onClick={() => {
+              document.getElementById("hero-demo")?.scrollIntoView({ behavior: "smooth", block: "start" })
+            }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "11px 20px",
+              borderRadius: "8px",
+              fontSize: "14px",
+              fontWeight: 500,
+              border: `1px solid ${LINE_STR}`,
+              background: PANEL,
+              color: FG,
+              cursor: "pointer",
+              transition: "all 140ms cubic-bezier(0.16,1,0.3,1)",
+            }}
+            onMouseEnter={e => { const el = e.currentTarget; el.style.background = BG2; el.style.transform = "translateY(-1px)"; el.style.borderColor = FG }}
+            onMouseLeave={e => { const el = e.currentTarget; el.style.background = PANEL; el.style.transform = ""; el.style.borderColor = LINE_STR }}
+          >
+            <Play size={11} fill={FG} /> See How It Works
+          </button>
         </motion.div>
 
         {/* Backed By strip */}
@@ -331,6 +332,7 @@ export default function Hero() {
 
         {/* ── Product demo window ── */}
         <motion.div
+          id="hero-demo"
           initial={{ opacity: 0, y: 48, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}

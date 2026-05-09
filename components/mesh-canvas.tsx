@@ -82,8 +82,8 @@ export default function MeshCanvas() {
       }
 
       // Horizontal lines
-      ctx.strokeStyle = "rgba(22,163,74,0.22)"
-      ctx.lineWidth = 0.7
+      ctx.strokeStyle = "rgba(22,163,74,0.30)"
+      ctx.lineWidth = 0.75
       for (let r = 0; r < rows; r++) {
         ctx.beginPath()
         for (let c = 0; c < cols; c++) {
