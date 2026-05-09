@@ -58,8 +58,12 @@ export default function Footer() {
                 </motion.div>
               </Link>
               <p className="text-foreground/60 text-sm leading-relaxed">
-                Shaping the future through intelligent perception.
+                Building Auta — the natural-language interface for vision data annotation.
               </p>
+              <div className="flex items-center gap-2 mt-1" style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "11px", color: "#aaaaaa", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] flex-shrink-0" />
+                Delaware, USA
+              </div>
             </motion.div>
 
             {/* Quick Links */}

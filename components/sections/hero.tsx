@@ -1,212 +1,488 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { ArrowRight, BookOpen, Sparkles, Layers, MessageSquare } from "lucide-react"
-import Image from "next/image"
+import { motion } from "framer-motion"
+import { ArrowRight, BookOpen } from "lucide-react"
 import Link from "next/link"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import WaitlistModal from "@/components/waitlist-modal"
+import MeshCanvas from "@/components/mesh-canvas"
+
+/* ─────────────────────────────────────────────
+   Tiny inline-style constants (mirrors reference
+   design CSS vars so nothing inherits dark theme)
+───────────────────────────────────────────── */
+const FG       = "#0c0c0a"
+const MUTED    = "#5a5a52"
+const FAINT    = "#aaaaaa"
+const MONO     = "'Geist Mono', 'Courier New', monospace"
+const GREEN    = "#16a34a"
+const GREEN_2  = "#15803d"
+const LINE     = "rgba(12,12,10,0.09)"
+const LINE_STR = "rgba(12,12,10,0.14)"
+const PANEL    = "#ffffff"
+const BG2      = "#f2f2ee"
+const PANEL2   = "#f6f6f3"
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null)
   const [waitlistOpen, setWaitlistOpen] = useState(false)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  })
-  const bgY     = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 overflow-hidden">
-      {/* ── Background ── */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
-          style={{ backgroundImage: "url('/images/hero-background.jpg')" }}
-        />
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050d1a]/40 via-transparent to-[#050d1a]/90" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050d1a]/50 via-transparent to-[#050d1a]/50" />
-      </motion.div>
+    <section
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        background: PANEL,
+        paddingTop: "148px",
+        paddingBottom: "96px",
+        borderBottom: `1px solid ${LINE}`,
+        /* reset all text to dark so nothing bleeds from dark body */
+        color: FG,
+      }}
+    >
+      {/* ── Gravity mesh canvas ── */}
+      <MeshCanvas />
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
-        {[...Array(10)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: i % 3 === 0 ? 4 : i % 2 === 0 ? 3 : 2,
-              height: i % 3 === 0 ? 4 : i % 2 === 0 ? 3 : 2,
-              left: `${8 + i * 9}%`,
-              top: `${12 + (i % 5) * 16}%`,
-              background: i % 3 === 0 ? "#53C5E6" : i % 3 === 1 ? "#C26FCF" : "#2178C7",
-            }}
-            animate={{ y: [0, -60, 0], opacity: [0.08, 0.45, 0.08] }}
-            transition={{ duration: 5 + i * 0.7, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }}
-          />
-        ))}
-      </div>
-
-      {/* Grid overlay */}
+      {/* ── Soft green ambient glow ── */}
       <div
-        className="absolute inset-0 z-[1] opacity-[0.02]"
+        aria-hidden="true"
         style={{
-          backgroundImage: "linear-gradient(rgba(83,197,230,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(83,197,230,0.5) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
+          position: "absolute",
+          top: "-18%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "900px",
+          height: "560px",
+          background:
+            "radial-gradient(ellipse at 50% 40%, rgba(22,163,74,0.12) 0%, rgba(22,163,74,0.04) 45%, transparent 68%)",
+          zIndex: 0,
+          pointerEvents: "none",
         }}
       />
 
-      {/* Radial glow behind headline */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-[#2178C7]/12 blur-[120px] pointer-events-none z-[1]" />
-      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] rounded-full bg-[#C26FCF]/8 blur-[100px] pointer-events-none z-[1]" />
-
       {/* ── Main content ── */}
-      <motion.div className="w-full relative z-10 flex flex-col items-center" style={{ opacity }}>
-        <div className="max-w-5xl mx-auto px-6 md:px-12 flex flex-col items-center text-center">
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
+          maxWidth: "1160px",
+          margin: "0 auto",
+          padding: "0 32px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
 
-          {/* Eyebrow badge */}
-          <motion.div
-            className="mb-8"
-            initial={{ opacity: 0, y: 16, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              border: `1px solid ${LINE}`,
+              borderRadius: "6px",
+              background: PANEL,
+              overflow: "hidden",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+              fontFamily: MONO,
+              fontSize: "11.5px",
+              letterSpacing: "0.02em",
+            }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-[13px] text-white/50 font-medium backdrop-blur-md">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#53C5E6] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#53C5E6]" />
-              </span>
-              Now in Early Access
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            className="text-[clamp(2.75rem,7vw,6.5rem)] font-light text-white leading-[1.0] mb-7 tracking-[-0.03em]"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
-          >
-            Stop Annotating.
-            <br />
-            <span className="cosmic-heading-gradient">Start Describing.</span>
-          </motion.h1>
-
-          {/* Sub-headline */}
-          <motion.p
-            className="text-base sm:text-lg md:text-xl text-white/50 max-w-xl leading-relaxed mb-8 font-light"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-          >
-            Tell AI what to label in plain language.
-            <br className="hidden sm:block" />
-            Watch it annotate your entire dataset — instantly.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-14"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.55 }}
-          >
-            <motion.button
-              className="cosmic-btn-primary inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-semibold text-[15px] shadow-lg shadow-[#2178C7]/20"
-              whileHover={{ scale: 1.04, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setWaitlistOpen(true)}
+            <span
+              style={{
+                background: GREEN,
+                color: "#fff",
+                fontWeight: 600,
+                padding: "5px 9px",
+                letterSpacing: "0.07em",
+                fontSize: "10px",
+                textTransform: "uppercase",
+              }}
             >
-              Get Early Access <ArrowRight size={16} strokeWidth={2.5} />
-            </motion.button>
-            <Link href="/blog">
-              <motion.span
-                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-medium text-[15px] text-white/70 border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm hover:bg-white/[0.08] hover:text-white/90 transition-colors duration-300"
-                whileHover={{ scale: 1.03, y: -1 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <BookOpen size={17} /> Read Our Blog
-              </motion.span>
-            </Link>
-          </motion.div>
-
-          {/* ── Product demo window ── */}
-          <motion.div
-            className="relative w-full max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 50, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-          >
-            {/* Glow under the window */}
-            <motion.div
-              className="absolute -inset-6 rounded-3xl blur-3xl opacity-25"
-              style={{ background: "linear-gradient(135deg, #2178C7 0%, #53C5E6 40%, #C26FCF 100%)" }}
-              animate={{ opacity: [0.15, 0.35, 0.15] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              Beta
+            </span>
+            <span
+              style={{ width: "1px", alignSelf: "stretch", background: LINE, flexShrink: 0 }}
             />
+            <span style={{ padding: "5px 11px", color: MUTED }}>
+              <b style={{ color: FG, fontWeight: 500 }}>Auta</b> is now in early access
+            </span>
+          </div>
+        </motion.div>
 
-            {/* Browser chrome */}
-            <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] shadow-[0_50px_120px_-30px_rgba(33,120,199,0.3)] bg-[#0c1220]">
-              {/* Title bar */}
-              <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0c1220]/90 border-b border-white/[0.05]">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#E05A6D]/70" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#F1B646]/70" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#53C5E6]/70" />
-                <div className="flex-1 mx-4">
-                  <div className="max-w-[200px] mx-auto h-5 rounded-md bg-white/[0.04] border border-white/[0.05] flex items-center justify-center">
-                    <span className="text-[10px] text-white/25 tracking-wide">auta.perceptronai.org</span>
-                  </div>
-                </div>
-              </div>
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            margin: "32px auto 0",
+            fontSize: "clamp(48px, 8.5vw, 108px)",
+            fontWeight: 500,
+            letterSpacing: "-0.052em",
+            lineHeight: 0.95,
+            color: FG,
+            maxWidth: "14ch",
+          }}
+        >
+          Stop Annotating.
+          <br />
+          <em style={{ color: GREEN, fontStyle: "italic" }}>Start Describing.</em>
+        </motion.h1>
 
-              {/* Demo video */}
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-auto"
+        {/* Sub-headline */}
+        <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.3 }}
+          style={{
+            margin: "26px auto 0",
+            maxWidth: "520px",
+            fontSize: "17px",
+            lineHeight: 1.6,
+            color: MUTED,
+          }}
+        >
+          Tell AI what to label in plain language.{" "}
+          Watch it annotate your entire dataset — instantly.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          style={{ display: "flex", gap: "10px", marginTop: "36px", flexWrap: "wrap", justifyContent: "center" }}
+        >
+          <button
+            onClick={() => setWaitlistOpen(true)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "11px 20px",
+              borderRadius: "8px",
+              fontSize: "14px",
+              fontWeight: 500,
+              border: `1px solid ${GREEN_2}`,
+              background: GREEN,
+              color: "#fff",
+              cursor: "pointer",
+              boxShadow: "0 1px 3px rgba(22,163,74,0.3), inset 0 1px 0 rgba(255,255,255,0.12)",
+              transition: "all 140ms cubic-bezier(0.16,1,0.3,1)",
+            }}
+            onMouseEnter={e => {
+              const el = e.currentTarget
+              el.style.background = GREEN_2
+              el.style.transform = "translateY(-1px)"
+              el.style.boxShadow = "0 6px 20px rgba(22,163,74,0.28), inset 0 1px 0 rgba(255,255,255,0.12)"
+            }}
+            onMouseLeave={e => {
+              const el = e.currentTarget
+              el.style.background = GREEN
+              el.style.transform = "translateY(0)"
+              el.style.boxShadow = "0 1px 3px rgba(22,163,74,0.3), inset 0 1px 0 rgba(255,255,255,0.12)"
+            }}
+          >
+            Get Early Access <ArrowRight size={14} />
+          </button>
+
+          <Link href="/blog">
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "11px 20px",
+                borderRadius: "8px",
+                fontSize: "14px",
+                fontWeight: 500,
+                border: `1px solid ${LINE_STR}`,
+                background: PANEL,
+                color: FG,
+                cursor: "pointer",
+                transition: "all 140ms cubic-bezier(0.16,1,0.3,1)",
+              }}
+            >
+              <BookOpen size={14} /> Read Our Blog
+            </span>
+          </Link>
+        </motion.div>
+
+        {/* Backed By strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          style={{ marginTop: "44px" }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              border: `1px solid ${LINE}`,
+              borderRadius: "10px",
+              background: PANEL,
+              overflow: "hidden",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+            }}
+          >
+            <span
+              style={{
+                padding: "14px 20px",
+                fontFamily: MONO,
+                fontSize: "10px",
+                color: FAINT,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                borderRight: `1px solid ${LINE}`,
+                whiteSpace: "nowrap",
+              }}
+            >
+              Backed by
+            </span>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "28px",
+                padding: "14px 24px",
+                flexWrap: "wrap",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  color: MUTED,
+                  letterSpacing: "-0.01em",
+                  whiteSpace: "nowrap",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
               >
-                <source src="/images/auta/medicaldemo.mp4" type="video/mp4" />
-              </video>
+                NVIDIA{" "}
+                <span style={{ fontWeight: 300, color: FAINT, fontSize: "12px" }}>Inception</span>
+              </span>
+              <span style={{ width: "1px", height: "20px", background: LINE, flexShrink: 0 }} />
+              <span
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  color: MUTED,
+                  letterSpacing: "-0.01em",
+                  whiteSpace: "nowrap",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                Amazon{" "}
+                <span style={{ fontWeight: 300, color: FAINT, fontSize: "12px" }}>AWS Activate</span>
+              </span>
+            </div>
+          </div>
+        </motion.div>
 
-              {/* Bottom fade overlay */}
-              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#050d1a] to-transparent" />
+        {/* Industry proof row */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.75 }}
+          style={{
+            marginTop: "36px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "10px",
+            fontSize: "12px",
+            color: FAINT,
+          }}
+        >
+          <span>Trusted by research teams in</span>
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              fontFamily: MONO,
+              fontSize: "11px",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: MUTED,
+            }}
+          >
+            <span>Medical Imaging</span>
+            <span style={{ color: LINE_STR }}>/</span>
+            <span>Sports Analytics</span>
+            <span style={{ color: LINE_STR }}>/</span>
+            <span>Autonomous Driving</span>
+          </div>
+        </motion.div>
+
+        {/* ── Product demo window ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 48, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            position: "relative",
+            width: "100%",
+            maxWidth: "1080px",
+            marginTop: "72px",
+          }}
+        >
+          {/* Window chrome */}
+          <div
+            style={{
+              border: `1px solid ${LINE}`,
+              borderRadius: "14px",
+              background: PANEL,
+              overflow: "hidden",
+              boxShadow: "0 8px 48px rgba(0,0,0,0.09), 0 0 0 0.5px rgba(0,0,0,0.04)",
+            }}
+          >
+            {/* Title bar */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                height: "40px",
+                padding: "0 16px",
+                gap: "10px",
+                borderBottom: `1px solid ${LINE}`,
+                background: PANEL2,
+              }}
+            >
+              {/* Traffic lights */}
+              <div style={{ display: "flex", gap: "6px" }}>
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#fc635d", display: "block" }} />
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#fdbc40", display: "block" }} />
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#34c749", display: "block" }} />
+              </div>
+              {/* Window title */}
+              <span
+                style={{
+                  fontFamily: MONO,
+                  fontSize: "11px",
+                  color: "#7a7a72",
+                  marginLeft: "10px",
+                }}
+              >
+                auta — chest-xray-pneumonia.parquet
+              </span>
+              {/* Tabs */}
+              <div style={{ display: "flex", gap: "2px", marginLeft: "auto" }}>
+                {["Annotate", "Plan", "Export"].map((tab, i) => (
+                  <span
+                    key={tab}
+                    style={{
+                      fontFamily: MONO,
+                      fontSize: "11px",
+                      padding: "4px 9px",
+                      borderRadius: "5px",
+                      color: i === 0 ? FG : "#7a7a72",
+                      background: i === 0 ? BG2 : "transparent",
+                    }}
+                  >
+                    {tab}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            {/* Floating stat cards */}
-            <motion.div
-              className="absolute -left-8 top-1/3 px-5 py-3.5 rounded-2xl bg-[#0d1424]/80 backdrop-blur-xl border border-white/[0.1] shadow-2xl hidden lg:block"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            {/* Demo video */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: "100%", height: "auto", display: "block" }}
             >
-              <p className="text-2xl font-bold text-white tracking-tight">10×</p>
-              <p className="text-[11px] text-white/40 mt-0.5 font-medium">Faster annotation</p>
-            </motion.div>
+              <source src="/images/auta/medicaldemo.mp4" type="video/mp4" />
+            </video>
+          </div>
 
-            <motion.div
-              className="absolute -right-8 top-1/4 px-5 py-3.5 rounded-2xl bg-[#0d1424]/80 backdrop-blur-xl border border-white/[0.1] shadow-2xl hidden lg:block"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-            >
-              <p className="text-2xl font-bold text-white tracking-tight">20+</p>
-              <p className="text-[11px] text-white/40 mt-0.5 font-medium">Export formats</p>
-            </motion.div>
-
-            <motion.div
-              className="absolute -right-6 bottom-20 px-5 py-3.5 rounded-2xl bg-[#0d1424]/80 backdrop-blur-xl border border-white/[0.1] shadow-2xl hidden lg:block"
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-            >
-              <p className="text-2xl font-bold cosmic-heading-gradient tracking-tight">Zero</p>
-              <p className="text-[11px] text-white/40 mt-0.5 font-medium">Setup required</p>
-            </motion.div>
+          {/* Floating stat cards */}
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              position: "absolute",
+              left: "-32px",
+              top: "33%",
+              padding: "14px 20px",
+              borderRadius: "16px",
+              background: "rgba(255,255,255,0.96)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: `1px solid ${LINE}`,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+            }}
+            className="hidden lg:block"
+          >
+            <p style={{ fontSize: "24px", fontWeight: 700, color: FG, letterSpacing: "-0.02em", lineHeight: 1 }}>10×</p>
+            <p style={{ fontSize: "11px", color: "#7a7a72", marginTop: "2px", fontWeight: 500 }}>Faster annotation</p>
           </motion.div>
-        </div>
-      </motion.div>
-      <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} theme="dark" />
+
+          <motion.div
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+            style={{
+              position: "absolute",
+              right: "-32px",
+              top: "25%",
+              padding: "14px 20px",
+              borderRadius: "16px",
+              background: "rgba(255,255,255,0.96)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: `1px solid ${LINE}`,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+            }}
+            className="hidden lg:block"
+          >
+            <p style={{ fontSize: "24px", fontWeight: 700, color: FG, letterSpacing: "-0.02em", lineHeight: 1 }}>20+</p>
+            <p style={{ fontSize: "11px", color: "#7a7a72", marginTop: "2px", fontWeight: 500 }}>Export formats</p>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+            style={{
+              position: "absolute",
+              right: "-24px",
+              bottom: "80px",
+              padding: "14px 20px",
+              borderRadius: "16px",
+              background: "rgba(255,255,255,0.96)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: `1px solid ${LINE}`,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+            }}
+            className="hidden lg:block"
+          >
+            <p style={{ fontSize: "24px", fontWeight: 700, color: GREEN, letterSpacing: "-0.02em", lineHeight: 1 }}>Zero</p>
+            <p style={{ fontSize: "11px", color: "#7a7a72", marginTop: "2px", fontWeight: 500 }}>Setup required</p>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      <WaitlistModal
+        isOpen={waitlistOpen}
+        onClose={() => setWaitlistOpen(false)}
+        theme="light"
+      />
     </section>
   )
 }
