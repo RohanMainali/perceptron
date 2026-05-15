@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Linkedin, Youtube, Facebook } from "lucide-react"
+import { ArrowUpRight, Linkedin, Youtube, Facebook } from "lucide-react"
 import { SiReddit } from "react-icons/si"
 
 const FG    = "#0c0c0a"
@@ -95,6 +95,7 @@ export default function Footer() {
             heading="Company"
             links={[
               { label: "About", href: "/about" },
+              { label: "Auta", href: "https://auta.perceptronai.org", external: true },
               { label: "Blog", href: "/blog" },
               { label: "Contact", href: "/contact" },
             ]}
@@ -104,9 +105,9 @@ export default function Footer() {
           <FooterCol
             heading="Solutions"
             links={[
-              { label: "Medical Imaging", href: "/services#data-annotation" },
-              { label: "Sports Analytics", href: "/services#model-development" },
-              { label: "Autonomous Driving", href: "/services#research-consulting" },
+              { label: "Medical Imaging", href: "/contact" },
+              { label: "Sports Analytics", href: "/contact" },
+              { label: "Autonomous Driving", href: "/contact" },
               { label: "Enterprise", href: "/contact" },
             ]}
           />
@@ -157,7 +158,7 @@ export default function Footer() {
   )
 }
 
-function FooterCol({ heading, links }: { heading: string; links: { label: string; href: string }[] }) {
+function FooterCol({ heading, links }: { heading: string; links: { label: string; href: string; external?: boolean }[] }) {
   return (
     <div>
       <div style={{ fontFamily: MONO, fontSize: "10.5px", fontWeight: 500, color: FAINT, letterSpacing: "0.09em", textTransform: "uppercase", marginBottom: "14px" }}>
@@ -166,14 +167,27 @@ function FooterCol({ heading, links }: { heading: string; links: { label: string
       <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "9px" }}>
         {links.map(l => (
           <li key={l.label}>
-            <Link
-              href={l.href}
-              style={{ fontSize: "13.5px", color: MUTED, textDecoration: "none", transition: "color 100ms" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = FG }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = MUTED }}
-            >
-              {l.label}
-            </Link>
+            {l.external ? (
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: "13.5px", color: MUTED, textDecoration: "none", transition: "color 100ms", display: "inline-flex", alignItems: "center", gap: "4px" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = FG }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = MUTED }}
+              >
+                {l.label} <ArrowUpRight size={11} strokeWidth={2} />
+              </a>
+            ) : (
+              <Link
+                href={l.href}
+                style={{ fontSize: "13.5px", color: MUTED, textDecoration: "none", transition: "color 100ms" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = FG }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = MUTED }}
+              >
+                {l.label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
