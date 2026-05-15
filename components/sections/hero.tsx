@@ -73,48 +73,6 @@ export default function Hero() {
         }}
       >
 
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              border: `1px solid ${LINE}`,
-              borderRadius: "6px",
-              background: PANEL,
-              overflow: "hidden",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-              fontFamily: MONO,
-              fontSize: "11.5px",
-              letterSpacing: "0.02em",
-            }}
-          >
-            <span
-              style={{
-                background: GREEN,
-                color: "#fff",
-                fontWeight: 600,
-                padding: "5px 9px",
-                letterSpacing: "0.07em",
-                fontSize: "10px",
-                textTransform: "uppercase",
-              }}
-            >
-              Beta
-            </span>
-            <span
-              style={{ width: "1px", alignSelf: "stretch", background: LINE, flexShrink: 0 }}
-            />
-            <span style={{ padding: "5px 11px", color: MUTED }}>
-              <b style={{ color: FG, fontWeight: 500 }}>Auta</b> is now in early access
-            </span>
-          </div>
-        </motion.div>
-
         {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 28 }}

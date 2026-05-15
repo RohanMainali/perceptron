@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { ArrowLeft, Calendar, User, Clock, ChevronUp, BookOpen, ChevronRight } from "lucide-react"
+import { ArrowLeft, Calendar, User, Clock, ChevronUp, ChevronRight } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
@@ -118,24 +118,6 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
           <div style={{ display: "grid", gridTemplateColumns: hasHeroMedia ? "1fr 480px" : "1fr", gap: "56px", alignItems: "center" }}>
             {/* Left — copy */}
             <div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: "8px",
-                  padding: "5px 12px 5px 5px", borderRadius: "100px",
-                  border: `1px solid ${LINE_STR}`, background: PANEL, marginBottom: "20px",
-                }}
-              >
-                <span style={{ background: GREEN, color: "#fff", borderRadius: "100px", padding: "2px 10px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.04em", fontFamily: MONO }}>
-                  ARTICLE
-                </span>
-                <span style={{ fontSize: "12px", color: MUTED, fontFamily: MONO, letterSpacing: "0.03em", display: "flex", alignItems: "center", gap: "4px" }}>
-                  <BookOpen size={11} /> {readingTime} min read
-                </span>
-              </motion.div>
-
               <motion.h1
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}

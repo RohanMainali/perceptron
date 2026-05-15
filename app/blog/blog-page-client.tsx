@@ -95,19 +95,6 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             style={{ maxWidth: "680px" }}
           >
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: "8px",
-              padding: "5px 12px 5px 5px", borderRadius: "100px",
-              border: `1px solid ${LINE_STR}`, background: PANEL, marginBottom: "24px",
-            }}>
-              <span style={{ background: GREEN, color: "#fff", borderRadius: "100px", padding: "2px 10px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.04em", fontFamily: MONO }}>
-                BLOG
-              </span>
-              <span style={{ fontSize: "12px", color: MUTED, fontFamily: MONO, letterSpacing: "0.03em" }}>
-                Knowledge Hub
-              </span>
-            </div>
-
             <h1 style={{ fontSize: "clamp(42px, 6vw, 72px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.0, color: FG, margin: "0 0 20px" }}>
               Blog &amp; <em style={{ fontStyle: "italic", color: GREEN }}>Insights</em>
             </h1>

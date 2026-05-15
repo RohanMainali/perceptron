@@ -127,19 +127,11 @@ export default function AboutPage() {
         <div aria-hidden="true" style={{ position: "absolute", top: "-18%", left: "50%", transform: "translateX(-50%)", width: "900px", height: "560px", background: "radial-gradient(ellipse at 50% 40%, rgba(22,163,74,0.12) 0%, rgba(22,163,74,0.04) 45%, transparent 68%)", zIndex: 0, pointerEvents: "none" }} />
 
         <div style={{ position: "relative", zIndex: 2, maxWidth: "1280px", margin: "0 auto", padding: "0 40px", textAlign: "center" }}>
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", border: `1px solid ${LINE}`, borderRadius: "6px", background: PANEL, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", fontFamily: MONO, fontSize: "11.5px", letterSpacing: "0.02em" }}>
-              <span style={{ background: GREEN, color: "#fff", fontWeight: 600, padding: "5px 9px", letterSpacing: "0.07em", fontSize: "10px", textTransform: "uppercase" }}>Story</span>
-              <span style={{ width: "1px", alignSelf: "stretch", background: LINE }} />
-              <span style={{ padding: "5px 11px", color: MUTED }}>Perceptron AI Labs</span>
-            </div>
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            style={{ margin: "32px auto 0", fontSize: "clamp(48px, 7vw, 88px)", fontWeight: 500, letterSpacing: "-0.05em", lineHeight: 0.95, color: FG, maxWidth: "14ch" }}
+            style={{ margin: "0 auto", fontSize: "clamp(48px, 7vw, 88px)", fontWeight: 500, letterSpacing: "-0.05em", lineHeight: 0.95, color: FG, maxWidth: "14ch" }}
           >
             About<br /><em style={{ color: GREEN, fontStyle: "italic" }}>Perceptron</em>
           </motion.h1>
