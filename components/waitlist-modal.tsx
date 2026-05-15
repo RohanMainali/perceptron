@@ -2,7 +2,7 @@
 
 import { useState, FormEvent, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, ArrowRight, CheckCircle2, Loader2, Sparkles, Clock } from "lucide-react"
+import { X, ArrowRight, CheckCircle2, Loader2, Clock, ChevronDown } from "lucide-react"
 import { toast } from "sonner"
 
 interface WaitlistModalProps {
@@ -19,23 +19,21 @@ const USE_CASE_LABELS: Record<string, string> = {
   Other:      "Other",
 }
 
-export default function WaitlistModal({ isOpen, onClose, theme = "dark" }: WaitlistModalProps) {
+const MONO    = "'Geist Mono', 'Courier New', monospace"
+const GREEN   = "#16a34a"
+const GREEN_2 = "#15803d"
+
+export default function WaitlistModal({ isOpen, onClose, theme = "light" }: WaitlistModalProps) {
   const [submitState, setSubmitState] = useState<"idle" | "success" | "duplicate">("idle")
-  const [loading, setLoading] = useState(false)
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
+  const [loading, setLoading]         = useState(false)
+  const [form, setForm]               = useState({
+    name: "", email: "",
     useCase: "Other" as (typeof USE_CASES)[number],
     message: "",
   })
 
-  // Lock body scroll while open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
+    document.body.style.overflow = isOpen ? "hidden" : ""
     return () => { document.body.style.overflow = "" }
   }, [isOpen])
 
@@ -52,20 +50,10 @@ export default function WaitlistModal({ isOpen, onClose, theme = "dark" }: Waitl
     if (loading) return
     setLoading(true)
     try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      })
+      const res  = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) })
       const data = await res.json()
-      if (res.status === 409) {
-        setSubmitState("duplicate")
-        return
-      }
-      if (!res.ok) {
-        toast.error(data.error || "Something went wrong. Please try again.")
-        return
-      }
+      if (res.status === 409) { setSubmitState("duplicate"); return }
+      if (!res.ok) { toast.error(data.error || "Something went wrong. Please try again."); return }
       setSubmitState("success")
     } catch {
       toast.error("Network error. Please check your connection and try again.")
@@ -74,290 +62,239 @@ export default function WaitlistModal({ isOpen, onClose, theme = "dark" }: Waitl
     }
   }
 
-  const isDark = theme === "dark"
+  const dark = theme === "dark"
 
-  /* ─── Theme tokens ─────────────────────────────────────────────── */
-  const overlay    = isDark ? "rgba(4, 10, 22, 0.88)"  : "rgba(15, 23, 42, 0.55)"
-  const panel      = isDark ? "bg-[#060e1c]"           : "bg-white"
-  const panelBorder= isDark ? "border-white/[0.08]"    : "border-slate-200"
-  const panelShadow= isDark
-    ? "0 32px 100px -16px rgba(33,120,199,0.4), 0 0 0 1px rgba(255,255,255,0.04)"
-    : "0 24px 80px -12px rgba(33,120,199,0.18), 0 8px 32px -8px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.04)"
+  const t = {
+    overlay:      dark ? "rgba(4,10,22,0.85)"       : "rgba(12,12,10,0.55)",
+    panel:        dark ? "#111110"                   : "#ffffff",
+    border:       dark ? "rgba(255,255,255,0.08)"    : "rgba(12,12,10,0.13)",
+    shadow:       dark
+      ? "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)"
+      : "0 24px 64px rgba(0,0,0,0.12), 0 0 0 1px rgba(12,12,10,0.08)",
+    heading:      dark ? "#ffffff"                   : "#0c0c0a",
+    sub:          dark ? "rgba(255,255,255,0.4)"     : "#5a5a52",
+    label:        dark ? "rgba(255,255,255,0.3)"     : "#aaaaaa",
+    inputBg:      dark ? "rgba(255,255,255,0.05)"    : "#f6f6f3",
+    inputBorder:  dark ? "rgba(255,255,255,0.1)"     : "rgba(12,12,10,0.14)",
+    inputText:    dark ? "#ffffff"                   : "#0c0c0a",
+    inputPh:      dark ? "rgba(255,255,255,0.2)"     : "#aaaaaa",
+    selectBg:     dark ? "#0d0d0c"                   : "#f6f6f3",
+    divider:      dark ? "rgba(255,255,255,0.07)"    : "rgba(12,12,10,0.09)",
+    closeColor:   dark ? "rgba(255,255,255,0.35)"    : "#aaaaaa",
+    closeBg:      dark ? "rgba(255,255,255,0.06)"    : "rgba(12,12,10,0.05)",
+    footer:       dark ? "rgba(255,255,255,0.2)"     : "#aaaaaa",
+    successIcon:  dark ? GREEN                       : GREEN,
+    altIconColor: dark ? "#f1b646"                   : "#d97706",
+  }
 
-  // Eyebrow pill
-  const eyebrow    = isDark ? "bg-[#2178C7]/15 border-[#53C5E6]/25 text-[#53C5E6]"      : "bg-[#2178C7]/10 border-[#2178C7]/20 text-[#1d6ab2]"
-  const pingColor  = isDark ? "bg-[#53C5E6]"  : "bg-[#2178C7]"
-
-  // Text
-  const headingCls = isDark ? "text-white"    : "text-slate-900"
-  const subCls     = isDark ? "text-white/38" : "text-slate-500"
-  const labelCls   = isDark ? "text-white/35" : "text-slate-500"
-  const optionalCls= isDark ? "text-white/22" : "text-slate-400"
-  const requiredCls= "text-[#E05A6D]"
-  const footerCls  = isDark ? "text-white/22" : "text-slate-400"
-
-  // Close btn
-  const closeBtn   = isDark
-    ? "text-white/30 hover:text-white/75 hover:bg-white/[0.07]"
-    : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
-
-  // Divider
-  const divider    = isDark ? "border-white/[0.07]" : "border-slate-100"
-
-  // Inputs
-  const inputBase  = isDark
-    ? "bg-white/[0.05] border-white/[0.1] text-white placeholder:text-white/22 focus:border-[#2178C7]/65 focus:bg-white/[0.08]"
-    : "bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-[#2178C7]/60 focus:bg-white focus:ring-2 focus:ring-[#2178C7]/[0.12]"
-  const selectArrow= isDark
-    ? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff45' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`
-    : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`
-  const selectBg   = isDark ? "#070f1e" : "#f8fafc"
-
-  // Submit button
-  const submitShadow = isDark
-    ? "shadow-[0_8px_28px_-6px_rgba(33,120,199,0.55)] hover:shadow-[0_12px_36px_-4px_rgba(33,120,199,0.65)]"
-    : "shadow-[0_8px_24px_-6px_rgba(33,120,199,0.38)] hover:shadow-[0_12px_32px_-4px_rgba(33,120,199,0.48)]"
-
-  // Success
-  const successIconCls   = isDark ? "text-[#53C5E6]"    : "text-[#2178C7]"
-  const successHeadCls   = isDark ? "text-white"         : "text-slate-900"
-  const successBodyCls   = isDark ? "text-white/45"      : "text-slate-500"
-  const successCloseCls  = isDark
-    ? "text-white/50 border-white/[0.1] hover:bg-white/[0.07] hover:text-white/80"
-    : "text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-800"
+  const inputStyle = (extraStyle?: React.CSSProperties): React.CSSProperties => ({
+    width: "100%", padding: "11px 13px",
+    borderRadius: "8px", border: `1px solid ${t.inputBorder}`,
+    background: t.inputBg, color: t.inputText,
+    fontSize: "14px", outline: "none",
+    transition: "border-color 140ms, background 140ms",
+    boxSizing: "border-box", fontFamily: "inherit",
+    ...extraStyle,
+  })
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          style={{ position: "fixed", inset: 0, zIndex: 60, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
           onClick={handleClose}
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 backdrop-blur-[8px]" style={{ background: overlay }} />
+          <div style={{ position: "absolute", inset: 0, backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", background: t.overlay }} />
 
           {/* Panel */}
           <motion.div
-            className={`relative z-10 w-full max-w-[492px] rounded-2xl border overflow-hidden ${panel} ${panelBorder}`}
-            style={{ boxShadow: panelShadow }}
-            initial={{ scale: 0.94, opacity: 0, y: 20 }}
+            style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "460px", borderRadius: "16px", border: `1px solid ${t.border}`, background: t.panel, boxShadow: t.shadow, overflow: "hidden" }}
+            initial={{ scale: 0.95, opacity: 0, y: 16 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.94, opacity: 0, y: 14 }}
-            transition={{ type: "spring", stiffness: 340, damping: 30 }}
-            onClick={(e) => e.stopPropagation()}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+            transition={{ type: "spring", stiffness: 360, damping: 32 }}
+            onClick={e => e.stopPropagation()}
           >
-            {/* Top accent bar */}
-            <div
-              className="h-[2.5px] w-full"
-              style={{ background: "linear-gradient(90deg, #1d6bb3 0%, #53C5E6 50%, #C26FCF 100%)" }}
-            />
-
             {/* Header */}
-            <div className="px-7 pt-6 pb-[18px] flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                {/* Eyebrow pill */}
-                <div className={`inline-flex items-center gap-1.5 px-2.5 py-[5px] rounded-full border text-[10.5px] font-semibold tracking-[0.06em] uppercase mb-3 ${eyebrow}`}>
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-70 ${pingColor}`} />
-                    <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${pingColor}`} />
-                  </span>
-                  Private Beta
-                </div>
-                <h2 className={`text-[1.3rem] font-bold leading-[1.2] tracking-[-0.02em] mb-1.5 ${headingCls}`}>
+            <div style={{ padding: "28px 28px 22px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
+              <div>
+                <h2 style={{ fontSize: "20px", fontWeight: 600, letterSpacing: "-0.03em", color: t.heading, margin: "0 0 6px" }}>
                   Join the Auta Waitlist
                 </h2>
-                <p className={`text-[13px] leading-relaxed ${subCls}`}>
+                <p style={{ fontSize: "13.5px", color: t.sub, margin: 0, lineHeight: 1.55 }}>
                   Be among the first to experience AI-powered annotation.
                 </p>
               </div>
               <button
                 onClick={handleClose}
                 aria-label="Close"
-                className={`mt-0.5 flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${closeBtn}`}
+                style={{ flexShrink: 0, width: "32px", height: "32px", borderRadius: "8px", border: "none", background: "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: t.closeColor, transition: "background 120ms, color 120ms", marginTop: "2px" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = t.closeBg }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent" }}
               >
-                <X size={16} strokeWidth={2.5} />
+                <X size={16} strokeWidth={2} />
               </button>
             </div>
 
             {/* Divider */}
-            <div className={`mx-7 border-t ${divider}`} />
+            <div style={{ height: "1px", background: t.divider, margin: "0 28px" }} />
 
             {/* Body */}
-            <div className="px-7 pb-7 pt-5">
+            <div style={{ padding: "22px 28px 28px" }}>
               <AnimatePresence mode="wait">
+
                 {submitState === "success" ? (
-                  /* ─── Success state ─── */
-                  <motion.div
-                    key="success"
-                    className="py-6 flex flex-col items-center text-center"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                  <motion.div key="success"
+                    style={{ padding: "24px 0 8px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "14px" }}
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                   >
                     <motion.div
-                      className={`mb-4 ${successIconCls}`}
-                      initial={{ scale: 0, rotate: -12 }}
-                      animate={{ scale: 1, rotate: 0 }}
+                      style={{ width: "60px", height: "60px", borderRadius: "16px", background: "rgba(22,163,74,0.08)", border: "1px solid rgba(22,163,74,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      initial={{ scale: 0.7 }} animate={{ scale: 1 }}
                       transition={{ type: "spring", stiffness: 280, damping: 18, delay: 0.06 }}
                     >
-                      <CheckCircle2 size={54} strokeWidth={1.35} />
+                      <CheckCircle2 size={28} color={GREEN} strokeWidth={1.5} />
                     </motion.div>
-                    <h3 className={`text-[1.1rem] font-bold mb-2 ${successHeadCls}`}>
-                      You&apos;re on the list!
-                    </h3>
-                    <p className={`text-[13.5px] leading-relaxed max-w-[290px] ${successBodyCls}`}>
-                      Thanks for your interest. We&apos;ll review your request and notify you when you&apos;re approved.
-                    </p>
-                    <motion.button
-                      className={`mt-6 px-7 py-2.5 rounded-xl text-[13px] font-medium border transition-all ${successCloseCls}`}
+                    <div>
+                      <h3 style={{ fontSize: "17px", fontWeight: 600, letterSpacing: "-0.02em", color: t.heading, margin: "0 0 6px" }}>You&apos;re on the list!</h3>
+                      <p style={{ fontSize: "13.5px", color: t.sub, lineHeight: 1.6, margin: 0, maxWidth: "280px" }}>
+                        We&apos;ll review your request and notify you when you&apos;re approved.
+                      </p>
+                    </div>
+                    <button
                       onClick={handleClose}
-                      whileTap={{ scale: 0.97 }}
+                      style={{ marginTop: "4px", padding: "10px 28px", borderRadius: "8px", border: `1px solid ${t.border}`, background: "transparent", fontSize: "13px", fontWeight: 500, color: t.sub, cursor: "pointer", transition: "background 120ms" }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = t.inputBg }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent" }}
                     >
                       Close
-                    </motion.button>
+                    </button>
                   </motion.div>
+
                 ) : submitState === "duplicate" ? (
-                  /* ─── Already registered state ─── */
-                  <motion.div
-                    key="duplicate"
-                    className="py-6 flex flex-col items-center text-center"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                  <motion.div key="duplicate"
+                    style={{ padding: "24px 0 8px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "14px" }}
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                   >
                     <motion.div
-                      className={`mb-4 ${isDark ? "text-[#F1B646]" : "text-amber-500"}`}
-                      initial={{ scale: 0, rotate: 20 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: "spring", stiffness: 260, damping: 16, delay: 0.06 }}
+                      style={{ width: "60px", height: "60px", borderRadius: "16px", background: "rgba(217,119,6,0.08)", border: "1px solid rgba(217,119,6,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      initial={{ scale: 0.7 }} animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.06 }}
                     >
-                      <Clock size={54} strokeWidth={1.35} />
+                      <Clock size={28} color={t.altIconColor} strokeWidth={1.5} />
                     </motion.div>
-                    <h3 className={`text-[1.1rem] font-bold mb-2 ${successHeadCls}`}>
-                      Still in line, still counting.
-                    </h3>
-                    <p className={`text-[13.5px] leading-relaxed max-w-[300px] ${successBodyCls}`}>
-                      Your application is already with us — no need to reapply. We&apos;re working through the queue and will reach out when you&apos;re approved. Good things come to those who wait.
-                    </p>
-                    <motion.button
-                      className={`mt-6 px-7 py-2.5 rounded-xl text-[13px] font-medium border transition-all ${successCloseCls}`}
+                    <div>
+                      <h3 style={{ fontSize: "17px", fontWeight: 600, letterSpacing: "-0.02em", color: t.heading, margin: "0 0 6px" }}>Still in queue.</h3>
+                      <p style={{ fontSize: "13.5px", color: t.sub, lineHeight: 1.6, margin: 0, maxWidth: "280px" }}>
+                        Your application is already with us — no need to reapply. We&apos;ll reach out when you&apos;re approved.
+                      </p>
+                    </div>
+                    <button
                       onClick={handleClose}
-                      whileTap={{ scale: 0.97 }}
+                      style={{ marginTop: "4px", padding: "10px 28px", borderRadius: "8px", border: `1px solid ${t.border}`, background: "transparent", fontSize: "13px", fontWeight: 500, color: t.sub, cursor: "pointer", transition: "background 120ms" }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = t.inputBg }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent" }}
                     >
                       Got it
-                    </motion.button>
+                    </button>
                   </motion.div>
+
                 ) : (
-                  /* ─── Form ─── */
-                  <motion.form
-                    key="form"
-                    onSubmit={handleSubmit}
-                    className="flex flex-col gap-[14px]"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                  <motion.form key="form" onSubmit={handleSubmit}
+                    style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                   >
                     {/* Name + Email */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="flex flex-col gap-[6px]">
-                        <label className={`text-[10.5px] font-semibold uppercase tracking-[0.07em] ${labelCls}`}>
-                          Full Name <span className={requiredCls}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Jane Smith"
-                          value={form.name}
-                          onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                          className={`w-full px-3.5 py-[10px] rounded-xl border text-[13.5px] outline-none transition-all ${inputBase}`}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-[6px]">
-                        <label className={`text-[10.5px] font-semibold uppercase tracking-[0.07em] ${labelCls}`}>
-                          Email <span className={requiredCls}>*</span>
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          placeholder="jane@company.com"
-                          value={form.email}
-                          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                          className={`w-full px-3.5 py-[10px] rounded-xl border text-[13.5px] outline-none transition-all ${inputBase}`}
-                        />
-                      </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                      {([
+                        { label: "Name",  type: "text",  key: "name",  placeholder: "Your name",       required: true },
+                        { label: "Email", type: "email", key: "email", placeholder: "your@email.com",   required: true },
+                      ] as const).map(f => (
+                        <div key={f.key}>
+                          <label style={{ display: "block", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: t.label, marginBottom: "6px" }}>
+                            {f.label}
+                          </label>
+                          <input
+                            type={f.type} required={f.required} placeholder={f.placeholder}
+                            value={form[f.key]} disabled={loading}
+                            onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                            style={inputStyle()}
+                            onFocus={e => { e.currentTarget.style.borderColor = GREEN; e.currentTarget.style.background = dark ? "rgba(255,255,255,0.08)" : "#ffffff" }}
+                            onBlur={e => { e.currentTarget.style.borderColor = t.inputBorder; e.currentTarget.style.background = t.inputBg }}
+                          />
+                        </div>
+                      ))}
                     </div>
 
                     {/* Use case */}
-                    <div className="flex flex-col gap-[6px]">
-                      <label className={`text-[10.5px] font-semibold uppercase tracking-[0.07em] ${labelCls}`}>
+                    <div>
+                      <label style={{ display: "block", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: t.label, marginBottom: "6px" }}>
                         Primary Use Case
                       </label>
-                      <select
-                        value={form.useCase}
-                        onChange={(e) => setForm((f) => ({ ...f, useCase: e.target.value as typeof form.useCase }))}
-                        className={`w-full px-3.5 py-[10px] rounded-xl border text-[13.5px] outline-none transition-all appearance-none cursor-pointer ${inputBase}`}
-                        style={{
-                          backgroundImage: selectArrow,
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "right 14px center",
-                          backgroundColor: selectBg,
-                        }}
-                      >
-                        {USE_CASES.map((uc) => (
-                          <option key={uc} value={uc} style={{ background: selectBg }}>
-                            {USE_CASE_LABELS[uc]}
-                          </option>
-                        ))}
-                      </select>
+                      <div style={{ position: "relative" }}>
+                        <select
+                          value={form.useCase} disabled={loading}
+                          onChange={e => setForm(p => ({ ...p, useCase: e.target.value as typeof form.useCase }))}
+                          style={inputStyle({ paddingRight: "36px", appearance: "none", cursor: "pointer" })}
+                          onFocus={e => { e.currentTarget.style.borderColor = GREEN }}
+                          onBlur={e => { e.currentTarget.style.borderColor = t.inputBorder }}
+                        >
+                          {USE_CASES.map(uc => (
+                            <option key={uc} value={uc} style={{ background: t.selectBg }}>{USE_CASE_LABELS[uc]}</option>
+                          ))}
+                        </select>
+                        <ChevronDown size={13} style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: t.label }} />
+                      </div>
                     </div>
 
                     {/* Message */}
-                    <div className="flex flex-col gap-[6px]">
-                      <label className={`text-[10.5px] font-semibold uppercase tracking-[0.07em] ${labelCls}`}>
+                    <div>
+                      <label style={{ display: "block", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: t.label, marginBottom: "6px" }}>
                         About your use case{" "}
-                        <span className={`normal-case font-normal ${optionalCls}`}>(optional)</span>
+                        <span style={{ textTransform: "none", letterSpacing: 0, fontFamily: "inherit", opacity: 0.7 }}>(optional)</span>
                       </label>
                       <textarea
-                        rows={3}
-                        placeholder="Briefly describe what you'll be annotating and your expected scale…"
-                        value={form.message}
-                        onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-                        className={`w-full px-3.5 py-[10px] rounded-xl border text-[13.5px] outline-none transition-all resize-none leading-relaxed ${inputBase}`}
+                        rows={3} placeholder="Briefly describe what you'll be annotating and your expected scale…"
+                        value={form.message} disabled={loading}
+                        onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
+                        style={inputStyle({ resize: "none", lineHeight: "1.6" })}
+                        onFocus={e => { e.currentTarget.style.borderColor = GREEN; e.currentTarget.style.background = dark ? "rgba(255,255,255,0.08)" : "#ffffff" }}
+                        onBlur={e => { e.currentTarget.style.borderColor = t.inputBorder; e.currentTarget.style.background = t.inputBg }}
                       />
                     </div>
 
                     {/* Submit */}
-                    <motion.button
-                      type="submit"
-                      disabled={loading}
-                      className={`mt-0.5 w-full flex items-center justify-center gap-2 px-6 py-[13px] rounded-xl font-bold text-[14px] text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed ${submitShadow}`}
-                      style={{ background: "linear-gradient(135deg, #1d6bb3 0%, #2da8d0 60%, #3ab8e0 100%)" }}
-                      whileHover={loading ? {} : { scale: 1.015, y: -1 }}
-                      whileTap={loading ? {} : { scale: 0.985 }}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 size={15} className="animate-spin" />
-                          Submitting…
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles size={14} />
-                          Request Early Access
-                          <ArrowRight size={15} strokeWidth={2.5} />
-                        </>
-                      )}
-                    </motion.button>
-
-                    <p className={`text-center text-[11px] leading-relaxed ${footerCls}`}>
-                      No spam, no commitments. We&apos;ll only reach out when you&apos;re approved.
-                    </p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px", paddingTop: "2px" }}>
+                      <button
+                        type="submit" disabled={loading}
+                        style={{
+                          width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                          padding: "13px 20px", borderRadius: "9px",
+                          background: GREEN, color: "#fff", border: `1px solid ${GREEN_2}`,
+                          fontSize: "14px", fontWeight: 500,
+                          cursor: loading ? "not-allowed" : "pointer",
+                          opacity: loading ? 0.7 : 1,
+                          boxShadow: "0 1px 4px rgba(22,163,74,0.3)",
+                          transition: "background 120ms, transform 100ms",
+                        }}
+                        onMouseEnter={e => { if (!loading) { e.currentTarget.style.background = GREEN_2; e.currentTarget.style.transform = "translateY(-1px)" } }}
+                        onMouseLeave={e => { e.currentTarget.style.background = GREEN; e.currentTarget.style.transform = "" }}
+                      >
+                        {loading
+                          ? <><Loader2 size={14} className="animate-spin" /> Submitting…</>
+                          : <>Get Early Access <ArrowRight size={14} /></>
+                        }
+                      </button>
+                      <p style={{ textAlign: "center", fontSize: "11.5px", color: t.footer, margin: 0, fontFamily: MONO }}>
+                        No spam. We&apos;ll only reach out when you&apos;re approved.
+                      </p>
+                    </div>
                   </motion.form>
                 )}
+
               </AnimatePresence>
             </div>
           </motion.div>

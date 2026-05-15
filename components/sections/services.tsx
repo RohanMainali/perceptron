@@ -2,293 +2,287 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
-import {
-  MessageSquare, Brain, Layers, ScanLine, Video, Wand2, Package,
-  ChevronLeft, ChevronRight, ArrowRight,
-} from "lucide-react"
+import { MessageSquare, Brain, Layers, ScanLine, Video, Wand2, Package, ArrowRight } from "lucide-react"
 import WaitlistModal from "@/components/waitlist-modal"
 import { FeatureAnimation } from "@/components/feature-animations"
 
-const icons = [MessageSquare, Brain, Layers, ScanLine, Video, Wand2, Package]
+const FG      = "#0c0c0a"
+const MUTED   = "#5a5a52"
+const FAINT   = "#aaaaaa"
+const MONO    = "'Geist Mono', 'Courier New', monospace"
+const GREEN   = "#16a34a"
+const GREEN_2 = "#15803d"
+const LINE    = "rgba(12,12,10,0.09)"
+const LINE_STR = "rgba(12,12,10,0.14)"
+const PANEL   = "#ffffff"
+const BG2     = "#f6f6f3"
+const SECTION = "#ffffff"   // light
 
-const features = [
+const ICONS = [MessageSquare, Brain, Layers, ScanLine, Video, Wand2, Package]
+
+const FEATURES = [
   {
-    id: "01",
+    id: "01", tag: "Chat-to-Task",
     title: "Conversational Annotation",
-    description:
-      "Create and run annotation tasks directly from chat. Just say what you want — \"Segment all the monkeys\" or \"Draw bounding boxes around vehicles\" — and the AI builds and executes the task.",
-    color: "#53C5E6",
-    tag: "Chat-to-Task",
+    description: "Create and run annotation tasks directly from chat. Just say what you want — \"Segment all the monkeys\" or \"Draw bounding boxes around vehicles\" — and the AI builds and executes the task.",
+    file: "auta › task › chest-xray",
   },
   {
-    id: "02",
+    id: "02", tag: "Smart Planning",
     title: "AI Dataset Planner",
-    description:
-      "Upload raw images and describe your goal. The AI analyzes the request, suggests the label schema, picks the right annotation type, and immediately starts processing your dataset.",
-    color: "#C26FCF",
-    tag: "Smart Planning",
+    description: "Upload raw images and describe your goal. The AI analyzes the request, suggests the label schema, picks the right annotation type, and immediately starts processing your dataset.",
+    file: "auta › plan › preview",
   },
   {
-    id: "03",
+    id: "03", tag: "AI Segmentation",
     title: "Polygon Segmentation",
-    description:
-      "Pixel-perfect segmentation masks powered by state-of-the-art AI. Automated brush and polygon tools for precise object delineation across thousands of images — no manual effort.",
-    color: "#2178C7",
-    tag: "AI Segmentation",
+    description: "Pixel-perfect segmentation masks powered by state-of-the-art AI. Automated brush and polygon tools for precise object delineation across thousands of images — no manual effort.",
+    file: "auta › segment › lesion-001",
   },
   {
-    id: "04",
+    id: "04", tag: "Bounding Boxes",
     title: "Object Detection",
-    description:
-      "Automatic bounding box annotations using state-of-the-art detection models. From simple objects to dense urban scenes — detect and label everything in a single prompt.",
-    color: "#F1B646",
-    tag: "Bounding Boxes",
+    description: "Automatic bounding box annotations using state-of-the-art detection models. From simple objects to dense urban scenes — detect and label everything in a single prompt.",
+    file: "auta › detect › urban-scene",
   },
   {
-    id: "05",
+    id: "05", tag: "Video + NLP",
     title: "Video Annotation & Tracking",
-    description:
-      "Upload raw MP4 files and use natural language prompts to annotate entire videos. Integrated tracking pipeline keeps object IDs consistent and movement smooth across the timeline.",
-    color: "#E05A6D",
-    tag: "Video + NLP",
+    description: "Upload raw MP4 files and use natural language prompts to annotate entire videos. Integrated tracking pipeline keeps object IDs consistent and movement smooth across the timeline.",
+    file: "auta › video › match-clip",
   },
   {
-    id: "06",
+    id: "06", tag: "No Images Needed",
     title: "Zero-Shot Dataset Generation",
-    description:
-      "You don't even need images. Describe the dataset you need — the tool sources images, generates masks, bounding boxes, and labels entirely on its own. Just review and export.",
-    color: "#53C5E6",
-    tag: "No Images Needed",
+    description: "You don't even need images. Describe the dataset you need — the tool sources images, generates masks, bounding boxes, and labels entirely on its own. Just review and export.",
+    file: "auta › generate › retail-v1",
   },
   {
-    id: "07",
+    id: "07", tag: "20+ Formats",
     title: "Multi-Format Export",
-    description:
-      "Export in COCO, PASCAL VOC, YOLO, Ultralytics YOLO, CVAT XML, Datumaro, LabelMe, ImageNet, MOT, KITTI, CamVid, Cityscapes, Open Images, WIDER Face, and more.",
-    color: "#C26FCF",
-    tag: "20+ Formats",
+    description: "Export in COCO, PASCAL VOC, YOLO, Ultralytics YOLO, CVAT XML, Datumaro, LabelMe, ImageNet, MOT, KITTI, CamVid, Cityscapes, Open Images, WIDER Face, and more.",
+    file: "auta › export › formats",
   },
 ]
 
 export default function Services() {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIdx, setActiveIdx] = useState(0)
   const [waitlistOpen, setWaitlistOpen] = useState(false)
-  const active = features[activeIndex]
-  const ActiveIcon = icons[activeIndex]
-
-  const prev = () => setActiveIndex((i) => (i - 1 + features.length) % features.length)
-  const next = () => setActiveIndex((i) => (i + 1) % features.length)
+  const active = FEATURES[activeIdx]
+  const ActiveIcon = ICONS[activeIdx]
 
   return (
     <section
       id="services"
-      className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900"
+      style={{
+        padding: "120px 0 130px",
+        background: SECTION,
+        borderBottom: `1px solid ${LINE_STR}`,
+        color: FG,
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
-      {/* Background texture */}
-      <div className="absolute inset-0 light-mesh pointer-events-none" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#53C5E6]/20 to-transparent" />
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
 
-      {/* Ambient glow */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{
-          background: `radial-gradient(ellipse 60% 50% at 50% 60%, ${active.color}0d, transparent 70%)`,
-        }}
-        transition={{ duration: 0.7 }}
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-        {/* ── Header ─────────────────────────────────────────── */}
+        {/* Header */}
         <motion.div
-          className="text-center mb-14"
+          style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "56px" }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true }}
         >
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#C26FCF] mb-4">
-            Features
-          </span>
-          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
-            <span className="cosmic-heading-gradient">The Best Choice for<br />Your Vision Task</span>
-          </h2>
-          <p className="mt-5 text-slate-400 text-base max-w-md mx-auto leading-relaxed">
+          <div>
+            <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
+              Features
+            </div>
+            <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+              The best choice for<br />your vision task.
+            </h2>
+          </div>
+          <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
             Works with images, videos, and every annotation type — no config required.
           </p>
         </motion.div>
 
-        {/* ── Tab strip ──────────────────────────────────────── */}
-        <motion.div
-          className="flex flex-nowrap justify-center gap-2 mb-12 overflow-x-auto"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true }}
-        >
-          {features.map((f, i) => {
-            const TabIcon = icons[i]
-            const isActive = i === activeIndex
-            return (
-              <motion.button
-                key={f.id}
-                onClick={() => setActiveIndex(i)}
-                className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap"
-                style={
-                  isActive
-                    ? { background: f.color, color: "#fff", boxShadow: `0 4px 20px ${f.color}40` }
-                    : { background: "#f1f5f9", color: "#94a3b8" }
-                }
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <TabIcon size={12} />
-                {f.tag}
-              </motion.button>
-            )
-          })}
-        </motion.div>
+        {/* Two-column layout: sidebar tabs + feature panel */}
+        <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: "24px", alignItems: "start" }}>
 
-        {/* ── Main content card ──────────────────────────────── */}
-        <motion.div
-          className="rounded-3xl overflow-hidden"
-          style={{
-            border: `1px solid ${active.color}22`,
-            boxShadow: `0 0 0 1px ${active.color}10, 0 32px 80px -12px ${active.color}28`,
-          }}
-          animate={{
-            boxShadow: `0 0 0 1px ${active.color}10, 0 32px 80px -12px ${active.color}28`,
-          }}
-          transition={{ duration: 0.5 }}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          {/* Accent bar */}
+          {/* Sidebar tabs */}
           <motion.div
-            className="h-[3px] w-full"
-            animate={{
-              background: `linear-gradient(90deg, ${active.color}, ${active.color}55, transparent)`,
+            style={{ display: "flex", flexDirection: "column", gap: "2px", position: "sticky", top: "80px" }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+          >
+            {FEATURES.map((f, i) => {
+              const Icon = ICONS[i]
+              const isActive = i === activeIdx
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setActiveIdx(i)}
+                  style={{
+                    textAlign: "left",
+                    background: isActive ? PANEL : "transparent",
+                    border: `1px solid ${isActive ? LINE_STR : "transparent"}`,
+                    padding: "13px 16px",
+                    borderRadius: "10px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    cursor: "pointer",
+                    position: "relative",
+                    transition: "background 140ms, border-color 140ms",
+                    width: "100%",
+                  }}
+                  onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = BG2 }}
+                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent" }}
+                >
+                  {/* Number */}
+                  <span style={{ position: "absolute", right: "14px", top: "14px", fontFamily: MONO, fontSize: "10px", color: FAINT }}>
+                    {f.id}
+                  </span>
+                  {/* Icon */}
+                  <span style={{
+                    width: "28px", height: "28px", borderRadius: "7px", flexShrink: 0,
+                    background: isActive ? GREEN : BG2,
+                    border: `1px solid ${isActive ? GREEN_2 : LINE}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: isActive ? "#fff" : MUTED,
+                    transition: "background 140ms, color 140ms",
+                  }}>
+                    <Icon size={13} />
+                  </span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px", minWidth: 0 }}>
+                    <span style={{ fontSize: "13.5px", fontWeight: 500, color: FG, letterSpacing: "-0.01em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {f.title}
+                    </span>
+                    <span style={{ fontFamily: MONO, fontSize: "10px", color: FAINT, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                      {f.tag}
+                    </span>
+                  </div>
+                </button>
+              )
+            })}
+          </motion.div>
+
+          {/* Feature panel */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            style={{
+              border: `1px solid ${LINE}`,
+              borderRadius: "14px",
+              background: BG2,
+              overflow: "hidden",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
             }}
-            transition={{ duration: 0.4 }}
-          />
+          >
+            {/* Panel chrome */}
+            <div style={{
+              padding: "12px 16px",
+              borderBottom: `1px solid ${LINE}`,
+              display: "flex", alignItems: "center", gap: "10px",
+              background: PANEL,
+            }}>
+              <div style={{ display: "flex", gap: "5px", marginRight: "6px" }}>
+                {["#fc635d", "#fdbc40", "#34c749"].map((c, i) => (
+                  <span key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: c }} />
+                ))}
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={activeIdx}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ fontFamily: MONO, fontSize: "11.5px", color: MUTED }}
+                >
+                  {active.file}
+                </motion.span>
+              </AnimatePresence>
+            </div>
 
-          <div className="grid lg:grid-cols-[1fr_420px]">
-
-            {/* Animation panel */}
-            <div className="relative bg-slate-50/70 overflow-hidden" style={{ minHeight: 420 }}>
+            {/* Animation */}
+            <div style={{ position: "relative", minHeight: "380px" }}>
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, scale: 1.03 }}
+                  key={activeIdx}
+                  initial={{ opacity: 0, scale: 1.02 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.38, ease: "easeInOut" }}
-                  className="absolute inset-0"
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.35 }}
+                  style={{ position: "absolute", inset: 0 }}
                 >
-                  <FeatureAnimation featureId={active.id} color={active.color} />
+                  <FeatureAnimation featureId={active.id} color={GREEN} />
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Details panel */}
-            <div className="flex flex-col justify-between bg-white border-l border-slate-100 p-8 lg:p-10">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, x: 16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -16 }}
-                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {/* Tag + number */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <span
-                      className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                      style={{ background: `${active.color}18`, color: active.color }}
-                    >
+            {/* Description + CTA */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIdx}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  padding: "22px 24px",
+                  borderTop: `1px solid ${LINE}`,
+                  background: PANEL,
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  gap: "24px",
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
+                    <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(22,163,74,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <ActiveIcon size={16} color={GREEN} />
+                    </div>
+                    <h3 style={{ fontSize: "16px", fontWeight: 500, color: FG, margin: 0, letterSpacing: "-0.02em" }}>
+                      {active.title}
+                    </h3>
+                    <span style={{ fontFamily: MONO, fontSize: "10px", padding: "3px 8px", borderRadius: "4px", background: "rgba(22,163,74,0.08)", color: GREEN, letterSpacing: "0.04em", textTransform: "uppercase" }}>
                       {active.tag}
                     </span>
-                    <span className="text-xs font-mono text-slate-300">{active.id} / {String(features.length).padStart(2, "0")}</span>
                   </div>
-
-                  {/* Icon */}
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5"
-                    style={{ background: `${active.color}15` }}
-                  >
-                    <ActiveIcon size={22} style={{ color: active.color }} />
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-2xl font-bold text-slate-900 leading-snug mb-4">
-                    {active.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-sm text-slate-500 leading-relaxed">
+                  <p style={{ fontSize: "13.5px", color: MUTED, lineHeight: 1.6, margin: 0, maxWidth: "680px" }}>
                     {active.description}
                   </p>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Bottom controls */}
-              <div className="mt-10 space-y-6">
-                {/* CTA */}
+                </div>
                 <button
                   type="button"
                   onClick={() => setWaitlistOpen(true)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200 cursor-pointer group"
-                  style={{ color: active.color }}
+                  style={{
+                    flexShrink: 0,
+                    display: "inline-flex", alignItems: "center", gap: "6px",
+                    padding: "10px 18px", borderRadius: "8px",
+                    background: GREEN, color: "#fff",
+                    border: `1px solid ${GREEN_2}`,
+                    fontSize: "13px", fontWeight: 500,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    boxShadow: "0 1px 3px rgba(22,163,74,0.25)",
+                    transition: "background 120ms, transform 100ms",
+                  }}
+                  onMouseEnter={e => { const el = e.currentTarget; el.style.background = GREEN_2; el.style.transform = "translateY(-1px)" }}
+                  onMouseLeave={e => { const el = e.currentTarget; el.style.background = GREEN; el.style.transform = "" }}
                 >
-                  Try AUTA Now
-                  <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                  Try Auta Now <ArrowRight size={13} />
                 </button>
-
-                {/* Navigation */}
-                <div className="flex items-center justify-between">
-                  {/* Dot indicators */}
-                  <div className="flex items-center gap-1.5">
-                    {features.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setActiveIndex(i)}
-                        className="rounded-full transition-all duration-300"
-                        style={{
-                          width: i === activeIndex ? 20 : 6,
-                          height: 6,
-                          background: i === activeIndex ? active.color : "#e2e8f0",
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Arrow buttons */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={prev}
-                      className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-slate-300 hover:text-slate-700 transition-all duration-200 cursor-pointer"
-                    >
-                      <ChevronLeft size={15} />
-                    </button>
-                    <button
-                      onClick={next}
-                      className="w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-200 cursor-pointer"
-                      style={{
-                        background: active.color,
-                        borderColor: active.color,
-                        color: "#fff",
-                      }}
-                    >
-                      <ChevronRight size={15} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        </div>
       </div>
 
       <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} theme="light" />

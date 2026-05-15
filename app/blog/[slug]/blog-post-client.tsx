@@ -1,15 +1,27 @@
 "use client"
 
-import { useEffect, useState, useRef, useMemo } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { ArrowLeft, Calendar, User, Clock, ChevronUp, BookOpen, ChevronRight } from "lucide-react"
+import { ArrowLeft, Calendar, User, Clock, ChevronUp, ChevronRight } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
+import MeshCanvas from "@/components/mesh-canvas"
 import type { BlogPost } from "@/lib/blog-posts"
+
+const FG       = "#0c0c0a"
+const MUTED    = "#5a5a52"
+const FAINT    = "#aaaaaa"
+const MONO     = "'Geist Mono', 'Courier New', monospace"
+const GREEN    = "#16a34a"
+const GREEN_2  = "#15803d"
+const LINE     = "rgba(12,12,10,0.09)"
+const LINE_STR = "rgba(12,12,10,0.14)"
+const PANEL    = "#ffffff"
+const BG2      = "#f6f6f3"
 
 interface BlogPostClientProps {
   post: BlogPost
@@ -34,33 +46,12 @@ function getEmbedUrl(url: string): string {
 export default function BlogPostClient({ post }: BlogPostClientProps) {
   const [scrollY, setScrollY] = useState(0)
   const [showScrollTop, setShowScrollTop] = useState(false)
-  const heroRef = useRef<HTMLDivElement>(null)
 
   const hasHeroMedia = Boolean(post.image && !post.image.toLowerCase().includes("placeholder"))
   const isVideo = hasHeroMedia && /youtube\.com|youtu\.be|vimeo\.com|\.mp4|\.webm/i.test(post.image || "")
 
   const { scrollYProgress: globalProgress } = useScroll()
   const progressWidth = useTransform(globalProgress, [0, 1], ["0%", "100%"])
-
-  const { scrollYProgress: heroProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  })
-  const heroY = useTransform(heroProgress, [0, 1], [0, 200])
-  const heroOpacity = useTransform(heroProgress, [0, 0.8], [1, 0])
-
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 25 }, (_, i) => ({
-        id: i,
-        left: `${(i * 37 + 13) % 100}%`,
-        top: `${(i * 53 + 7) % 100}%`,
-        size: 1 + (i % 3),
-        delay: (i * 0.4) % 5,
-        duration: 4 + (i % 4),
-      })),
-    []
-  )
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,380 +65,282 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
   const readingTime = Math.max(1, Math.ceil((post.content?.length || 0) / 1200))
 
   return (
-    <main className="relative overflow-hidden bg-white">
+    <main style={{ background: PANEL, position: "relative", overflow: "hidden", color: FG }}>
       {/* Reading progress bar */}
       <motion.div
-        className="fixed top-0 left-0 h-[3px] z-[60]"
         style={{
+          position: "fixed", top: 0, left: 0, height: "3px", zIndex: 60,
           width: progressWidth,
-          background: "linear-gradient(90deg, #2178C7, #53C5E6, #C26FCF)",
+          background: GREEN,
         }}
       />
 
       <Navigation scrollY={scrollY} />
 
-      {/* ── Dark parallax hero ── */}
-      <div ref={heroRef} className="relative min-h-[75vh] flex items-end overflow-hidden">
-        {/* Background layer */}
-        <motion.div className="absolute inset-0" style={{ y: heroY }}>
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
-            style={{ backgroundImage: "url('/images/other-hero-background.jpg')" }}
-          />
-          <div className="absolute inset-0 bg-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/15 via-transparent to-background/80" />
-          {/* Grid overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `linear-gradient(rgba(83,197,230,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(83,197,230,0.3) 1px, transparent 1px)`,
-              backgroundSize: "60px 60px",
-            }}
-          />
-          {/* Particles */}
-          {particles.map((p) => (
-            <motion.div
-              key={p.id}
-              className="absolute rounded-full bg-[#53C5E6]/30"
-              style={{ left: p.left, top: p.top, width: p.size, height: p.size }}
-              animate={{ opacity: [0, 0.8, 0], scale: [0.5, 1, 0.5] }}
-              transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "easeInOut" }}
-            />
-          ))}
-        </motion.div>
+      {/* Hero */}
+      <section style={{
+        position: "relative",
+        background: PANEL,
+        paddingTop: "140px",
+        paddingBottom: "80px",
+        overflow: "hidden",
+        borderBottom: `1px solid ${LINE_STR}`,
+      }}>
+        <MeshCanvas />
+        <div style={{
+          position: "absolute", top: "40%", left: "50%", transform: "translate(-50%, -50%)",
+          width: "700px", height: "400px",
+          background: "radial-gradient(ellipse, rgba(22,163,74,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
 
-        {/* Hero content — two-column: copy left, media right */}
-        <motion.div
-          className="relative z-10 w-full px-6 md:px-12 lg:px-16 pt-36 pb-28"
-          style={{ opacity: heroOpacity }}
-        >
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left — Copy */}
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px", position: "relative", zIndex: 1 }}>
+          {/* Breadcrumb */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "28px", fontFamily: MONO, fontSize: "12px" }}
+          >
+            <Link href="/blog"
+              style={{ color: MUTED, textDecoration: "none", transition: "color 120ms" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = FG }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = MUTED }}
+            >
+              Blog
+            </Link>
+            <ChevronRight size={12} color={FAINT} />
+            <span style={{ color: GREEN, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "420px" }}>
+              {post.title}
+            </span>
+          </motion.div>
+
+          <div style={{ display: "grid", gridTemplateColumns: hasHeroMedia ? "1fr 480px" : "1fr", gap: "56px", alignItems: "center" }}>
+            {/* Left — copy */}
             <div>
-              {/* Breadcrumb */}
-              <motion.div
-                className="flex items-center gap-3 mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <Link href="/blog" className="text-white/50 hover:text-white/80 transition-colors text-sm">
-                  Blog
-                </Link>
-                <ChevronRight size={14} className="text-white/30" />
-                <span className="text-[#53C5E6] text-sm font-medium line-clamp-1 max-w-xs">
-                  {post.title}
-                </span>
-              </motion.div>
-
-              {/* Badge */}
-              <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#2178C7]/30 bg-[#2178C7]/10 text-[#53C5E6] text-sm font-medium mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <BookOpen size={14} />
-                Insight
-              </motion.div>
-
-              {/* Title */}
               <motion.h1
-                className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white mb-6 leading-[1.1]"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
+                transition={{ duration: 0.65, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                style={{ fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.07, color: FG, margin: "0 0 20px" }}
               >
                 {post.title}
               </motion.h1>
 
-              {/* Excerpt */}
-              <motion.p
-                className="text-lg text-white/60 mb-10 leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                {post.excerpt || "Explore key insights from our research and engineering teams."}
-              </motion.p>
+              {post.excerpt && (
+                <motion.p
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: 0.3 }}
+                  style={{ fontSize: "16px", color: MUTED, lineHeight: 1.65, margin: "0 0 24px" }}
+                >
+                  {post.excerpt}
+                </motion.p>
+              )}
 
-              {/* Meta pills */}
               <motion.div
-                className="flex flex-wrap items-center gap-3"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
+                style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px" }}
               >
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white text-sm">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#2178C7] to-[#53C5E6] flex items-center justify-center">
-                    <User size={12} className="text-white" />
+                {([
+                  { icon: User,     label: post.author || "Perceptron Team" },
+                  { icon: Calendar, label: post.date },
+                  { icon: Clock,    label: `${readingTime} min read` },
+                ] as const).map(({ icon: Icon, label }) => (
+                  <div key={label} style={{
+                    display: "flex", alignItems: "center", gap: "7px",
+                    padding: "6px 14px", borderRadius: "100px",
+                    border: `1px solid ${LINE_STR}`, background: BG2,
+                    fontSize: "13px", color: MUTED, fontFamily: MONO,
+                  }}>
+                    <Icon size={12} color={FAINT} />
+                    {label}
                   </div>
-                  <span className="font-medium">{post.author || "Perceptron Team"}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white/80 text-sm">
-                  <Calendar size={14} />
-                  <span>{post.date}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white/80 text-sm">
-                  <Clock size={14} />
-                  <span>{readingTime} min read</span>
-                </div>
+                ))}
               </motion.div>
             </div>
 
-            {/* Right — Hero Media */}
+            {/* Right — hero media */}
             {hasHeroMedia && (
               <motion.div
-                className="relative"
-                initial={{ opacity: 0, x: 40 }}
+                initial={{ opacity: 0, x: 32 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
+                transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                style={{ position: "relative", borderRadius: "14px", overflow: "hidden", border: `1px solid ${LINE}` }}
               >
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-[#2178C7]/10">
-                  {isVideo ? (
-                    <iframe
-                      src={getEmbedUrl(post.image!)}
-                      title={post.title}
-                      className="w-full aspect-video"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      frameBorder="0"
-                    />
-                  ) : (
-                    <img
-                      src={post.image || "/placeholder.svg"}
-                      alt={post.title}
-                      className="w-full aspect-[4/3] object-cover"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent pointer-events-none" />
-                </div>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: GREEN, zIndex: 2 }} />
+                {isVideo ? (
+                  <iframe
+                    src={getEmbedUrl(post.image!)}
+                    title={post.title}
+                    style={{ width: "100%", aspectRatio: "16/10", border: "none", display: "block" }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <img
+                    src={post.image || "/placeholder.svg"}
+                    alt={post.title}
+                    style={{ width: "100%", aspectRatio: "16/10", objectFit: "cover", display: "block" }}
+                  />
+                )}
               </motion.div>
             )}
           </div>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* Bottom gradient fade to white */}
-        <div className="absolute -bottom-0 left-0 right-0 h-25 bg-gradient-to-t from-white to-transparent z-10" />
-      </div>
-
-      {/* ── Blog Content ── */}
-      <section className="relative py-16 md:py-20 bg-white text-slate-900">
-        <div className="relative z-10 mx-auto w-full max-w-5xl px-6 md:px-12 lg:px-16">
+      {/* Article content */}
+      <section style={{ padding: "80px 0 100px", background: PANEL }}>
+        <div style={{ maxWidth: "800px", margin: "0 auto", padding: "0 40px" }}>
           <motion.div
-            className="prose prose-lg max-w-none"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <style>{`
-              .prose {
-                --tw-prose-body: #374151;
-                --tw-prose-headings: #111827;
-                --tw-prose-lead: #4b5563;
-                --tw-prose-links: #2178C7;
-                --tw-prose-bold: #1f2937;
-                --tw-prose-counters: #6b7280;
-                --tw-prose-bullets: #2178C7;
-                --tw-prose-hr: #e5e7eb;
-                --tw-prose-quotes: #111827;
-                --tw-prose-quote-borders: #2178C7;
-                --tw-prose-captions: #6b7280;
-                --tw-prose-code: #111827;
-                --tw-prose-pre-code: #e5e7eb;
-                --tw-prose-pre-bg: #0f172a;
-                --tw-prose-th-borders: #d1d5db;
-                --tw-prose-td-borders: #e5e7eb;
-                font-size: 1.125rem;
+              .blog-prose {
+                font-size: 1.0625rem;
                 line-height: 1.85;
                 color: #374151;
               }
-
-              .prose h1, .prose h2, .prose h3, .prose h4,
-              .prose h5, .prose h6 {
-                font-weight: 700;
+              .blog-prose h1, .blog-prose h2, .blog-prose h3,
+              .blog-prose h4, .blog-prose h5, .blog-prose h6 {
+                font-weight: 600;
                 letter-spacing: -0.025em;
-                color: #111827;
-              }
-
-              .prose h1 {
-                font-size: 2.25rem;
-                line-height: 1.2;
+                color: #0c0c0a;
                 margin-top: 2.5em;
                 margin-bottom: 0.8em;
               }
-
-              .prose h2 {
-                font-size: 1.75rem;
-                line-height: 1.3;
-                margin-top: 2.5em;
-                margin-bottom: 1em;
+              .blog-prose h2 {
+                font-size: 1.65rem;
                 padding-bottom: 0.5em;
-                border-bottom: 2px solid #e5e7eb;
+                border-bottom: 1px solid rgba(12,12,10,0.09);
               }
-
-              .prose h3 {
-                font-size: 1.375rem;
-                line-height: 1.4;
-                margin-top: 2em;
-                margin-bottom: 0.75em;
-              }
-
-              .prose p {
-                margin-bottom: 1.5em;
-                line-height: 1.85;
-              }
-
-              .prose a {
-                color: #2178C7;
+              .blog-prose h3 { font-size: 1.3rem; }
+              .blog-prose p { margin-bottom: 1.5em; }
+              .blog-prose a {
+                color: #16a34a;
                 text-decoration: none;
                 font-weight: 500;
-                transition: all 0.2s ease;
                 border-bottom: 1px solid transparent;
+                transition: border-color 150ms;
               }
-
-              .prose a:hover {
-                color: #1a62a1;
-                border-bottom-color: #2178C7;
-              }
-
-              .prose strong {
-                font-weight: 650;
-                color: #1f2937;
-              }
-
-              .prose code {
-                background-color: #f3f4f6;
-                color: #c026d3;
-                padding: 0.2em 0.45em;
-                border-radius: 0.375rem;
-                font-family: "Geist Mono", "Fira Code", ui-monospace, monospace;
+              .blog-prose a:hover { border-bottom-color: #16a34a; }
+              .blog-prose strong { color: #0c0c0a; font-weight: 650; }
+              .blog-prose code {
+                background: #f6f6f3;
+                color: #0c0c0a;
+                padding: 0.15em 0.4em;
+                border-radius: 5px;
+                font-family: 'Geist Mono','Fira Code',ui-monospace,monospace;
                 font-size: 0.875em;
-                font-weight: 500;
+                border: 1px solid rgba(12,12,10,0.09);
               }
-
-              .prose pre {
-                background: #0f172a;
-                border: 1px solid #1e293b;
-                border-radius: 0.875rem;
-                padding: 1.5em;
+              .blog-prose pre {
+                background: #0c0c0a;
+                border-radius: 10px;
+                padding: 1.4em;
                 overflow-x: auto;
                 margin: 2em 0;
+                border: 1px solid rgba(255,255,255,0.08);
               }
-
-              .prose pre code {
-                background-color: transparent;
+              .blog-prose pre code {
+                background: transparent;
                 color: #e2e8f0;
                 padding: 0;
                 border: none;
                 font-size: 0.9em;
                 line-height: 1.7;
               }
-
-              .prose blockquote {
-                border-left: 4px solid #2178C7;
-                padding: 1em 1.5em;
-                color: #374151;
-                font-style: italic;
-                background: #f8fafc;
-                border-radius: 0 0.75rem 0.75rem 0;
+              .blog-prose blockquote {
+                border-left: 3px solid #16a34a;
+                padding: 0.75em 1.25em;
+                background: rgba(22,163,74,0.04);
+                border-radius: 0 8px 8px 0;
                 margin: 2em 0;
+                font-style: italic;
               }
-
-              .prose blockquote p {
-                margin: 0;
-              }
-
-              .prose ul, .prose ol {
-                margin-bottom: 1.5em;
-                padding-left: 1.5em;
-              }
-
-              .prose ul {
-                list-style-type: none;
-              }
-
-              .prose ul li {
+              .blog-prose blockquote p { margin: 0; }
+              .blog-prose ul { list-style: none; padding-left: 0; margin-bottom: 1.5em; }
+              .blog-prose ul li {
                 position: relative;
-                padding-left: 0.75em;
-              }
-
-              .prose ul li::before {
-                content: "";
-                position: absolute;
-                left: -0.75em;
-                top: 0.75em;
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background: #2178C7;
-              }
-
-              .prose ol li {
-                padding-left: 0.25em;
-              }
-
-              .prose ol li::marker {
-                color: #2178C7;
-                font-weight: 600;
-              }
-
-              .prose li {
+                padding-left: 1.25em;
                 margin-bottom: 0.5em;
                 line-height: 1.8;
               }
-
-              .prose img {
-                border-radius: 0.875rem;
-                margin: 2.5em auto;
-                box-shadow: 0 10px 40px -10px rgba(0,0,0,0.12);
+              .blog-prose ul li::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0.72em;
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: #16a34a;
               }
-
-              .prose table {
-                border-collapse: collapse;
+              .blog-prose ol { padding-left: 1.5em; margin-bottom: 1.5em; }
+              .blog-prose ol li { padding-left: 0.25em; margin-bottom: 0.5em; line-height: 1.8; }
+              .blog-prose ol li::marker { color: #16a34a; font-weight: 600; }
+              .blog-prose img {
+                border-radius: 10px;
+                margin: 2em auto;
+                display: block;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+              }
+              .blog-prose table {
                 width: 100%;
+                border-collapse: collapse;
                 margin: 2em 0;
-                border-radius: 0.75rem;
+                border: 1px solid rgba(12,12,10,0.09);
+                border-radius: 10px;
                 overflow: hidden;
-                border: 1px solid #e5e7eb;
               }
-
-              .prose th, .prose td {
-                border: 1px solid #e5e7eb;
-                padding: 0.875em 1.25em;
+              .blog-prose th, .blog-prose td {
+                border: 1px solid rgba(12,12,10,0.09);
+                padding: 0.75em 1em;
                 text-align: left;
               }
-
-              .prose th {
-                background: #f9fafb;
+              .blog-prose th {
+                background: #f6f6f3;
                 font-weight: 600;
-                color: #111827;
+                color: #0c0c0a;
                 text-transform: uppercase;
-                font-size: 0.8em;
-                letter-spacing: 0.05em;
+                font-size: 0.75em;
+                letter-spacing: 0.06em;
               }
-
-              .prose hr {
+              .blog-prose hr {
                 border: none;
-                border-top: 1px solid #e5e7eb;
+                border-top: 1px solid rgba(12,12,10,0.09);
                 margin: 3em 0;
               }
             `}</style>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+            <div className="blog-prose">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+            </div>
           </motion.div>
 
-          {/* Bottom divider + back link */}
+          {/* Back link */}
           <motion.div
-            className="mt-20 pt-10 border-t border-slate-200"
+            style={{ marginTop: "64px", paddingTop: "32px", borderTop: `1px solid ${LINE_STR}` }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#2178C7] hover:text-[#1a62a1] transition-colors group"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                fontSize: "13px", fontWeight: 500, color: GREEN,
+                textDecoration: "none", fontFamily: MONO, letterSpacing: "0.02em",
+                transition: "color 120ms",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = GREEN_2 }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = GREEN }}
             >
-              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft size={14} />
               Back to all articles
             </Link>
           </motion.div>
@@ -457,13 +350,30 @@ export default function BlogPostClient({ post }: BlogPostClientProps) {
       {/* Scroll to top */}
       <motion.button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="fixed bottom-8 right-8 z-50 w-11 h-11 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center text-slate-500 hover:text-[#2178C7] hover:border-[#2178C7]/30 transition-all"
+        style={{
+          position: "fixed", bottom: "32px", right: "32px", zIndex: 50,
+          width: "44px", height: "44px", borderRadius: "50%",
+          background: PANEL, border: `1px solid ${LINE_STR}`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+          pointerEvents: showScrollTop ? "auto" : "none",
+          color: MUTED,
+        }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: showScrollTop ? 1 : 0, scale: showScrollTop ? 1 : 0.8 }}
         transition={{ duration: 0.2 }}
-        style={{ pointerEvents: showScrollTop ? "auto" : "none" }}
+        onMouseEnter={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.borderColor = GREEN
+          el.style.color = GREEN
+        }}
+        onMouseLeave={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.borderColor = LINE_STR
+          el.style.color = MUTED
+        }}
       >
-        <ChevronUp size={20} />
+        <ChevronUp size={18} />
       </motion.button>
 
       <Footer />

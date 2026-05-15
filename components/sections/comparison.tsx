@@ -6,114 +6,79 @@ import { useRef, useState } from "react"
 import Image from "next/image"
 import WaitlistModal from "@/components/waitlist-modal"
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+const FG       = "#0c0c0a"
+const MUTED    = "#5a5a52"
+const FAINT    = "#aaaaaa"
+const MONO     = "'Geist Mono', 'Courier New', monospace"
+const GREEN    = "#16a34a"
+const GREEN_2  = "#15803d"
+const LINE     = "rgba(12,12,10,0.09)"
+const LINE_STR = "rgba(12,12,10,0.14)"
+const PANEL    = "#ffffff"
+const BG2      = "#f0efeb"
+const SECTION  = "#eeecea"  // dark
+const GREEN_SOFT = "rgba(22,163,74,0.06)"
+const GREEN_MID  = "rgba(22,163,74,0.10)"
 
 const exclusives = [
   {
     icon: MessageSquare,
-    color: "#53C5E6",
+    color: GREEN,
     title: "Chat-to-Task Annotation",
-    description:
-      "The only tool where you simply describe your task in plain English and the AI builds, configures, and runs the entire annotation pipeline for you.",
+    description: "The only tool where you simply describe your task in plain English and the AI builds, configures, and runs the entire annotation pipeline for you.",
   },
   {
     icon: Sparkles,
-    color: "#C26FCF",
+    color: GREEN,
     title: "Zero-Shot Dataset Generation",
-    description:
-      "Don't have images yet? Describe your dataset — Auta sources imagery, generates annotations, and exports a ready-to-train dataset. No images required.",
+    description: "Don't have images yet? Describe your dataset — Auta sources imagery, generates annotations, and exports a ready-to-train dataset. No images required.",
   },
   {
     icon: Zap,
-    color: "#F1B646",
+    color: GREEN,
     title: ".zip to Annotated Dataset",
-    description:
-      "Drop a zip file, describe your goal in one sentence. Auta handles label schema, annotation type, model selection, and batch processing automatically.",
+    description: "Drop a zip file, describe your goal in one sentence. Auta handles label schema, annotation type, model selection, and batch processing automatically.",
   },
 ]
 
 type Status = "full" | "partial" | "none"
-
-interface Row {
-  feature: string
-  category: string
-  auta: Status
-  roboflow: Status
-  cvat: Status
-  labelstudio: Status
-  autaNote?: string
-}
+interface Row { feature: string; category: string; auta: Status; roboflow: Status; cvat: Status; labelstudio: Status; autaNote?: string }
 
 const rows: Row[] = [
-  { feature: "Chat-to-Task Annotation",        category: "AI & Automation",  auta: "full",  roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
-  { feature: "Zero-Shot Dataset Generation",    category: "AI & Automation",  auta: "full",  roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
-  { feature: "Natural Language Video Tracking", category: "AI & Automation",  auta: "full",  roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
-  { feature: "AI Dataset Planner",              category: "AI & Automation",  auta: "full",  roboflow: "partial", cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
-  { feature: "AI-Powered Segmentation",         category: "Annotation",       auta: "full",  roboflow: "full",    cvat: "partial", labelstudio: "partial" },
-  { feature: "Auto-annotation (AI models)",     category: "Annotation",       auta: "full",  roboflow: "full",    cvat: "full",    labelstudio: "partial" },
-  { feature: "Bounding Boxes & Polygons",       category: "Annotation",       auta: "full",  roboflow: "full",    cvat: "full",    labelstudio: "full" },
-  { feature: "Video Annotation",                category: "Annotation",       auta: "full",  roboflow: "partial", cvat: "full",    labelstudio: "full" },
-  { feature: "20+ Export Formats",              category: "Export & Workflow", auta: "full",  roboflow: "partial", cvat: "full",    labelstudio: "full",    autaNote: "20+" },
-  { feature: "Zero-config .zip Upload",         category: "Export & Workflow", auta: "full",  roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
-  { feature: "No-code Setup",                   category: "Export & Workflow", auta: "full",  roboflow: "full",    cvat: "none",    labelstudio: "partial" },
+  { feature: "Chat-to-Task Annotation",        category: "AI & Automation",  auta: "full", roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
+  { feature: "Zero-Shot Dataset Generation",   category: "AI & Automation",  auta: "full", roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
+  { feature: "Natural Language Video Tracking",category: "AI & Automation",  auta: "full", roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
+  { feature: "AI Dataset Planner",             category: "AI & Automation",  auta: "full", roboflow: "partial", cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
+  { feature: "AI-Powered Segmentation",        category: "Annotation",       auta: "full", roboflow: "full",    cvat: "partial", labelstudio: "partial" },
+  { feature: "Auto-annotation (AI models)",    category: "Annotation",       auta: "full", roboflow: "full",    cvat: "full",    labelstudio: "partial" },
+  { feature: "Bounding Boxes & Polygons",      category: "Annotation",       auta: "full", roboflow: "full",    cvat: "full",    labelstudio: "full" },
+  { feature: "Video Annotation",               category: "Annotation",       auta: "full", roboflow: "partial", cvat: "full",    labelstudio: "full" },
+  { feature: "20+ Export Formats",             category: "Export & Workflow", auta: "full", roboflow: "partial", cvat: "full",    labelstudio: "full",    autaNote: "20+" },
+  { feature: "Zero-config .zip Upload",        category: "Export & Workflow", auta: "full", roboflow: "none",    cvat: "none",    labelstudio: "none",    autaNote: "Exclusive" },
+  { feature: "No-code Setup",                  category: "Export & Workflow", auta: "full", roboflow: "full",    cvat: "none",    labelstudio: "partial" },
 ]
 
-const tools = [
-  {
-    key: "auta",
-    label: "Auta",
-    sub: "by Perceptron",
-    logo: null, // uses local Image
-    highlight: true,
-  },
-  {
-    key: "roboflow",
-    label: "Roboflow",
-    sub: "roboflow.com",
-    logo: "https://www.google.com/s2/favicons?domain=roboflow.com&sz=64",
-    highlight: false,
-  },
-  {
-    key: "cvat",
-    label: "CVAT",
-    sub: "cvat.ai",
-    logo: "https://www.google.com/s2/favicons?domain=cvat.ai&sz=64",
-    highlight: false,
-  },
-  {
-    key: "labelstudio",
-    label: "Label Studio",
-    sub: "labelstud.io",
-    logo: "https://www.google.com/s2/favicons?domain=labelstud.io&sz=64",
-    highlight: false,
-  },
-] as const
-
-const categories = Array.from(new Set(rows.map((r) => r.category)))
-
-// ─── Small helpers ────────────────────────────────────────────────────────────
+const categories = Array.from(new Set(rows.map(r => r.category)))
 
 function StatusIcon({ status, isAuta }: { status: Status; isAuta: boolean }) {
   if (status === "full")
     return (
-      <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full ${isAuta ? "bg-[#2178C7]/10" : "bg-emerald-50"}`}>
-        <Check size={14} className={isAuta ? "text-[#2178C7]" : "text-emerald-500"} strokeWidth={2.5} />
+      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "26px", height: "26px", borderRadius: "50%", background: isAuta ? GREEN_SOFT : "rgba(34,197,94,0.08)" }}>
+        <Check size={13} color={isAuta ? GREEN : "#16a34a"} strokeWidth={2.5} />
       </span>
     )
   if (status === "partial")
     return (
-      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-50">
-        <Minus size={14} className="text-amber-400" strokeWidth={2.5} />
+      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "26px", height: "26px", borderRadius: "50%", background: "rgba(245,158,11,0.08)" }}>
+        <Minus size={13} color="#d97706" strokeWidth={2.5} />
       </span>
     )
   return (
-    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-50">
-      <X size={13} className="text-slate-300" strokeWidth={2} />
+    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "26px", height: "26px", borderRadius: "50%", background: "rgba(0,0,0,0.04)" }}>
+      <X size={12} color={FAINT} strokeWidth={2} />
     </span>
   )
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Comparison() {
   const ref = useRef<HTMLElement>(null)
@@ -121,258 +86,229 @@ export default function Comparison() {
   const [waitlistOpen, setWaitlistOpen] = useState(false)
 
   return (
-    <section ref={ref} id="projects" className="relative py-24 md:py-36 overflow-hidden bg-slate-50 text-slate-900">
-      <div className="absolute inset-0 light-mesh pointer-events-none opacity-60" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2178C7]/15 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C26FCF]/15 to-transparent" />
+    <section
+      ref={ref}
+      id="projects"
+      style={{
+        padding: "120px 0 110px",
+        background: SECTION,
+        borderBottom: `1px solid ${LINE_STR}`,
+        color: FG,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-        {/* ── Header ── */}
+        {/* Header */}
         <motion.div
-          className="mb-16"
+          style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "60px" }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] as const }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true }}
         >
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#2178C7] mb-3">
-            Why Auta
-          </span>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl md:text-5xl font-bold">
-              <span className="cosmic-heading-gradient">Built Different, By Design</span>
+          <div>
+            <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
+              Why Auta
+            </div>
+            <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+              Built different, by design.
             </h2>
-            <p className="text-slate-400 text-sm max-w-xs leading-relaxed md:text-right">
-              A side-by-side look at what makes Auta the smarter choice for modern annotation teams.
-            </p>
           </div>
-          <div className="mt-5 h-px bg-slate-200" />
+          <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
+            A side-by-side look at what makes Auta the smarter choice for modern annotation teams.
+          </p>
         </motion.div>
 
-        {/* ── Auta Exclusive callout cards ── */}
+        {/* Exclusive callout cards */}
         <motion.div
-          className="grid md:grid-cols-3 gap-5 mb-16"
+          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "48px" }}
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] as const }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
           {exclusives.map((item, i) => (
             <motion.div
               key={item.title}
-              className="relative group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-lg transition-shadow duration-400 overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.15 + i * 0.08, ease: [0.22, 1, 0.36, 1] as const }}
+              transition={{ duration: 0.5, delay: 0.15 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                background: PANEL,
+                borderRadius: "14px",
+                border: `1px solid ${LINE}`,
+                padding: "24px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                position: "relative",
+                overflow: "hidden",
+              }}
             >
-              {/* Faint glow */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: `radial-gradient(ellipse at 20% 30%, ${item.color}10, transparent 70%)` }}
-              />
               {/* Top bar */}
-              <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl" style={{ background: item.color }} />
-
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                style={{ background: `${item.color}15` }}
-              >
-                <item.icon size={20} style={{ color: item.color }} />
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", borderRadius: "14px 14px 0 0", background: GREEN }} />
+              {/* Icon */}
+              <div style={{ width: "38px", height: "38px", borderRadius: "10px", background: GREEN_SOFT, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "14px", marginTop: "4px" }}>
+                <item.icon size={18} color={GREEN} />
               </div>
-
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="text-sm font-bold text-slate-800 leading-snug">{item.title}</h3>
-                <span
-                  className="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full mt-0.5"
-                  style={{ background: `${item.color}15`, color: item.color }}
-                >
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px", marginBottom: "8px" }}>
+                <h3 style={{ fontSize: "14px", fontWeight: 500, color: FG, margin: 0, lineHeight: 1.3 }}>{item.title}</h3>
+                <span style={{ flexShrink: 0, fontFamily: MONO, fontSize: "9px", fontWeight: 700, padding: "3px 7px", borderRadius: "4px", background: GREEN_SOFT, color: GREEN, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   Only Auta
                 </span>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed">{item.description}</p>
+              <p style={{ fontSize: "13px", color: MUTED, lineHeight: 1.6, margin: 0 }}>{item.description}</p>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* ── Comparison table ── */}
+        {/* Comparison table */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.65, delay: 0.25, ease: [0.22, 1, 0.36, 1] as const }}
+          transition={{ duration: 0.65, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Mobile scroll hint */}
-          <p className="flex items-center gap-1.5 text-[11px] text-slate-400 mb-2 sm:hidden">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="flex-shrink-0">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Scroll to compare
-          </p>
+          <div style={{ overflowX: "auto" }}>
+            <div style={{ minWidth: "600px", border: `1px solid ${LINE}`, borderRadius: "14px 14px 0 0", background: PANEL, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
 
-          {/* Horizontal scroll wrapper */}
-          <div className="overflow-x-auto rounded-t-3xl shadow-xl">
-            <div className="min-w-[540px] sm:min-w-[700px] bg-white border border-slate-200 rounded-t-3xl overflow-hidden">
-
-              {/* Table header row */}
-              <div className="grid grid-cols-[1fr_repeat(4,_90px)] sm:grid-cols-[1fr_repeat(4,_140px)] border-b border-slate-100">
-                <div className="px-4 sm:px-6 py-5 text-xs font-semibold uppercase tracking-widest text-slate-400">Feature</div>
-                {tools.map((tool) => (
-                  <div
-                    key={tool.key}
-                    className={`px-2 py-5 flex flex-col items-center justify-center gap-1.5 border-l border-slate-100 ${
-                      tool.highlight
-                        ? "bg-gradient-to-b from-[#2178C7]/[0.06] to-[#2178C7]/[0.02]"
-                        : ""
-                    }`}
-                  >
-                    {/* Logo */}
-                    {tool.key === "auta" ? (
-                      <div className="w-8 h-8 rounded-lg bg-[#2178C7]/10 flex items-center justify-center">
-                        <Image src="/perceptron-logo.png" alt="Auta" width={22} height={22} className="w-[22px] h-[22px]" />
-                      </div>
-                    ) : (
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center overflow-hidden">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={tool.logo}
-                          alt={tool.label}
-                          width={20}
-                          height={20}
-                          className="w-5 h-5 object-contain"
-                        />
-                      </div>
-                    )}
-                    {/* Label */}
-                    <div className="text-center">
-                      <p className={`text-[11px] font-bold leading-tight ${tool.highlight ? "text-[#2178C7]" : "text-slate-700"}`}>
-                        {tool.label}
-                      </p>
-                      <p className="text-[9px] text-slate-400 leading-tight hidden sm:block">{tool.sub}</p>
+              {/* Table header */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr repeat(4, 130px)", borderBottom: `1px solid ${LINE}` }}>
+                <div style={{ padding: "18px 20px", fontFamily: MONO, fontSize: "10px", fontWeight: 500, color: FAINT, textTransform: "uppercase", letterSpacing: "0.08em", background: BG2 }}>
+                  Feature
+                </div>
+                {/* Auta */}
+                <div style={{ padding: "18px 12px", background: GREEN_SOFT, borderLeft: `1px solid ${LINE}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+                  <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: GREEN_SOFT, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Image src="/perceptron-logo.png" alt="Auta" width={20} height={20} />
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <p style={{ fontFamily: MONO, fontSize: "11px", fontWeight: 600, color: GREEN, margin: 0 }}>Auta</p>
+                    <p style={{ fontFamily: MONO, fontSize: "9px", color: FAINT, margin: 0 }}>by Perceptron</p>
+                  </div>
+                </div>
+                {/* Competitors */}
+                {[
+                  { label: "Roboflow", sub: "roboflow.com", logo: "https://www.google.com/s2/favicons?domain=roboflow.com&sz=64" },
+                  { label: "CVAT", sub: "cvat.ai", logo: "https://www.google.com/s2/favicons?domain=cvat.ai&sz=64" },
+                  { label: "Label Studio", sub: "labelstud.io", logo: "https://www.google.com/s2/favicons?domain=labelstud.io&sz=64" },
+                ].map(tool => (
+                  <div key={tool.label} style={{ padding: "18px 12px", background: BG2, borderLeft: `1px solid ${LINE}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+                    <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: PANEL, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={tool.logo} alt={tool.label} width={18} height={18} style={{ objectFit: "contain" }} />
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <p style={{ fontFamily: MONO, fontSize: "11px", fontWeight: 500, color: MUTED, margin: 0 }}>{tool.label}</p>
+                      <p style={{ fontFamily: MONO, fontSize: "9px", color: FAINT, margin: 0 }}>{tool.sub}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Rows grouped by category */}
+              {/* Grouped rows */}
               {categories.map((cat, catIdx) => (
                 <div key={cat}>
                   {/* Category label */}
-                  <div className="grid grid-cols-[1fr_repeat(4,_90px)] sm:grid-cols-[1fr_repeat(4,_140px)] bg-slate-50/70 border-b border-slate-100">
-                    <div className="px-4 sm:px-6 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 col-span-5">
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr repeat(4, 130px)", background: BG2, borderBottom: `1px solid ${LINE}` }}>
+                    <div style={{ padding: "8px 20px", gridColumn: "1 / -1", fontFamily: MONO, fontSize: "10px", fontWeight: 600, color: FAINT, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                       {cat}
                     </div>
                   </div>
 
-                  {rows
-                    .filter((r) => r.category === cat)
-                    .map((row, rowIdx) => {
-                      const isExclusive = row.autaNote === "Exclusive"
-                      return (
-                        <motion.div
-                          key={row.feature}
-                          className="grid grid-cols-[1fr_repeat(4,_90px)] sm:grid-cols-[1fr_repeat(4,_140px)] border-b border-slate-100/80 last:border-b-0 group"
-                          initial={{ opacity: 0, x: -8 }}
-                          animate={isInView ? { opacity: 1, x: 0 } : {}}
-                          transition={{
-                            duration: 0.4,
-                            delay: 0.3 + catIdx * 0.05 + rowIdx * 0.04,
-                            ease: [0.22, 1, 0.36, 1] as const,
-                          }}
-                        >
-                          {/* Feature name */}
-                          <div className="px-4 sm:px-6 py-4 flex items-center gap-2 group-hover:bg-slate-50/50 transition-colors duration-150">
-                            <span className="text-xs sm:text-sm text-slate-700 font-medium leading-snug">{row.feature}</span>
-                            {isExclusive && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#2178C7]/10 text-[#2178C7] uppercase tracking-wide flex-shrink-0">
-                                Only Auta
-                              </span>
-                            )}
+                  {rows.filter(r => r.category === cat).map((row, rowIdx) => {
+                    const isExclusive = row.autaNote === "Exclusive"
+                    return (
+                      <motion.div
+                        key={row.feature}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ duration: 0.4, delay: 0.3 + catIdx * 0.05 + rowIdx * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                        style={{ display: "grid", gridTemplateColumns: "1fr repeat(4, 130px)", borderBottom: `1px solid ${LINE}` }}
+                      >
+                        <div style={{ padding: "14px 20px", display: "flex", alignItems: "center", gap: "8px" }}>
+                          <span style={{ fontSize: "13.5px", fontWeight: 500, color: FG }}>{row.feature}</span>
+                          {isExclusive && (
+                            <span style={{ fontFamily: MONO, fontSize: "9px", fontWeight: 700, padding: "2px 6px", borderRadius: "3px", background: GREEN_SOFT, color: GREEN, textTransform: "uppercase", letterSpacing: "0.05em", flexShrink: 0 }}>
+                              Only Auta
+                            </span>
+                          )}
+                        </div>
+                        {/* Auta */}
+                        <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px", background: GREEN_SOFT, borderLeft: `1px solid ${LINE}` }}>
+                          <StatusIcon status={row.auta} isAuta={true} />
+                          {row.autaNote && row.autaNote !== "Exclusive" && (
+                            <span style={{ fontFamily: MONO, fontSize: "9px", fontWeight: 600, color: GREEN }}>{row.autaNote}</span>
+                          )}
+                        </div>
+                        {/* Others */}
+                        {[row.roboflow, row.cvat, row.labelstudio].map((val, k) => (
+                          <div key={k} style={{ padding: "14px 12px", display: "flex", alignItems: "center", justifyContent: "center", borderLeft: `1px solid ${LINE}` }}>
+                            <StatusIcon status={val} isAuta={false} />
                           </div>
-
-                          {/* Auta column */}
-                          <div className="px-2 py-4 flex items-center justify-center border-l border-slate-100 bg-[#2178C7]/[0.03] group-hover:bg-[#2178C7]/[0.06] transition-colors duration-150">
-                            <div className="flex flex-col items-center gap-1">
-                              <StatusIcon status={row.auta} isAuta={true} />
-                              {row.autaNote && row.autaNote !== "Exclusive" && (
-                                <span className="text-[9px] font-semibold text-[#2178C7]">{row.autaNote}</span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Roboflow */}
-                          <div className="px-2 py-4 flex items-center justify-center border-l border-slate-100 group-hover:bg-slate-50/50 transition-colors duration-150">
-                            <StatusIcon status={row.roboflow} isAuta={false} />
-                          </div>
-
-                          {/* CVAT */}
-                          <div className="px-2 py-4 flex items-center justify-center border-l border-slate-100 group-hover:bg-slate-50/50 transition-colors duration-150">
-                            <StatusIcon status={row.cvat} isAuta={false} />
-                          </div>
-
-                          {/* Label Studio */}
-                          <div className="px-2 py-4 flex items-center justify-center border-l border-slate-100 group-hover:bg-slate-50/50 transition-colors duration-150">
-                            <StatusIcon status={row.labelstudio} isAuta={false} />
-                          </div>
-                        </motion.div>
-                      )
-                    })}
+                        ))}
+                      </motion.div>
+                    )
+                  })}
                 </div>
               ))}
-
             </div>
           </div>
 
-          {/* Legend + CTA — outside scroll container so always full-width */}
-          <div className="bg-white border border-t-0 border-slate-200 rounded-b-3xl px-4 sm:px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-xl shadow-slate-200/60">
-            <div className="flex items-center gap-4 text-xs text-slate-500 flex-wrap">
-              <span className="flex items-center gap-1.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 inline-flex items-center justify-center">
-                  <Check size={11} className="text-emerald-500" strokeWidth={2.5} />
+          {/* Table footer + CTA */}
+          <div style={{ background: PANEL, border: `1px solid ${LINE}`, borderTop: "none", borderRadius: "0 0 14px 14px", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+              {[
+                { icon: <Check size={11} color="#16a34a" strokeWidth={2.5} />, bg: "rgba(22,163,74,0.08)", label: "Full support" },
+                { icon: <Minus size={11} color="#d97706" strokeWidth={2.5} />, bg: "rgba(245,158,11,0.08)", label: "Partial" },
+                { icon: <X size={10} color={FAINT} strokeWidth={2} />, bg: "rgba(0,0,0,0.04)", label: "Not available" },
+              ].map(l => (
+                <span key={l.label} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: MUTED }}>
+                  <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: l.bg, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                    {l.icon}
+                  </span>
+                  {l.label}
                 </span>
-                Full support
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-5 h-5 rounded-full bg-amber-50 inline-flex items-center justify-center">
-                  <Minus size={11} className="text-amber-400" strokeWidth={2.5} />
-                </span>
-                Partial
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-5 h-5 rounded-full bg-slate-50 inline-flex items-center justify-center">
-                  <X size={10} className="text-slate-300" strokeWidth={2} />
-                </span>
-                Not available
-              </span>
+              ))}
             </div>
             <button
               type="button"
               onClick={() => setWaitlistOpen(true)}
-              className="inline-flex items-center justify-center gap-2 text-sm font-semibold text-white px-5 py-3 rounded-xl transition-all duration-200 hover:opacity-90 hover:shadow-lg w-full sm:w-auto cursor-pointer"
-              style={{ background: "linear-gradient(135deg, #2178C7, #53C5E6)" }}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                padding: "10px 20px", borderRadius: "8px",
+                background: GREEN, color: "#fff",
+                border: `1px solid ${GREEN_2}`,
+                fontSize: "13.5px", fontWeight: 500,
+                cursor: "pointer",
+                boxShadow: "0 1px 3px rgba(22,163,74,0.25)",
+                transition: "background 120ms, transform 100ms",
+              }}
+              onMouseEnter={e => { const el = e.currentTarget; el.style.background = GREEN_2; el.style.transform = "translateY(-1px)" }}
+              onMouseLeave={e => { const el = e.currentTarget; el.style.background = GREEN; el.style.transform = "" }}
             >
               Try Auta Now
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
                 <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           </div>
         </motion.div>
 
-        {/* Bottom stat strip */}
+        {/* Stat strip */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10"
+          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px", marginTop: "40px" }}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, delay: 0.5, ease: [0.22, 1, 0.36, 1] as const }}
+          transition={{ duration: 0.55, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           {[
             { value: "5×",  label: "fewer clicks per annotation task" },
             { value: "20+", label: "export formats supported" },
             { value: "10×", label: "faster than manual labeling" },
             { value: "0",   label: "images needed for zero-shot mode" },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-white rounded-2xl border border-slate-200 px-5 py-4 text-center shadow-sm">
-              <p className="text-3xl font-bold cosmic-heading-gradient mb-1">{stat.value}</p>
-              <p className="text-xs text-slate-500 leading-snug">{stat.label}</p>
+          ].map(stat => (
+            <div key={stat.label} style={{ background: PANEL, border: `1px solid ${LINE}`, borderRadius: "12px", padding: "20px 16px", textAlign: "center", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+              <p style={{ fontFamily: MONO, fontSize: "30px", fontWeight: 500, color: GREEN, letterSpacing: "-0.045em", margin: "0 0 4px" }}>{stat.value}</p>
+              <p style={{ fontSize: "12px", color: MUTED, margin: 0, lineHeight: 1.4 }}>{stat.label}</p>
             </div>
           ))}
         </motion.div>
