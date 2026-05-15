@@ -25,6 +25,23 @@ const PANEL2   = "#f6f6f3"
 export default function Hero() {
   const [waitlistOpen, setWaitlistOpen] = useState(false)
 
+  const centerDemoVideo = () => {
+    const target =
+      document.querySelector<HTMLVideoElement>("#hero-demo video") ??
+      document.getElementById("hero-demo")
+
+    if (!target) return
+
+    const rect = target.getBoundingClientRect()
+    const targetCenter = rect.top + rect.height / 2
+    const viewportCenter = window.innerHeight / 2
+
+    window.scrollBy({
+      top: targetCenter - viewportCenter,
+      behavior: "smooth",
+    })
+  }
+
   return (
     <section
       style={{
@@ -150,9 +167,7 @@ export default function Hero() {
           </button>
 
           <button
-            onClick={() => {
-              document.getElementById("hero-demo")?.scrollIntoView({ behavior: "smooth", block: "start" })
-            }}
+            onClick={centerDemoVideo}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -179,68 +194,45 @@ export default function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          style={{ marginTop: "44px" }}
+          style={{
+            marginTop: "48px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
+          <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", color: FAINT, textTransform: "uppercase", display: "block", marginBottom: "14px" }}>
+            Backed by
+          </span>
+
           <div
             style={{
-              display: "inline-flex",
+              display: "grid",
+              gridTemplateColumns: "minmax(0, 1fr) 1px minmax(0, 1fr)",
               alignItems: "center",
-              border: `1px solid ${LINE}`,
-              borderRadius: "10px",
-              background: PANEL,
-              overflow: "hidden",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+              columnGap: "32px",
+              width: "min(100%, 620px)",
             }}
           >
-            <span
-              style={{
-                padding: "0 20px",
-                fontFamily: MONO,
-                fontSize: "10px",
-                color: FAINT,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                borderRight: `1px solid ${LINE}`,
-                whiteSpace: "nowrap",
-                alignSelf: "stretch",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              Backed by
-            </span>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "24px",
-                padding: "10px 20px",
-                flexWrap: "wrap",
-              }}
-            >
-              {/* NVIDIA Inception Program official member badge — RGB color version for light backgrounds */}
-              <img
-                src="/nvidia-inception-badge.svg"
-                alt="NVIDIA Inception Program member"
-                width={160}
-                height={69}
-                style={{ display: "block", flexShrink: 0 }}
-              />
-              <span style={{ width: "1px", height: "28px", background: LINE, flexShrink: 0 }} />
-              <span
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: MUTED,
-                  letterSpacing: "-0.01em",
-                  whiteSpace: "nowrap",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                Amazon{" "}
-                <span style={{ fontWeight: 300, color: FAINT, fontSize: "12px" }}>AWS Activate</span>
+            {/* NVIDIA Inception */}
+            <img
+              src="/nvidia-inception-badge.svg"
+              alt="NVIDIA Inception Program member"
+              height={60}
+              style={{ display: "block", justifySelf: "end" }}
+            />
+
+            {/* Divider */}
+            <div style={{ width: "1px", height: "44px", background: LINE_STR }} />
+
+            {/* AWS Activate */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px", justifySelf: "start" }}>
+              <span style={{ fontSize: "17px", fontWeight: 700, color: "#232f3e", letterSpacing: "-0.02em", lineHeight: 1 }}>
+                amazon
+              </span>
+              <span style={{ fontFamily: MONO, fontSize: "9.5px", letterSpacing: "0.1em", textTransform: "uppercase", color: FAINT, whiteSpace: "nowrap" }}>
+                Web Services · Activate
               </span>
             </div>
           </div>
@@ -252,35 +244,34 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.75 }}
           style={{
-            marginTop: "36px",
+            marginTop: "44px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "10px",
-            fontSize: "12px",
-            color: FAINT,
+            gap: "14px",
           }}
         >
-          <span>Trusted by research teams in</span>
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              alignItems: "center",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              fontFamily: MONO,
-              fontSize: "11px",
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              color: MUTED,
-            }}
-          >
-            <span>Medical Imaging</span>
-            <span style={{ color: LINE_STR }}>/</span>
-            <span>Sports Analytics</span>
-            <span style={{ color: LINE_STR }}>/</span>
-            <span>Autonomous Driving</span>
+          <span style={{ fontSize: "12px", color: FAINT }}>Trusted by research teams in</span>
+          <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+            {["Medical Imaging", "Sports Analytics", "Autonomous Driving"].map((label, i) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{
+                  padding: "5px 12px",
+                  borderRadius: "100px",
+                  border: `1px solid ${LINE}`,
+                  background: PANEL2,
+                  fontFamily: MONO,
+                  fontSize: "10px",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: MUTED,
+                  whiteSpace: "nowrap",
+                }}>
+                  {label}
+                </span>
+                {i < 2 && <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: LINE_STR, display: "block" }} />}
+              </div>
+            ))}
           </div>
         </motion.div>
 
