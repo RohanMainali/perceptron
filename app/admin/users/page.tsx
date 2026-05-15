@@ -172,7 +172,7 @@ export default function AdminUsersPage() {
                     username: r.user?.username,
                     email: r.user?.email,
                     ai_tokens_used: r.user?.ai_tokens_used ?? 0,
-                    ai_tokens_limit: r.user?.ai_tokens_limit ?? 10,
+                    ai_tokens_limit: r.user?.ai_tokens_limit ?? 100,
                 }))
                 setCreditRequests(flat)
                 // Keep the stats card up to date
@@ -436,7 +436,7 @@ export default function AdminUsersPage() {
                         <p className="text-2xl font-bold text-white mb-0.5">
                             {users.reduce((acc, u) => acc + (u.ai_tokens_used ?? 0), 0)}
                         </p>
-                        <p className="text-xs text-white/40">Tokens Used Today</p>
+                        <p className="text-xs text-white/40">Tokens Used This Month</p>
                     </div>
                 </div>
 
@@ -526,7 +526,7 @@ export default function AdminUsersPage() {
 
                                             {/* Token usage */}
                                             <div className="flex-1 min-w-[140px]">
-                                                <p className="text-[11px] text-white/35 mb-1.5">Today&apos;s usage</p>
+                                                <p className="text-[11px] text-white/35 mb-1.5">This month&apos;s usage</p>
                                                 <TokenBar used={user.ai_tokens_used} limit={user.ai_tokens_limit} />
                                             </div>
 
@@ -667,7 +667,7 @@ export default function AdminUsersPage() {
 
                                                 {/* Token usage */}
                                                 <div className="flex-1 min-w-[130px] hidden sm:block">
-                                                    <p className="text-[11px] text-white/35 mb-1.5">Today&apos;s usage</p>
+                                                    <p className="text-[11px] text-white/35 mb-1.5">This month&apos;s usage</p>
                                                     <TokenBar used={req.ai_tokens_used} limit={req.ai_tokens_limit} />
                                                 </div>
 
