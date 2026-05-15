@@ -236,7 +236,7 @@ export default function Hero() {
           >
             <span
               style={{
-                padding: "14px 20px",
+                padding: "0 20px",
                 fontFamily: MONO,
                 fontSize: "10px",
                 color: FAINT,
@@ -244,6 +244,9 @@ export default function Hero() {
                 textTransform: "uppercase",
                 borderRight: `1px solid ${LINE}`,
                 whiteSpace: "nowrap",
+                alignSelf: "stretch",
+                display: "flex",
+                alignItems: "center",
               }}
             >
               Backed by
@@ -252,27 +255,20 @@ export default function Hero() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "28px",
-                padding: "14px 24px",
+                gap: "24px",
+                padding: "10px 20px",
                 flexWrap: "wrap",
               }}
             >
-              <span
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: MUTED,
-                  letterSpacing: "-0.01em",
-                  whiteSpace: "nowrap",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                NVIDIA{" "}
-                <span style={{ fontWeight: 300, color: FAINT, fontSize: "12px" }}>Inception</span>
-              </span>
-              <span style={{ width: "1px", height: "20px", background: LINE, flexShrink: 0 }} />
+              {/* NVIDIA Inception Program official member badge — RGB color version for light backgrounds */}
+              <img
+                src="/nvidia-inception-badge.svg"
+                alt="NVIDIA Inception Program member"
+                width={160}
+                height={69}
+                style={{ display: "block", flexShrink: 0 }}
+              />
+              <span style={{ width: "1px", height: "28px", background: LINE, flexShrink: 0 }} />
               <span
                 style={{
                   fontSize: "13px",

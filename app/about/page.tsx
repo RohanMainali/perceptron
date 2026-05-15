@@ -1,21 +1,25 @@
 "use client"
 
-import { motion, useInView, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState, useRef, useCallback } from "react"
 import Image from "next/image"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
-import PageHero from "@/components/page-hero"
-import { Brain, Zap, Users, Linkedin, ChevronLeft, ChevronRight, Lightbulb, Code2, Rocket } from "lucide-react"
+import MeshCanvas from "@/components/mesh-canvas"
+import { Brain, Zap, Users, Linkedin, ChevronLeft, ChevronRight, Lightbulb, Code2, Rocket, Check } from "lucide-react"
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-}
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.96 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
-}
+// ── Design tokens ────────────────────────────────────────────────────────────
+const FG       = "#0c0c0a"
+const MUTED    = "#5a5a52"
+const FAINT    = "#aaaaaa"
+const MONO     = "'Geist Mono', 'Courier New', monospace"
+const GREEN    = "#16a34a"
+const GREEN_2  = "#15803d"
+const LINE     = "rgba(12,12,10,0.09)"
+const LINE_STR = "rgba(12,12,10,0.14)"
+const PANEL    = "#ffffff"
+const BG2      = "#f6f6f3"
+const DARK     = "#eeecea"  // "dark" sections
 
 const slideVariants = {
   enter: (dir: number) => ({ x: dir >= 0 ? 280 : -280, opacity: 0 }),
@@ -23,8 +27,7 @@ const slideVariants = {
   exit: (dir: number) => ({ x: dir >= 0 ? -280 : 280, opacity: 0 }),
 }
 
-const leaderAccents = ["#2178C7", "#C26FCF", "#53C5E6", "#F1B646"]
-
+// ── Data ─────────────────────────────────────────────────────────────────────
 const roadmapStages = [
   {
     icon: Lightbulb,
@@ -76,800 +79,419 @@ const roadmapStages = [
   },
 ]
 
+const values = [
+  { icon: Brain,  title: "Innovation",    description: "Pushing the boundaries of AI research with cutting-edge techniques and novel approaches." },
+  { icon: Zap,    title: "Intelligence",  description: "Creating systems that understand, learn, and adapt to complex real-world challenges." },
+  { icon: Users,  title: "Collaboration", description: "Working closely with partners to transform vision into reality through intelligent solutions." },
+]
+
+const team = [
+  { name: "Rohan Mainali",        role: "Chief Executive Officer",  expertise: "Strategic Leadership &\nCorporate Governance",       image: "/images/team/rohan-mainali.jpg",       socials: { linkedin: "https://www.linkedin.com/in/rohanmainali/"} },
+  { name: "Neha Aryal",           role: "Chief Marketing Officer",  expertise: "Marketing Strategy &\nBusiness Growth",              image: "/images/team/neha-aryal.jpg",          socials: { linkedin: "https://www.linkedin.com/in/nehaaryal/"} },
+  { name: "Soyam Shrestha",       role: "Chief Technology Officer", expertise: "Technology Strategy &\nEngineering Leadership",      image: "/images/team/soyam-shrestha.jpg",      socials: { linkedin: "https://www.linkedin.com/in/soyam-shrestha-bb1350296/" } },
+  { name: "Manas Mudbari",        role: "Chief Operating Officer",  expertise: "Operations Management &\nProcess Optimization",     image: "/images/team/manas-mudbari.png",       socials: { linkedin: "https://www.linkedin.com/in/manasmudbari/"} },
+]
+
+// ── Page ─────────────────────────────────────────────────────────────────────
 export default function AboutPage() {
   const [scrollY, setScrollY] = useState(0)
-  const valuesRef = useRef<HTMLDivElement>(null)
-  const valuesInView = useInView(valuesRef, { once: true, margin: "-100px" })
-  const teamRef = useRef<HTMLDivElement>(null)
-  const teamInView = useInView(teamRef, { once: true, margin: "-80px" })
-
   const [leaderIdx, setLeaderIdx] = useState(0)
   const [slideDir, setSlideDir] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
 
-  const nextLeader = useCallback(() => {
-    setSlideDir(1)
-    setLeaderIdx(prev => (prev + 1) % 4)
-  }, [])
+  const nextLeader = useCallback(() => { setSlideDir(1);  setLeaderIdx(p => (p + 1) % 4) }, [])
+  const prevLeader = useCallback(() => { setSlideDir(-1); setLeaderIdx(p => (p - 1 + 4) % 4) }, [])
 
-  const prevLeader = useCallback(() => {
-    setSlideDir(-1)
-    setLeaderIdx(prev => (prev - 1 + 4) % 4)
-  }, [])
-
-  useEffect(() => {
-    if (isPaused) return
-    const timer = setInterval(nextLeader, 5000)
-    return () => clearInterval(timer)
-  }, [isPaused, nextLeader])
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const values = [
-    {
-      icon: Brain,
-      title: "Innovation",
-      description: "Pushing the boundaries of AI research with cutting-edge techniques and novel approaches.",
-    },
-    {
-      icon: Zap,
-      title: "Intelligence",
-      description: "Creating systems that understand, learn, and adapt to complex real-world challenges.",
-    },
-    {
-      icon: Users,
-      title: "Collaboration",
-      description: "Working closely with partners to transform vision into reality through intelligent solutions.",
-    },
-  ]
-
-  const team = [
-    { name: "Rohan Mainali", role: "Chief Executive Officer", expertise: "Strategic Leadership &\nCorporate Governance", image: "/images/team/rohan-mainali.jpg", socials: { linkedin: "https://www.linkedin.com/in/rohanmainali/"} },
-    { name: "Neha Aryal", role: "Chief Marketing Officer", expertise: "Marketing Strategy &\nBusiness Growth", image: "/images/team/neha-aryal.jpg", socials: { linkedin: "https://www.linkedin.com/in/nehaaryal/"} },
-    { name: "Soyam Shrestha", role: "Chief Technology Officer", expertise: "Technology Strategy &\nEngineering Leadership", image: "/images/team/soyam-shrestha.jpg", socials: { linkedin: "https://www.linkedin.com/in/soyam-shrestha-bb1350296/" } },
-    { name: "Manas Mudbari", role: "Chief Operating Officer", expertise: "Operations Management &\nProcess Optimization", image: "/images/team/manas-mudbari.png", socials: { linkedin: "https://www.linkedin.com/in/manasmudbari/"} },
-    { name: "Bibek Shrestha", role: "Lead Engineer", expertise: "Building Scalable Infrastructure", image: "/images/team/bibek-shrestha.jpg" },
-    { name: "Pratik Awal", role: "Lead Researcher", expertise: "Research & Algorithmic Innovation", image: "/images/team/pratik-awal.jpg" },
-    { name: "Samikchhya Maharjan", role: "Market Research", expertise: "Market Analysis, User Research", image: "/images/team/samikchhya-maharjan.jpg" },
-    { name: "Aayushman Shrestha", role: "Data Scientist", expertise: "Data Annotation, Analysis", image: "/images/team/aayushman-shrestha.jpg" },
-    { name: "Puspa Kutu", role: "Data Analyst", expertise: "Data Visualization, Reporting", image: "/images/team/puspa-kutu.jpg" },
-    { name: "Priyokti Manandhar", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/priyokti-manandhar.jpg" },
-    { name: "Swornika Rajbhandari", role: "QA Engineer", expertise: "Manual Testing, Automation", image: "/images/team/swornika-rajbhandari.jpg" },
-    { name: "Nischal Bhattarai", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/nischal-bhattarai.jpg" },
-    { name: "Rakesh Shrestha", role: "Data Engineer", expertise: "Data Pipeline Development, ETL", image: "/images/team/rakesh-shrestha.jpg" },
-    { name: "Samichha Shrestha", role: "Full Stack Developer", expertise: "MERN Stack", image: "/images/team/samichha-shrestha.jpg" },
-    { name: "Suyog Maharjan", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/suyog-maharjan.jpg" },
-    { name: "Sahajid Rahaman", role: "ML Engineer", expertise: "Model Development, Optimization", image: "/images/team/sahajid-rahaman.jpg" },
-    { name: "Abhay Shrestha", role: "QA Engineer", expertise: "Test Cases & Manual Testing", image: "/images/team/abhay-shrestha.jpg" },
-  ]
-
-  const milestones = [
-    { year: "2020", title: "Founded", description: "Perceptron established with a vision to advance AI research" },
-    { year: "2021", title: "First Project", description: "Completed groundbreaking MMA Vision analysis system" },
-    { year: "2022", title: "Expansion", description: "Grew team and expanded service offerings" },
-    { year: "2024", title: "Innovation", description: "Launched CLIP Fine-tuning Suite and Pose Estimation Engine" },
-  ]
+  useEffect(() => { if (isPaused) return; const t = setInterval(nextLeader, 5000); return () => clearInterval(t) }, [isPaused, nextLeader])
+  useEffect(() => { const fn = () => setScrollY(window.scrollY); window.addEventListener("scroll", fn); return () => window.removeEventListener("scroll", fn) }, [])
 
   return (
-    <main className="relative overflow-hidden bg-background">
+    <main style={{ background: PANEL }}>
       <Navigation scrollY={scrollY} />
 
-      <PageHero
-        title="About Perceptron"
-        subtitle="We are a team of AI researchers and engineers dedicated to building the next generation of intelligent systems that solve real-world problems."
-        badge="Our Story"
-      />
+      {/* ── PAGE HERO — light ─────────────────────────────────────────── */}
+      <section
+        style={{
+          position: "relative",
+          background: PANEL,
+          borderBottom: `1px solid ${LINE_STR}`,
+          paddingTop: "148px",
+          paddingBottom: "100px",
+          overflow: "hidden",
+          color: FG,
+        }}
+      >
+        {/* Gravity mesh — identical to landing hero */}
+        <MeshCanvas />
+        {/* Green ambient glow */}
+        <div aria-hidden="true" style={{ position: "absolute", top: "-18%", left: "50%", transform: "translateX(-50%)", width: "900px", height: "560px", background: "radial-gradient(ellipse at 50% 40%, rgba(22,163,74,0.12) 0%, rgba(22,163,74,0.04) 45%, transparent 68%)", zIndex: 0, pointerEvents: "none" }} />
 
-      {/* Mission Section */}
-      <section className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
-        <div className="absolute inset-0 light-mesh pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-            >
-              <motion.span
-                className="inline-block text-sm font-medium tracking-widest uppercase text-[#53C5E6] mb-4"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.1 }}
-                viewport={{ once: true }}
-              >
-                Our Purpose
-              </motion.span>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                <span className="cosmic-heading-gradient">
-                  Our Mission
-                </span>
-              </h2>
-              <p className="text-slate-600 text-lg leading-relaxed mb-6">
+        <div style={{ position: "relative", zIndex: 2, maxWidth: "1280px", margin: "0 auto", padding: "0 40px", textAlign: "center" }}>
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", border: `1px solid ${LINE}`, borderRadius: "6px", background: PANEL, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", fontFamily: MONO, fontSize: "11.5px", letterSpacing: "0.02em" }}>
+              <span style={{ background: GREEN, color: "#fff", fontWeight: 600, padding: "5px 9px", letterSpacing: "0.07em", fontSize: "10px", textTransform: "uppercase" }}>Story</span>
+              <span style={{ width: "1px", alignSelf: "stretch", background: LINE }} />
+              <span style={{ padding: "5px 11px", color: MUTED }}>Perceptron AI Labs</span>
+            </div>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            style={{ margin: "32px auto 0", fontSize: "clamp(48px, 7vw, 88px)", fontWeight: 500, letterSpacing: "-0.05em", lineHeight: 0.95, color: FG, maxWidth: "14ch" }}
+          >
+            About<br /><em style={{ color: GREEN, fontStyle: "italic" }}>Perceptron</em>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.3 }}
+            style={{ margin: "28px auto 0", maxWidth: "520px", fontSize: "17px", lineHeight: 1.6, color: MUTED }}
+          >
+            We are a team of AI researchers and engineers dedicated to building the next generation of intelligent systems that solve real-world problems.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ── MISSION — dark ───────────────────────────────────────────────── */}
+      <section style={{ padding: "120px 0 110px", background: DARK, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+
+          <SectionHeader eyebrow="Our Purpose" title="Our Mission." right="At Perceptron, we believe AI has the power to transform industries and improve lives." />
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "center", marginTop: "60px" }}>
+            {/* Text */}
+            <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true }}>
+              <p style={{ fontSize: "16px", color: MUTED, lineHeight: 1.75, marginBottom: "20px" }}>
                 At Perceptron, we believe that artificial intelligence has the power to transform industries and improve
                 lives. Our mission is to develop cutting-edge AI solutions that are not only technically advanced but
                 also practical and impactful.
               </p>
-              <p className="text-slate-600 text-lg leading-relaxed">
+              <p style={{ fontSize: "16px", color: MUTED, lineHeight: 1.75 }}>
                 We focus on three core areas: computer vision, natural language processing, and multimodal AI systems.
                 Through rigorous research and development, we create tools and services that help organizations harness
                 the power of AI.
               </p>
-              <motion.div
-                className="mt-6 h-[1px] rounded-full"
-                style={{ background: "linear-gradient(90deg, #53C5E6, #C26FCF, transparent)" }}
-                initial={{ width: 0 }}
-                whileInView={{ width: 120 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                viewport={{ once: true }}
-              />
+              <div style={{ display: "flex", gap: "24px", marginTop: "36px", flexWrap: "wrap" }}>
+                {[["Computer Vision", GREEN], ["NLP", "#2563eb"], ["Multimodal AI", "#7c3aed"]].map(([label, color]) => (
+                  <div key={label as string} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: MUTED }}>
+                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: color as string, flexShrink: 0 }} />
+                    {label}
+                  </div>
+                ))}
+              </div>
             </motion.div>
+
+            {/* Auta demo window */}
             <motion.div
-              className="relative h-96 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white overflow-hidden shadow-lg"
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 24 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
+              style={{ border: `1px solid ${LINE}`, borderRadius: "14px", overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.07)" }}
             >
-              {/* Subtle grid background */}
-              <div
-                className="absolute inset-0 opacity-[0.04]"
-                style={{
-                  backgroundImage: "radial-gradient(circle, #2178C7 1px, transparent 1px)",
-                  backgroundSize: "24px 24px",
-                }}
-              />
-
-              {/* Outer orbit ring */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  className="relative"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                >
-                  <div className="w-72 h-72 rounded-full border border-dashed border-[#53C5E6]/15" />
-                  {/* Orbiting dot 1 */}
-                  <motion.div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#53C5E6] shadow-[0_0_12px_rgba(83,197,230,0.5)]" />
-                </motion.div>
+              {/* Browser chrome */}
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "11px 16px", borderBottom: `1px solid ${LINE}`, background: PANEL }}>
+                <div style={{ display: "flex", gap: "5px" }}>
+                  {["#fc635d","#fdbc40","#34c749"].map(c => <span key={c} style={{ width: "10px", height: "10px", borderRadius: "50%", background: c }} />)}
+                </div>
+                <div style={{ flex: 1, maxWidth: "180px", margin: "0 auto", height: "22px", borderRadius: "5px", background: BG2, border: `1px solid ${LINE}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontFamily: MONO, fontSize: "10px", color: FAINT }}>auta.perceptron.ai</span>
+                </div>
+                <div style={{ display: "flex", gap: "2px", marginLeft: "auto" }}>
+                  {["Annotate","Plan","Export"].map((tab, i) => (
+                    <span key={tab} style={{ fontFamily: MONO, fontSize: "10px", padding: "3px 8px", borderRadius: "4px", color: i === 0 ? FG : FAINT, background: i === 0 ? BG2 : "transparent" }}>{tab}</span>
+                  ))}
+                </div>
               </div>
 
-              {/* Middle orbit ring */}
-              <div className="absolute inset-0 flex items-center justify-center">
+              {/* Chat area */}
+              <div style={{ padding: "20px", background: BG2, display: "flex", flexDirection: "column", gap: "12px" }}>
+                {/* User bubble */}
                 <motion.div
-                  className="relative"
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} viewport={{ once: true }}
+                  style={{ alignSelf: "flex-end", maxWidth: "82%", padding: "11px 14px", borderRadius: "10px 10px 2px 10px", background: PANEL, border: `1px solid ${LINE}`, fontSize: "13px", color: FG, lineHeight: 1.5 }}
                 >
-                  <div className="w-48 h-48 rounded-full border border-[#C26FCF]/12" />
-                  {/* Orbiting dot 2 */}
-                  <motion.div className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#C26FCF] shadow-[0_0_10px_rgba(194,111,207,0.5)]" />
+                  Annotate every chest X-ray. Bounding boxes around{" "}
+                  <strong style={{ color: GREEN, fontWeight: 600 }}>opacity</strong> or{" "}
+                  <strong style={{ color: GREEN, fontWeight: 600 }}>effusion</strong>. Skip clean scans.
                 </motion.div>
-              </div>
 
-              {/* Inner orbit ring */}
-              <div className="absolute inset-0 flex items-center justify-center">
+                {/* Auta response */}
                 <motion.div
-                  className="relative"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                  initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }} viewport={{ once: true }}
+                  style={{ maxWidth: "96%", padding: "11px 14px", borderRadius: "10px 10px 10px 2px", background: PANEL, border: `1px solid ${LINE}`, fontSize: "13px", color: FG, lineHeight: 1.5 }}
                 >
-                  <div className="w-28 h-28 rounded-full border border-[#2178C7]/15" />
-                  <motion.div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2178C7] shadow-[0_0_8px_rgba(33,120,199,0.5)]" />
-                </motion.div>
-              </div>
-
-              {/* Center brain icon with pulsing glow */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  className="relative"
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  {/* Glow backdrop */}
-                  <motion.div
-                    className="absolute -inset-6 rounded-full bg-gradient-to-br from-[#53C5E6]/20 to-[#C26FCF]/15 blur-xl"
-                    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2178C7] to-[#53C5E6] flex items-center justify-center shadow-lg shadow-[#2178C7]/25">
-                    <Brain className="w-8 h-8 text-white" />
+                  Running <strong style={{ color: GREEN, fontWeight: 600 }}>2-class detection</strong> on 2,847 images.
+                  {/* Task table */}
+                  <div style={{ marginTop: "10px", border: `1px solid ${LINE}`, borderRadius: "7px", overflow: "hidden", fontFamily: MONO, fontSize: "11px" }}>
+                    {[["task","object_detection"],["classes","[opacity, effusion]"],["format","COCO"],["split","80 / 10 / 10"]].map(([k,v]) => (
+                      <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "6px 10px", borderBottom: `1px solid ${LINE}`, background: BG2 }}>
+                        <span style={{ color: MUTED }}>{k}</span>
+                        <span style={{ color: FG }}>{v}</span>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
+
+                {/* Processing status */}
+                <motion.div
+                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.8 }} viewport={{ once: true }}
+                  style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 12px", borderRadius: "8px", background: "rgba(22,163,74,0.07)", border: "1px solid rgba(22,163,74,0.18)" }}
+                >
+                  <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                    style={{ width: "7px", height: "7px", borderRadius: "50%", background: GREEN, flexShrink: 0 }} />
+                  <span style={{ fontFamily: MONO, fontSize: "11px", color: GREEN }}>Processing 2,847 images · 1,203 annotated</span>
+                </motion.div>
               </div>
-
-              {/* Floating keyword cards */}
-              <motion.div
-                className="absolute top-8 right-8 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#53C5E6]" />
-                  <span className="text-xs font-medium text-slate-600">Computer Vision</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="absolute bottom-12 left-6 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"
-                animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#C26FCF]" />
-                  <span className="text-xs font-medium text-slate-600">Multimodal AI</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="absolute top-12 left-8 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#2178C7]" />
-                  <span className="text-xs font-medium text-slate-600">NLP</span>
-                </div>
-              </motion.div>
-
-              {/* Corner gradient accents */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#53C5E6]/8 to-transparent rounded-bl-full" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#C26FCF]/8 to-transparent rounded-tr-full" />
             </motion.div>
           </div>
         </div>
       </section>
 
-  {/* Team Section */}
-<section className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
-  <div className="absolute inset-0 light-mesh pointer-events-none" />
-  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#53C5E6]/20 to-transparent" />
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <motion.div
-      className="text-center mb-20"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      viewport={{ once: true }}
-    >
-      <motion.span
-        className="inline-block text-sm font-medium tracking-widest uppercase text-[#53C5E6] mb-4"
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        viewport={{ once: true }}
-      >
-        The People
-      </motion.span>
-      <h2 className="text-4xl md:text-5xl font-bold mb-6">
-        <span className="cosmic-heading-gradient">
-          Meet Our Team
-        </span>
-      </h2>
-      <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-        Talented researchers and engineers working together to advance AI
-      </p>
-      <motion.div
-        className="mt-6 mx-auto h-[1px] rounded-full"
-        style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
-        initial={{ width: 0 }}
-        whileInView={{ width: 120 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        viewport={{ once: true }}
-      />
-    </motion.div>
+      {/* ── TEAM — light ─────────────────────────────────────────────────── */}
+      <section style={{ padding: "120px 0 110px", background: PANEL, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
 
-    {/* Leadership Carousel */}
-    <motion.div
-      className="mb-20"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-      viewport={{ once: true }}
-    >
-      <motion.p
-        className="text-xs uppercase tracking-[0.25em] text-[#C26FCF] font-semibold mb-10 text-center"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        viewport={{ once: true }}
-      >
-        Leadership
-      </motion.p>
+          <SectionHeader eyebrow="The People" title="Meet our team." right="Talented researchers and engineers working together to advance AI." />
 
-      <div
-        className="relative max-w-4xl mx-auto"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        {/* Navigation arrows */}
-        <button
-          onClick={prevLeader}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-14 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-lg flex items-center justify-center text-slate-400 hover:text-[#2178C7] hover:border-[#2178C7]/30 hover:shadow-xl transition-all duration-300"
-          aria-label="Previous leader"
-        >
-          <ChevronLeft size={20} />
-        </button>
-        <button
-          onClick={nextLeader}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-14 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-lg flex items-center justify-center text-slate-400 hover:text-[#2178C7] hover:border-[#2178C7]/30 hover:shadow-xl transition-all duration-300"
-          aria-label="Next leader"
-        >
-          <ChevronRight size={20} />
-        </button>
-
-        {/* Carousel card */}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
-          <AnimatePresence mode="wait" custom={slideDir}>
-            {(() => {
-              const member = team[leaderIdx]
-              const accent = leaderAccents[leaderIdx]
-              return (
-                <motion.div
-                  key={leaderIdx}
-                  custom={slideDir}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="grid md:grid-cols-2"
-                >
-                  {/* Photo */}
-                  <div className="relative h-72 md:h-[420px] overflow-hidden">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      priority
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                    <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accent }} />
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex flex-col justify-center p-8 md:p-12">
-                    <div className="w-12 h-[3px] rounded-full mb-6" style={{ background: accent }} />
-                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{member.name}</h3>
-                    <p className="text-base font-semibold mb-4" style={{ color: accent }}>{member.role}</p>
-                    <p className="text-slate-500 text-sm leading-relaxed whitespace-pre-line mb-6">{member.expertise}</p>
-                    {member.socials?.linkedin && (
-                      <a
-                        href={member.socials.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 w-fit px-4 py-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 hover:text-[#2178C7] hover:bg-slate-50 hover:border-[#2178C7]/30 transition-all duration-300 text-sm"
-                      >
-                        <Linkedin size={16} />
-                        <span>LinkedIn</span>
-                      </a>
-                    )}
-                  </div>
-                </motion.div>
-              )
-            })()}
-          </AnimatePresence>
-        </div>
-
-        {/* Dot indicators with names */}
-        <div className="flex justify-center gap-6 mt-8">
-          {team.slice(0, 4).map((member, idx) => (
-            <button
-              key={member.name}
-              onClick={() => {
-                setSlideDir(idx > leaderIdx ? 1 : -1)
-                setLeaderIdx(idx)
-              }}
-              className="group relative flex flex-col items-center gap-2 outline-none"
-              aria-label={`View ${member.name}`}
-            >
-              {/* Thumbnail */}
-              <div
-                className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 transition-all duration-300 ${
-                  idx === leaderIdx
-                    ? "shadow-lg scale-110"
-                    : "border-slate-200 opacity-60 hover:opacity-100 grayscale hover:grayscale-0"
-                }`}
-                style={idx === leaderIdx ? { borderColor: leaderAccents[idx] } : {}}
-              >
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  fill
-                  className="object-cover"
-                  sizes="48px"
-                />
-              </div>
-              <span
-                className={`text-[11px] font-medium transition-all duration-300 ${
-                  idx === leaderIdx ? "text-slate-800" : "text-slate-400 group-hover:text-slate-600"
-                }`}
-              >
-                {member.name.split(" ")[0]}
-              </span>
-              {/* Active indicator bar */}
-              <div
-                className={`h-[2px] rounded-full transition-all duration-300 ${
-                  idx === leaderIdx ? "w-full" : "w-0"
-                }`}
-                style={{ background: leaderAccents[idx] }}
-              />
-            </button>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-
-    {/* Divider */}
-    {/* <motion.div
-      className="mx-auto h-px max-w-xs mb-20"
-      style={{ background: "linear-gradient(90deg, transparent, #53C5E6, #C26FCF, transparent)" }}
-      initial={{ scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-    /> */}
-
-    {/* Rest of the team */}
-    {/* <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-      viewport={{ once: true }}
-    >
-      <motion.p
-        className="text-xs uppercase tracking-[0.25em] text-[#F1B646] font-semibold mb-10 text-center"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        viewport={{ once: true }}
-      >
-        Engineering &amp; Research
-      </motion.p>
-      <motion.div
-        ref={teamRef}
-        className="flex flex-wrap justify-center gap-x-6 gap-y-10"
-        variants={containerVariants}
-        initial="hidden"
-        animate={teamInView ? "visible" : "hidden"}
-      >
-        {team.slice(4).map((member, index) => {
-          const chipColors = ["#53C5E6", "#C26FCF", "#F1B646", "#2178C7"]
-          const chipColor = chipColors[index % chipColors.length]
-          return (
-            <motion.div
-              key={member.name}
-              className="group text-center w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-19.2px)]"
-              variants={cardVariants}
-            >
-              <div className="relative mx-auto mb-4 w-28 h-28">
-                <motion.div
-                  className="absolute -inset-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: `conic-gradient(from 0deg, ${chipColor}40, transparent, ${chipColor}40)` }}
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                />
-                <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-slate-200 group-hover:border-transparent transition-colors duration-300 shadow-md">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="112px"
-                  />
-                </div>
-              </div>
-              <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#2178C7] transition-colors duration-300 mb-1">
-                {member.name}
-              </h3>
-              <span
-                className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium mb-1.5"
-                style={{ background: `${chipColor}12`, color: chipColor }}
-              >
-                {member.role}
-              </span>
-              <p className="text-slate-500 text-xs leading-relaxed max-h-0 overflow-hidden group-hover:max-h-20 transition-all duration-500">
-                {member.expertise}
-              </p>
-            </motion.div>
-          )
-        })}
-      </motion.div>
-    </motion.div> */}
-  </div>
-</section>
-
-      {/* Values Section */}
-      <section className="relative py-24 md:py-36 overflow-hidden bg-slate-50 text-slate-900">
-        <div className="absolute inset-0 dot-pattern pointer-events-none" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C26FCF]/15 to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-          >
-            <motion.span
-              className="inline-block text-sm font-medium tracking-widest uppercase text-[#C26FCF] mb-4"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              What Drives Us
-            </motion.span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="cosmic-heading-gradient">
-                Our Core Values
-              </span>
-            </h2>
-            <motion.div
-              className="mt-4 mx-auto h-[1px] rounded-full"
-              style={{ background: "linear-gradient(90deg, transparent, #C26FCF, #53C5E6, transparent)" }}
-              initial={{ width: 0 }}
-              whileInView={{ width: 120 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-            />
+          {/* Leadership label */}
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.2 }} viewport={{ once: true }}
+            style={{ fontFamily: MONO, fontSize: "10.5px", letterSpacing: "0.12em", color: FAINT, textTransform: "uppercase", textAlign: "center", marginTop: "56px", marginBottom: "28px" }}>
+            Leadership
           </motion.div>
 
-          <motion.div
-            ref={valuesRef}
-            className="grid md:grid-cols-3 gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate={valuesInView ? "visible" : "hidden"}
+          {/* Leadership Carousel */}
+          <div style={{ position: "relative", maxWidth: "900px", margin: "0 auto" }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
-            {values.map((value, index) => (
-              <motion.div
-                key={value.title}
-                className="group relative"
-                variants={cardVariants}
-                whileHover={{ y: -8 }}
+            {/* Nav arrows */}
+            {[{ dir: -1, fn: prevLeader, side: { left: "-48px" }, label: "Previous" }, { dir: 1, fn: nextLeader, side: { right: "-48px" }, label: "Next" }].map(btn => (
+              <button key={btn.label} onClick={btn.fn} aria-label={`${btn.label} leader`}
+                style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", ...btn.side, zIndex: 20, width: "36px", height: "36px", borderRadius: "50%", background: PANEL, border: `1px solid ${LINE_STR}`, boxShadow: "0 2px 8px rgba(0,0,0,0.08)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "border-color 150ms, box-shadow 150ms" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = GREEN }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = LINE_STR }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="cosmic-card relative p-8 rounded-2xl border border-slate-200 bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full">
-                  <div className="relative w-14 h-14 mb-6">
-                    <motion.div
-                      className="absolute inset-0 rounded-xl bg-[#53C5E6]/5 border border-[#53C5E6]/15"
-                      whileHover={{ rotate: 90, scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <value.icon className="w-7 h-7 text-[#53C5E6]" />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-[#2178C7] transition-colors duration-300">{value.title}</h3>
-                  <p className="text-slate-600 leading-relaxed">{value.description}</p>
-                  <motion.div
-                    className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full"
-                    style={{ background: "linear-gradient(90deg, #53C5E640, transparent)" }}
-                    initial={{ scaleX: 0, originX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                    viewport={{ once: true }}
-                  />
-                </div>
-              </motion.div>
+                {btn.dir < 0 ? <ChevronLeft size={17} color={MUTED} /> : <ChevronRight size={17} color={MUTED} />}
+              </button>
             ))}
-          </motion.div>
+
+            {/* Card */}
+            <div style={{ borderRadius: "16px", border: `1px solid ${LINE}`, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
+              <AnimatePresence mode="wait" custom={slideDir}>
+                {(() => {
+                  const m = team[leaderIdx]
+                  return (
+                    <motion.div key={leaderIdx} custom={slideDir} variants={slideVariants} initial="enter" animate="center" exit="exit"
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
+                    >
+                      {/* Photo */}
+                      <div style={{ position: "relative", height: "420px", overflow: "hidden" }}>
+                        <Image src={m.image} alt={m.name} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 450px" priority />
+                        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.2), transparent)" }} />
+                        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: GREEN }} />
+                      </div>
+                      {/* Info */}
+                      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "48px", background: PANEL }}>
+                        <div style={{ width: "40px", height: "3px", borderRadius: "2px", background: GREEN, marginBottom: "24px" }} />
+                        <h3 style={{ fontSize: "28px", fontWeight: 500, letterSpacing: "-0.03em", color: FG, margin: "0 0 6px" }}>{m.name}</h3>
+                        <p style={{ fontSize: "14px", fontWeight: 500, color: GREEN, margin: "0 0 16px" }}>{m.role}</p>
+                        <p style={{ fontSize: "14px", color: MUTED, lineHeight: 1.6, whiteSpace: "pre-line", margin: "0 0 24px" }}>{m.expertise}</p>
+                        {m.socials?.linkedin && (
+                          <a href={m.socials.linkedin} target="_blank" rel="noopener noreferrer"
+                            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "8px", background: BG2, border: `1px solid ${LINE}`, fontSize: "13px", color: MUTED, textDecoration: "none", width: "fit-content", transition: "color 120ms, border-color 120ms" }}
+                            onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = FG; el.style.borderColor = GREEN }}
+                            onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = MUTED; el.style.borderColor = LINE }}
+                          >
+                            <Linkedin size={15} /> LinkedIn
+                          </a>
+                        )}
+                      </div>
+                    </motion.div>
+                  )
+                })()}
+              </AnimatePresence>
+            </div>
+
+            {/* Dot nav */}
+            <div style={{ display: "flex", justifyContent: "center", gap: "24px", marginTop: "28px" }}>
+              {team.map((m, idx) => (
+                <button key={m.name} onClick={() => { setSlideDir(idx > leaderIdx ? 1 : -1); setLeaderIdx(idx) }}
+                  aria-label={`View ${m.name}`}
+                  style={{ background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: 0 }}
+                >
+                  <div style={{ position: "relative", width: "44px", height: "44px", borderRadius: "50%", overflow: "hidden", border: `2px solid ${idx === leaderIdx ? GREEN : LINE}`, opacity: idx === leaderIdx ? 1 : 0.55, transition: "border-color 200ms, opacity 200ms", transform: idx === leaderIdx ? "scale(1.1)" : "scale(1)" }}>
+                    <Image src={m.image} alt={m.name} fill style={{ objectFit: "cover" }} sizes="44px" />
+                  </div>
+                  <span style={{ fontFamily: MONO, fontSize: "10px", color: idx === leaderIdx ? FG : FAINT, letterSpacing: "0.04em", transition: "color 200ms" }}>
+                    {m.name.split(" ")[0]}
+                  </span>
+                  <div style={{ height: "2px", borderRadius: "1px", background: GREEN, transition: "width 200ms", width: idx === leaderIdx ? "100%" : "0" }} />
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-  {/* Roadmap Section */}
-      <section className="relative py-24 md:py-36 overflow-hidden bg-white text-slate-900">
-        <div className="absolute inset-0 light-mesh pointer-events-none" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#F1B646]/20 to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* ── VALUES — dark ────────────────────────────────────────────────── */}
+      <section style={{ padding: "120px 0 110px", background: DARK, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
 
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-          >
-            <motion.span
-              className="inline-block text-sm font-medium tracking-widest uppercase text-[#F1B646] mb-4"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              Our Journey
-            </motion.span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="cosmic-heading-gradient">Roadmap</span>
-            </h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
-              From identifying the problem to building AI that evolves — here&apos;s where we&apos;ve been and where we&apos;re going.
-            </p>
-            <motion.div
-              className="mt-6 mx-auto h-[1px] rounded-full"
-              style={{ background: "linear-gradient(90deg, transparent, #F1B646, #53C5E6, transparent)" }}
-              initial={{ width: 0 }}
-              whileInView={{ width: 120 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-            />
-          </motion.div>
+          <SectionHeader eyebrow="What Drives Us" title="Our core values." right="The principles that guide every decision we make as a team." />
 
-          {/* Desktop: horizontal timeline */}
-          <div className="hidden md:block relative">
-            {/* Background connector line */}
-            <div className="absolute top-7 left-[12.5%] right-[12.5%] h-px bg-slate-100" />
-            {/* Animated progress line — up to node 3 (current) */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px", marginTop: "60px" }}>
+            {values.map((v, i) => (
+              <motion.div
+                key={v.title}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+                whileHover={{ y: -4 }}
+                style={{ background: PANEL, border: `1px solid ${LINE}`, borderRadius: "16px", padding: "32px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", transition: "border-color 200ms, box-shadow 200ms" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = GREEN; el.style.boxShadow = "0 8px 32px rgba(22,163,74,0.10)" }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = LINE; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)" }}
+              >
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(22,163,74,0.08)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+                  <v.icon size={22} color={GREEN} />
+                </div>
+                <h3 style={{ fontSize: "20px", fontWeight: 500, letterSpacing: "-0.02em", color: FG, marginBottom: "12px" }}>{v.title}</h3>
+                <p style={{ fontSize: "14px", color: MUTED, lineHeight: 1.65, margin: 0 }}>{v.description}</p>
+                {/* Bottom bar */}
+                <motion.div style={{ position: "absolute", bottom: 0, left: "24px", right: "24px", height: "2px", background: GREEN, transformOrigin: "left" }}
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+                  viewport={{ once: true }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ROADMAP — light ──────────────────────────────────────────────── */}
+      <section style={{ padding: "120px 0 110px", background: PANEL, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+
+          <SectionHeader
+            eyebrow="Our Journey"
+            title="Roadmap."
+            right="From identifying the problem to building AI that evolves — here's where we've been and where we're going."
+          />
+
+          {/* Horizontal timeline */}
+          <div style={{ position: "relative", marginTop: "64px" }}>
+            {/* Background line */}
+            <div style={{ position: "absolute", top: "27px", left: "12.5%", right: "12.5%", height: "1px", background: LINE_STR }} />
+            {/* Progress line (up to current = stage 3) */}
             <motion.div
-              className="absolute top-7 left-[12.5%] h-px"
-              style={{ background: "linear-gradient(90deg, #2178C7, #53C5E6)" }}
+              style={{ position: "absolute", top: "27px", left: "12.5%", height: "1px", background: GREEN }}
               initial={{ width: 0 }}
               whileInView={{ width: "50%" }}
               transition={{ duration: 1.4, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
             />
 
-            <div className="grid grid-cols-4 gap-6">
-              {roadmapStages.map((stage, index) => (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }}>
+              {roadmapStages.map((stage, i) => (
                 <motion.div
                   key={stage.title}
-                  className="relative flex flex-col items-center"
-                  initial={{ opacity: 0, y: 40 }}
+                  initial={{ opacity: 0, y: 36 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.6, delay: 0.2 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
                   viewport={{ once: true }}
+                  style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
                 >
-                  {/* Timeline node */}
-                  <div className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center mb-5 ${
-                    stage.future
-                      ? "bg-white border-2 border-dashed border-slate-200"
-                      : stage.current
-                        ? "bg-gradient-to-br from-[#2178C7] to-[#53C5E6] shadow-lg shadow-[#2178C7]/30"
-                        : "bg-white border-2 border-[#2178C7]/25 shadow-md"
-                  }`}>
+                  {/* Node */}
+                  <div style={{
+                    position: "relative", zIndex: 10,
+                    width: "54px", height: "54px", borderRadius: "50%",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    marginBottom: "20px",
+                    background: stage.future ? BG2 : stage.current ? GREEN : PANEL,
+                    border: `2px ${stage.future ? "dashed" : "solid"} ${stage.future ? LINE_STR : stage.current ? GREEN_2 : LINE_STR}`,
+                    boxShadow: stage.current ? "0 0 0 6px rgba(22,163,74,0.12)" : "0 2px 8px rgba(0,0,0,0.06)",
+                  }}>
                     {stage.current && (
-                      <motion.div
-                        className="absolute -inset-2 rounded-full"
-                        style={{ background: "radial-gradient(circle, rgba(33,120,199,0.2), transparent)" }}
-                        animate={{ scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] }}
+                      <motion.div style={{ position: "absolute", inset: "-6px", borderRadius: "50%", background: "radial-gradient(circle, rgba(22,163,74,0.2), transparent)" }}
+                        animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
                         transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
                       />
                     )}
-                    <stage.icon className={`w-6 h-6 ${
-                      stage.future ? "text-slate-300" : stage.current ? "text-white" : "text-[#2178C7]"
-                    }`} />
+                    <stage.icon size={22} color={stage.future ? FAINT : stage.current ? "#fff" : GREEN} />
                   </div>
 
-                  {/* Date label */}
-                  <span className={`text-[11px] font-semibold tracking-wider uppercase mb-5 ${
-                    stage.future ? "text-slate-300" : stage.current ? "text-[#2178C7]" : "text-slate-400"
-                  }`}>
+                  {/* Date */}
+                  <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: stage.future ? FAINT : stage.current ? GREEN : MUTED, marginBottom: "20px", textAlign: "center" }}>
                     {stage.date}
                   </span>
 
                   {/* Card */}
-                  <motion.div
-                    className={`relative w-full flex-1 rounded-2xl p-5 ${
-                      stage.future
-                        ? "border border-dashed border-slate-200 bg-slate-50/60"
-                        : stage.current
-                          ? "border border-[#2178C7]/20 bg-white shadow-2xl shadow-[#2178C7]/6 ring-1 ring-[#2178C7]/10"
-                          : "border border-slate-200 bg-white shadow-lg"
-                    }`}
-                    whileHover={!stage.future ? { y: -5, transition: { duration: 0.25 } } : {}}
-                  >
+                  <div style={{ width: "100%", position: "relative" }}>
                     {stage.current && (
-                      <motion.div
-                        className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full text-white text-[10px] font-bold tracking-wider uppercase shadow-md whitespace-nowrap"
-                        style={{ background: "linear-gradient(135deg, #2178C7, #53C5E6)" }}
-                        initial={{ opacity: 0, y: 6 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9 }}
-                        viewport={{ once: true }}
-                      >
+                      <div style={{ position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)", padding: "3px 10px", borderRadius: "20px", background: GREEN, color: "#fff", fontFamily: MONO, fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", whiteSpace: "nowrap", boxShadow: "0 2px 8px rgba(22,163,74,0.3)" }}>
                         Current Stage
-                      </motion.div>
+                      </div>
                     )}
-                    <h3 className={`text-sm font-bold mb-3.5 ${
-                      stage.future ? "text-slate-400" : "text-slate-900"
-                    }`}>
-                      {stage.title}
-                    </h3>
-                    <ul className="space-y-2">
-                      {stage.points.map((point) => (
-                        <li key={point} className="flex items-start gap-2">
-                          <div className={`w-[5px] h-[5px] rounded-full mt-[6px] flex-shrink-0 ${
-                            stage.future ? "bg-slate-300" : stage.current ? "bg-[#2178C7]" : "bg-[#53C5E6]"
-                          }`} />
-                          <span className={`text-xs leading-relaxed ${
-                            stage.future ? "text-slate-400" : "text-slate-500"
-                          }`}>
-                            {point}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
+                    <div style={{
+                      borderRadius: "14px",
+                      padding: "20px",
+                      background: PANEL,
+                      border: `1px solid ${stage.future ? LINE : stage.current ? GREEN + "44" : LINE}`,
+                      boxShadow: stage.current ? "0 4px 20px rgba(22,163,74,0.08)" : "0 2px 8px rgba(0,0,0,0.04)",
+                    }}>
+                      <h3 style={{ fontSize: "14px", fontWeight: 500, color: stage.future ? FAINT : FG, margin: "0 0 12px", letterSpacing: "-0.01em" }}>
+                        {stage.title}
+                      </h3>
+                      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "7px" }}>
+                        {stage.points.map(point => (
+                          <li key={point} style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                            <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: stage.future ? FAINT : GREEN, flexShrink: 0, marginTop: "5px" }} />
+                            <span style={{ fontSize: "12px", color: stage.future ? FAINT : MUTED, lineHeight: 1.5 }}>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
-
-          {/* Mobile: vertical timeline */}
-          <div className="md:hidden relative space-y-5">
-            <div className="absolute left-7 top-7 bottom-7 w-px bg-gradient-to-b from-[#2178C7]/50 via-[#53C5E6]/30 to-slate-200" />
-            {roadmapStages.map((stage, index) => (
-              <motion.div
-                key={stage.title}
-                className="flex gap-4 relative"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className={`relative z-10 flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center ${
-                  stage.future
-                    ? "bg-white border-2 border-dashed border-slate-200"
-                    : stage.current
-                      ? "bg-gradient-to-br from-[#2178C7] to-[#53C5E6] shadow-lg"
-                      : "bg-white border-2 border-[#2178C7]/25 shadow-md"
-                }`}>
-                  <stage.icon className={`w-6 h-6 ${
-                    stage.future ? "text-slate-300" : stage.current ? "text-white" : "text-[#2178C7]"
-                  }`} />
-                </div>
-
-                <div className={`flex-grow rounded-2xl border p-5 ${
-                  stage.current
-                    ? "border-[#2178C7]/20 bg-white shadow-xl ring-1 ring-[#2178C7]/10"
-                    : stage.future
-                      ? "border-dashed border-slate-200 bg-slate-50/60"
-                      : "border-slate-200 bg-white shadow-md"
-                }`}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <h3 className={`text-sm font-bold ${stage.future ? "text-slate-400" : "text-slate-900"}`}>
-                      {stage.title}
-                    </h3>
-                    {stage.current && (
-                      <span className="px-2.5 py-0.5 rounded-full text-white text-[10px] font-bold whitespace-nowrap" style={{ background: "linear-gradient(135deg, #2178C7, #53C5E6)" }}>
-                        Now
-                      </span>
-                    )}
-                  </div>
-                  <p className={`text-[10px] font-semibold tracking-wider uppercase mb-3 ${
-                    stage.future ? "text-slate-300" : stage.current ? "text-[#2178C7]" : "text-slate-400"
-                  }`}>
-                    {stage.date}
-                  </p>
-                  <ul className="space-y-1.5">
-                    {stage.points.map((point) => (
-                      <li key={point} className="flex items-start gap-2">
-                        <div className={`w-[5px] h-[5px] rounded-full mt-[6px] flex-shrink-0 ${
-                          stage.future ? "bg-slate-300" : "bg-[#53C5E6]"
-                        }`} />
-                        <span className={`text-xs leading-relaxed ${
-                          stage.future ? "text-slate-400" : "text-slate-500"
-                        }`}>
-                          {point}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
         </div>
       </section>
 
       <Footer />
     </main>
+  )
+}
+
+// ── Shared section header ─────────────────────────────────────────────────────
+function SectionHeader({ eyebrow, title, right }: { eyebrow: string; title: string; right: string }) {
+  return (
+    <motion.div
+      style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px" }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true }}
+    >
+      <div>
+        <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
+          {eyebrow}
+        </div>
+        <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: "#0c0c0a", margin: 0 }}>
+          {title}
+        </h2>
+      </div>
+      <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0, textAlign: "right" }}>
+        {right}
+      </p>
+    </motion.div>
   )
 }

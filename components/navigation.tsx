@@ -21,8 +21,7 @@ interface NavigationProps {
 export default function Navigation({ scrollY }: NavigationProps) {
   const [waitlistOpen, setWaitlistOpen] = useState(false)
   const pathname = usePathname()
-  const isHome = pathname === "/"
-  const scrolled = scrollY > 8 || !isHome
+  const scrolled = scrollY > 8
 
   return (
     <>
@@ -80,7 +79,7 @@ export default function Navigation({ scrollY }: NavigationProps) {
               {/* <NavLink href="/services" label="Solutions" active={pathname === "/services"} /> */}
 
               <a
-                href="https://auta.perceptron.ai"
+                href="https://auta.perceptronai.org"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={linkStyle(false)}
