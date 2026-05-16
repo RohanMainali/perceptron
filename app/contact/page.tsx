@@ -6,6 +6,7 @@ import { Send, ChevronDown, CheckCircle2, Loader2, Mail, Linkedin, Facebook, Arr
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import MeshCanvas from "@/components/mesh-canvas"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 const FG       = "#0c0c0a"
 const MUTED    = "#5a5a52"
@@ -24,6 +25,7 @@ export default function ContactPage() {
   const [isSubmitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted]     = useState(false)
   const [error, setError]             = useState<string | null>(null)
+  const isMobile                      = useIsMobile()
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY)
@@ -64,10 +66,10 @@ export default function ContactPage() {
       <Navigation scrollY={Math.max(scrollY, 9)} />
 
       {/* ── Full-height split ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "100vh" }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", minHeight: isMobile ? "auto" : "100vh" }}>
 
         {/* ── LEFT: dark panel ── */}
-        <div style={{ position: "relative", background: DARK, overflow: "hidden", padding: "148px 72px 80px" }}>
+        <div style={{ position: "relative", background: DARK, overflow: "hidden", padding: isMobile ? "96px 24px 40px" : "148px 72px 80px" }}>
           <MeshCanvas />
 
           {/* green glow */}
@@ -77,19 +79,19 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", height: "100%" }}
+            style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", height: isMobile ? "auto" : "100%" }}
           >
             {/* Heading */}
-            <h1 style={{ fontSize: "clamp(40px, 4.5vw, 64px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.05, color: "#fff", margin: "0 0 24px" }}>
-              Let&apos;s build<br />something<br /><em style={{ fontStyle: "italic", color: GREEN }}>together.</em>
+            <h1 style={{ fontSize: isMobile ? "clamp(32px, 8vw, 48px)" : "clamp(40px, 4.5vw, 64px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.05, color: "#fff", margin: "0 0 20px" }}>
+              Let&apos;s build{!isMobile && <br />} something{!isMobile && <br />} <em style={{ fontStyle: "italic", color: GREEN }}>together.</em>
             </h1>
 
-            <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7, margin: "0 0 52px", maxWidth: "340px" }}>
+            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7, margin: isMobile ? "0 0 28px" : "0 0 52px", maxWidth: "340px" }}>
               Have a project in mind? We work with teams across AI research, computer vision, and data annotation.
             </p>
 
             {/* Contact links */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginBottom: "52px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginBottom: isMobile ? "28px" : "52px" }}>
               {[
                 { icon: Mail,     label: "support@perceptronai.org",                        href: "mailto:support@perceptronai.org" },
                 { icon: Linkedin, label: "LinkedIn",                                         href: "https://www.linkedin.com/in/perceptronai/" },
@@ -112,7 +114,7 @@ export default function ContactPage() {
             </div>
 
             {/* Stats row */}
-            <div style={{ marginTop: "auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+            <div style={{ marginTop: isMobile ? "0" : "auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: isMobile ? "16px" : "24px" }}>
               {[
                 { label: "Response", value: "1–2 days" },
                 { label: "HQ",       value: "Delaware, USA" },
@@ -129,7 +131,7 @@ export default function ContactPage() {
         </div>
 
         {/* ── RIGHT: form panel ── */}
-        <div style={{ background: BG2, padding: "148px 72px 80px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div style={{ background: BG2, padding: isMobile ? "40px 24px 56px" : "148px 72px 80px", display: "flex", flexDirection: "column", justifyContent: isMobile ? "flex-start" : "center" }}>
           {submitted ? (
             <motion.div
               style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "flex-start" }}
@@ -154,19 +156,19 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div style={{ marginBottom: "44px" }}>
+              <div style={{ marginBottom: isMobile ? "28px" : "44px" }}>
                 <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", color: GREEN, textTransform: "uppercase", marginBottom: "12px" }}>
                   Send a message
                 </div>
-                <h2 style={{ fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 500, letterSpacing: "-0.03em", color: FG, margin: 0 }}>
-                  Tell us about<br />your project.
+                <h2 style={{ fontSize: isMobile ? "clamp(24px, 6vw, 32px)" : "clamp(28px, 3vw, 40px)", fontWeight: 500, letterSpacing: "-0.03em", color: FG, margin: 0 }}>
+                  Tell us about your project.
                 </h2>
               </div>
 
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: isMobile ? "24px" : "32px" }}>
 
                 {/* Name + Email */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? "24px" : "32px" }}>
                   {([
                     { label: "Name",  type: "text",  field: "name"  as const, placeholder: "Your name" },
                     { label: "Email", type: "email", field: "email" as const, placeholder: "your@email.com" },
@@ -231,14 +233,14 @@ export default function ContactPage() {
                   </p>
                 )}
 
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "20px" }}>
+                <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "stretch" : "center", justifyContent: "space-between", gap: "16px" }}>
                   <span style={{ fontSize: "11px", fontFamily: MONO, color: FAINT }}>
                     We&apos;ll respond within 1–2 business days.
                   </span>
                   <button
                     type="submit" disabled={isSubmitting}
                     style={{
-                      display: "inline-flex", alignItems: "center", gap: "8px",
+                      display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "8px",
                       padding: "13px 26px", borderRadius: "9px",
                       background: GREEN, color: "#fff", border: `1px solid ${GREEN_2}`,
                       fontSize: "14px", fontWeight: 500, flexShrink: 0, whiteSpace: "nowrap",
@@ -246,6 +248,7 @@ export default function ContactPage() {
                       opacity: isSubmitting ? 0.7 : 1,
                       boxShadow: "0 1px 4px rgba(22,163,74,0.3)",
                       transition: "background 120ms, transform 100ms",
+                      width: isMobile ? "100%" : "auto",
                     }}
                     onMouseEnter={e => { if (!isSubmitting) { e.currentTarget.style.background = GREEN_2; e.currentTarget.style.transform = "translateY(-1px)" } }}
                     onMouseLeave={e => { e.currentTarget.style.background = GREEN; e.currentTarget.style.transform = "" }}
