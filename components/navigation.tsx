@@ -141,7 +141,6 @@ export default function Navigation({ scrollY }: NavigationProps) {
                   borderRadius: "8px",
                   border: `1px solid ${LINE}`,
                   background: "transparent",
-                  display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   cursor: "pointer",

@@ -1,12 +1,14 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { useEffect, useState, useRef, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Image from "next/image"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import MeshCanvas from "@/components/mesh-canvas"
-import { Brain, Zap, Users, Linkedin, ChevronLeft, ChevronRight, Lightbulb, Code2, Rocket, Check } from "lucide-react"
+import { Brain, Zap, Users, ChevronLeft, ChevronRight, Lightbulb, Code2, Rocket } from "lucide-react"
+import { SiLinkedin } from "react-icons/si"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 // ── Design tokens ────────────────────────────────────────────────────────────
 const FG       = "#0c0c0a"
@@ -98,6 +100,7 @@ export default function AboutPage() {
   const [leaderIdx, setLeaderIdx] = useState(0)
   const [slideDir, setSlideDir] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const isMobile = useIsMobile()
 
   const nextLeader = useCallback(() => { setSlideDir(1);  setLeaderIdx(p => (p + 1) % 4) }, [])
   const prevLeader = useCallback(() => { setSlideDir(-1); setLeaderIdx(p => (p - 1 + 4) % 4) }, [])
@@ -115,18 +118,16 @@ export default function AboutPage() {
           position: "relative",
           background: PANEL,
           borderBottom: `1px solid ${LINE_STR}`,
-          paddingTop: "148px",
-          paddingBottom: "100px",
+          paddingTop: isMobile ? "96px" : "148px",
+          paddingBottom: isMobile ? "52px" : "100px",
           overflow: "hidden",
           color: FG,
         }}
       >
-        {/* Gravity mesh — identical to landing hero */}
         <MeshCanvas />
-        {/* Green ambient glow */}
         <div aria-hidden="true" style={{ position: "absolute", top: "-18%", left: "50%", transform: "translateX(-50%)", width: "900px", height: "560px", background: "radial-gradient(ellipse at 50% 40%, rgba(22,163,74,0.12) 0%, rgba(22,163,74,0.04) 45%, transparent 68%)", zIndex: 0, pointerEvents: "none" }} />
 
-        <div style={{ position: "relative", zIndex: 2, maxWidth: "1280px", margin: "0 auto", padding: "0 40px", textAlign: "center" }}>
+        <div style={{ position: "relative", zIndex: 2, maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px", textAlign: "center" }}>
           <motion.h1
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -140,7 +141,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.3 }}
-            style={{ margin: "28px auto 0", maxWidth: "520px", fontSize: "17px", lineHeight: 1.6, color: MUTED }}
+            style={{ margin: isMobile ? "20px auto 0" : "28px auto 0", maxWidth: "520px", fontSize: isMobile ? "15px" : "17px", lineHeight: 1.6, color: MUTED }}
           >
             We are a team of AI researchers and engineers dedicated to building the next generation of intelligent systems that solve real-world problems.
           </motion.p>
@@ -148,20 +149,20 @@ export default function AboutPage() {
       </section>
 
       {/* ── MISSION — dark ───────────────────────────────────────────────── */}
-      <section style={{ padding: "120px 0 110px", background: DARK, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <section style={{ padding: isMobile ? "56px 0 48px" : "120px 0 110px", background: DARK, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
           <SectionHeader eyebrow="Our Purpose" title="Our Mission." right="At Perceptron, we believe AI has the power to transform industries and improve lives." />
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "center", marginTop: "60px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? "32px" : "64px", alignItems: "center", marginTop: isMobile ? "32px" : "60px" }}>
             {/* Text */}
-            <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true }}>
-              <p style={{ fontSize: "16px", color: MUTED, lineHeight: 1.75, marginBottom: "20px" }}>
+            <motion.div initial={{ opacity: 0, x: isMobile ? 0 : -24 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true }}>
+              <p style={{ fontSize: isMobile ? "14px" : "16px", color: MUTED, lineHeight: 1.7, marginBottom: "16px" }}>
                 At Perceptron, we believe that artificial intelligence has the power to transform industries and improve
                 lives. Our mission is to develop cutting-edge AI solutions that are not only technically advanced but
                 also practical and impactful.
               </p>
-              <p style={{ fontSize: "16px", color: MUTED, lineHeight: 1.75 }}>
+              <p style={{ fontSize: isMobile ? "14px" : "16px", color: MUTED, lineHeight: 1.7 }}>
                 We focus on three core areas: computer vision, natural language processing, and multimodal AI systems.
                 Through rigorous research and development, we create tools and services that help organizations harness
                 the power of AI.
@@ -178,7 +179,7 @@ export default function AboutPage() {
 
             {/* Auta demo window */}
             <motion.div
-              initial={{ opacity: 0, x: 24 }}
+              initial={{ opacity: 0, x: isMobile ? 0 : 24 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
@@ -192,11 +193,13 @@ export default function AboutPage() {
                 <div style={{ flex: 1, maxWidth: "180px", margin: "0 auto", height: "22px", borderRadius: "5px", background: BG2, border: `1px solid ${LINE}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <span style={{ fontFamily: MONO, fontSize: "10px", color: FAINT }}>auta.perceptron.ai</span>
                 </div>
-                <div style={{ display: "flex", gap: "2px", marginLeft: "auto" }}>
-                  {["Annotate","Plan","Export"].map((tab, i) => (
-                    <span key={tab} style={{ fontFamily: MONO, fontSize: "10px", padding: "3px 8px", borderRadius: "4px", color: i === 0 ? FG : FAINT, background: i === 0 ? BG2 : "transparent" }}>{tab}</span>
-                  ))}
-                </div>
+                {!isMobile && (
+                  <div style={{ display: "flex", gap: "2px", marginLeft: "auto" }}>
+                    {["Annotate","Plan","Export"].map((tab, i) => (
+                      <span key={tab} style={{ fontFamily: MONO, fontSize: "10px", padding: "3px 8px", borderRadius: "4px", color: i === 0 ? FG : FAINT, background: i === 0 ? BG2 : "transparent" }}>{tab}</span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Chat area */}
@@ -244,32 +247,37 @@ export default function AboutPage() {
       </section>
 
       {/* ── TEAM — light ─────────────────────────────────────────────────── */}
-      <section style={{ padding: "120px 0 110px", background: PANEL, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <section style={{ padding: isMobile ? "56px 0 48px" : "120px 0 110px", background: PANEL, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
           <SectionHeader eyebrow="The People" title="Meet our team." right="Talented researchers and engineers working together to advance AI." />
 
           {/* Leadership label */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.2 }} viewport={{ once: true }}
-            style={{ fontFamily: MONO, fontSize: "10.5px", letterSpacing: "0.12em", color: FAINT, textTransform: "uppercase", textAlign: "center", marginTop: "56px", marginBottom: "28px" }}>
+            style={{ fontFamily: MONO, fontSize: "10.5px", letterSpacing: "0.12em", color: FAINT, textTransform: "uppercase", textAlign: "center", marginTop: isMobile ? "28px" : "56px", marginBottom: "20px" }}>
             Leadership
           </motion.div>
 
           {/* Leadership Carousel */}
-          <div style={{ position: "relative", maxWidth: "900px", margin: "0 auto" }}
+          <div style={{ position: "relative", maxWidth: isMobile ? "100%" : "900px", margin: "0 auto" }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
             {/* Nav arrows */}
-            {[{ dir: -1, fn: prevLeader, side: { left: "-48px" }, label: "Previous" }, { dir: 1, fn: nextLeader, side: { right: "-48px" }, label: "Next" }].map(btn => (
-              <button key={btn.label} onClick={btn.fn} aria-label={`${btn.label} leader`}
-                style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", ...btn.side, zIndex: 20, width: "36px", height: "36px", borderRadius: "50%", background: PANEL, border: `1px solid ${LINE_STR}`, boxShadow: "0 2px 8px rgba(0,0,0,0.08)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "border-color 150ms, box-shadow 150ms" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = GREEN }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = LINE_STR }}
-              >
-                {btn.dir < 0 ? <ChevronLeft size={17} color={MUTED} /> : <ChevronRight size={17} color={MUTED} />}
-              </button>
-            ))}
+            <button onClick={prevLeader} aria-label="Previous leader"
+              style={{ position: "absolute", top: isMobile ? "150px" : "50%", transform: isMobile ? "none" : "translateY(-50%)", left: isMobile ? "10px" : "-48px", zIndex: 20, width: "36px", height: "36px", borderRadius: "50%", background: "rgba(255,255,255,0.9)", backdropFilter: "blur(8px)", border: `1px solid ${LINE_STR}`, boxShadow: "0 2px 8px rgba(0,0,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "border-color 150ms" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = GREEN }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = LINE_STR }}
+            >
+              <ChevronLeft size={17} color={MUTED} />
+            </button>
+            <button onClick={nextLeader} aria-label="Next leader"
+              style={{ position: "absolute", top: isMobile ? "150px" : "50%", transform: isMobile ? "none" : "translateY(-50%)", right: isMobile ? "10px" : "-48px", zIndex: 20, width: "36px", height: "36px", borderRadius: "50%", background: "rgba(255,255,255,0.9)", backdropFilter: "blur(8px)", border: `1px solid ${LINE_STR}`, boxShadow: "0 2px 8px rgba(0,0,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "border-color 150ms" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = GREEN }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = LINE_STR }}
+            >
+              <ChevronRight size={17} color={MUTED} />
+            </button>
 
             {/* Card */}
             <div style={{ borderRadius: "16px", border: `1px solid ${LINE}`, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
@@ -279,27 +287,37 @@ export default function AboutPage() {
                   return (
                     <motion.div key={leaderIdx} custom={slideDir} variants={slideVariants} initial="enter" animate="center" exit="exit"
                       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
+                      style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}
                     >
                       {/* Photo */}
-                      <div style={{ position: "relative", height: "420px", overflow: "hidden" }}>
-                        <Image src={m.image} alt={m.name} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 450px" priority />
-                        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.2), transparent)" }} />
+                      <div style={{ position: "relative", height: isMobile ? "300px" : "420px", overflow: "hidden" }}>
+                        <Image src={m.image} alt={m.name} fill style={{ objectFit: "cover", objectPosition: "center 25%" }} sizes="(max-width: 768px) 100vw, 450px" priority />
+                        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 45%, transparent 75%)" }} />
                         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: GREEN }} />
+                        {/* Name overlay on mobile photo */}
+                        {isMobile && (
+                          <div style={{ position: "absolute", bottom: "18px", left: "20px", right: "20px" }}>
+                            <h3 style={{ fontSize: "20px", fontWeight: 600, letterSpacing: "-0.02em", color: "#fff", margin: "0 0 4px", textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>{m.name}</h3>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "3px 9px", borderRadius: "20px", background: "rgba(22,163,74,0.85)", backdropFilter: "blur(4px)" }}>
+                              <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#86efac", flexShrink: 0 }} />
+                              <span style={{ fontSize: "11px", fontWeight: 500, color: "#fff", letterSpacing: "0.01em" }}>{m.role}</span>
+                            </span>
+                          </div>
+                        )}
                       </div>
                       {/* Info */}
-                      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "48px", background: PANEL }}>
-                        <div style={{ width: "40px", height: "3px", borderRadius: "2px", background: GREEN, marginBottom: "24px" }} />
-                        <h3 style={{ fontSize: "28px", fontWeight: 500, letterSpacing: "-0.03em", color: FG, margin: "0 0 6px" }}>{m.name}</h3>
-                        <p style={{ fontSize: "14px", fontWeight: 500, color: GREEN, margin: "0 0 16px" }}>{m.role}</p>
-                        <p style={{ fontSize: "14px", color: MUTED, lineHeight: 1.6, whiteSpace: "pre-line", margin: "0 0 24px" }}>{m.expertise}</p>
+                      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: isMobile ? "20px 18px" : "48px", background: PANEL }}>
+                        {!isMobile && <div style={{ width: "40px", height: "3px", borderRadius: "2px", background: GREEN, marginBottom: "24px" }} />}
+                        {!isMobile && <h3 style={{ fontSize: "28px", fontWeight: 500, letterSpacing: "-0.03em", color: FG, margin: "0 0 6px" }}>{m.name}</h3>}
+                        {!isMobile && <p style={{ fontSize: "14px", fontWeight: 500, color: GREEN, margin: "0 0 16px" }}>{m.role}</p>}
+                        <p style={{ fontSize: isMobile ? "13px" : "14px", color: MUTED, lineHeight: 1.6, whiteSpace: "pre-line", margin: `0 0 ${isMobile ? "14px" : "24px"}` }}>{m.expertise}</p>
                         {m.socials?.linkedin && (
                           <a href={m.socials.linkedin} target="_blank" rel="noopener noreferrer"
                             style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "8px", background: BG2, border: `1px solid ${LINE}`, fontSize: "13px", color: MUTED, textDecoration: "none", width: "fit-content", transition: "color 120ms, border-color 120ms" }}
                             onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = FG; el.style.borderColor = GREEN }}
                             onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = MUTED; el.style.borderColor = LINE }}
                           >
-                            <Linkedin size={15} /> LinkedIn
+                            <SiLinkedin size={15} /> LinkedIn
                           </a>
                         )}
                       </div>
@@ -310,16 +328,16 @@ export default function AboutPage() {
             </div>
 
             {/* Dot nav */}
-            <div style={{ display: "flex", justifyContent: "center", gap: "24px", marginTop: "28px" }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: isMobile ? "20px" : "24px", marginTop: "28px" }}>
               {team.map((m, idx) => (
                 <button key={m.name} onClick={() => { setSlideDir(idx > leaderIdx ? 1 : -1); setLeaderIdx(idx) }}
                   aria-label={`View ${m.name}`}
                   style={{ background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: 0 }}
                 >
-                  <div style={{ position: "relative", width: "44px", height: "44px", borderRadius: "50%", overflow: "hidden", border: `2px solid ${idx === leaderIdx ? GREEN : LINE}`, opacity: idx === leaderIdx ? 1 : 0.55, transition: "border-color 200ms, opacity 200ms", transform: idx === leaderIdx ? "scale(1.1)" : "scale(1)" }}>
-                    <Image src={m.image} alt={m.name} fill style={{ objectFit: "cover" }} sizes="44px" />
+                  <div style={{ position: "relative", width: isMobile ? "36px" : "44px", height: isMobile ? "36px" : "44px", borderRadius: "50%", overflow: "hidden", border: `2px solid ${idx === leaderIdx ? GREEN : LINE}`, opacity: idx === leaderIdx ? 1 : 0.55, transition: "border-color 200ms, opacity 200ms", transform: idx === leaderIdx ? "scale(1.1)" : "scale(1)" }}>
+                    <Image src={m.image} alt={m.name} fill style={{ objectFit: "cover", objectPosition: "center 25%" }} sizes="44px" />
                   </div>
-                  <span style={{ fontFamily: MONO, fontSize: "10px", color: idx === leaderIdx ? FG : FAINT, letterSpacing: "0.04em", transition: "color 200ms" }}>
+                  <span style={{ fontFamily: MONO, fontSize: "9px", color: idx === leaderIdx ? FG : FAINT, letterSpacing: "0.04em", transition: "color 200ms" }}>
                     {m.name.split(" ")[0]}
                   </span>
                   <div style={{ height: "2px", borderRadius: "1px", background: GREEN, transition: "width 200ms", width: idx === leaderIdx ? "100%" : "0" }} />
@@ -331,12 +349,12 @@ export default function AboutPage() {
       </section>
 
       {/* ── VALUES — dark ────────────────────────────────────────────────── */}
-      <section style={{ padding: "120px 0 110px", background: DARK, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <section style={{ padding: isMobile ? "56px 0 48px" : "120px 0 110px", background: DARK, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
           <SectionHeader eyebrow="What Drives Us" title="Our core values." right="The principles that guide every decision we make as a team." />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px", marginTop: "60px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: isMobile ? "12px" : "18px", marginTop: isMobile ? "28px" : "60px" }}>
             {values.map((v, i) => (
               <motion.div
                 key={v.title}
@@ -344,23 +362,38 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                whileHover={{ y: -4 }}
-                style={{ background: PANEL, border: `1px solid ${LINE}`, borderRadius: "16px", padding: "32px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", transition: "border-color 200ms, box-shadow 200ms" }}
+                whileHover={isMobile ? {} : { y: -4 }}
+                style={{ background: PANEL, border: `1px solid ${LINE}`, borderRadius: "14px", padding: isMobile ? "18px 16px" : "32px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", transition: "border-color 200ms, box-shadow 200ms" }}
                 onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = GREEN; el.style.boxShadow = "0 8px 32px rgba(22,163,74,0.10)" }}
                 onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = LINE; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)" }}
               >
-                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(22,163,74,0.08)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
-                  <v.icon size={22} color={GREEN} />
-                </div>
-                <h3 style={{ fontSize: "20px", fontWeight: 500, letterSpacing: "-0.02em", color: FG, marginBottom: "12px" }}>{v.title}</h3>
-                <p style={{ fontSize: "14px", color: MUTED, lineHeight: 1.65, margin: 0 }}>{v.description}</p>
-                {/* Bottom bar */}
-                <motion.div style={{ position: "absolute", bottom: 0, left: "24px", right: "24px", height: "2px", background: GREEN, transformOrigin: "left" }}
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
-                  viewport={{ once: true }}
-                />
+                {isMobile ? (
+                  /* Horizontal layout on mobile */
+                  <div style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                    <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(22,163,74,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <v.icon size={20} color={GREEN} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 500, letterSpacing: "-0.02em", color: FG, margin: "0 0 6px" }}>{v.title}</h3>
+                      <p style={{ fontSize: "13px", color: MUTED, lineHeight: 1.6, margin: 0 }}>{v.description}</p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Vertical layout on desktop */
+                  <>
+                    <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(22,163,74,0.08)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+                      <v.icon size={22} color={GREEN} />
+                    </div>
+                    <h3 style={{ fontSize: "20px", fontWeight: 500, letterSpacing: "-0.02em", color: FG, marginBottom: "12px" }}>{v.title}</h3>
+                    <p style={{ fontSize: "14px", color: MUTED, lineHeight: 1.65, margin: 0 }}>{v.description}</p>
+                    <motion.div style={{ position: "absolute", bottom: 0, left: "24px", right: "24px", height: "2px", background: GREEN, transformOrigin: "left" }}
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+                      viewport={{ once: true }}
+                    />
+                  </>
+                )}
               </motion.div>
             ))}
           </div>
@@ -368,8 +401,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── ROADMAP — light ──────────────────────────────────────────────── */}
-      <section style={{ padding: "120px 0 110px", background: PANEL, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <section style={{ padding: isMobile ? "56px 0 80px" : "120px 0 110px", background: PANEL, borderBottom: `1px solid ${LINE_STR}`, color: FG, overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
           <SectionHeader
             eyebrow="Our Journey"
@@ -377,84 +410,158 @@ export default function AboutPage() {
             right="From identifying the problem to building AI that evolves — here's where we've been and where we're going."
           />
 
-          {/* Horizontal timeline */}
-          <div style={{ position: "relative", marginTop: "64px" }}>
-            {/* Background line */}
-            <div style={{ position: "absolute", top: "27px", left: "12.5%", right: "12.5%", height: "1px", background: LINE_STR }} />
-            {/* Progress line (up to current = stage 3) */}
-            <motion.div
-              style={{ position: "absolute", top: "27px", left: "12.5%", height: "1px", background: GREEN }}
-              initial={{ width: 0 }}
-              whileInView={{ width: "50%" }}
-              transition={{ duration: 1.4, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-            />
+          {isMobile ? (
+            /* ── Vertical timeline (mobile) ── */
+            <div style={{ position: "relative", marginTop: "32px", paddingLeft: "28px" }}>
+              {/* Background vertical line */}
+              <div style={{ position: "absolute", left: "26px", top: "27px", bottom: "27px", width: "1px", background: LINE_STR }} />
+              {/* Green progress line (covers first 3 stages) */}
+              <motion.div
+                style={{ position: "absolute", left: "26px", top: "27px", width: "1px", background: GREEN }}
+                initial={{ height: 0 }}
+                whileInView={{ height: "calc(75% - 27px)" }}
+                transition={{ duration: 1.4, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+              />
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }}>
-              {roadmapStages.map((stage, i) => (
-                <motion.div
-                  key={stage.title}
-                  initial={{ opacity: 0, y: 36 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-                  viewport={{ once: true }}
-                  style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-                >
-                  {/* Node */}
-                  <div style={{
-                    position: "relative", zIndex: 10,
-                    width: "54px", height: "54px", borderRadius: "50%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    marginBottom: "20px",
-                    background: stage.future ? BG2 : stage.current ? GREEN : PANEL,
-                    border: `2px ${stage.future ? "dashed" : "solid"} ${stage.future ? LINE_STR : stage.current ? GREEN_2 : LINE_STR}`,
-                    boxShadow: stage.current ? "0 0 0 6px rgba(22,163,74,0.12)" : "0 2px 8px rgba(0,0,0,0.06)",
-                  }}>
-                    {stage.current && (
-                      <motion.div style={{ position: "absolute", inset: "-6px", borderRadius: "50%", background: "radial-gradient(circle, rgba(22,163,74,0.2), transparent)" }}
-                        animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
-                        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-                      />
-                    )}
-                    <stage.icon size={22} color={stage.future ? FAINT : stage.current ? "#fff" : GREEN} />
-                  </div>
-
-                  {/* Date */}
-                  <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: stage.future ? FAINT : stage.current ? GREEN : MUTED, marginBottom: "20px", textAlign: "center" }}>
-                    {stage.date}
-                  </span>
-
-                  {/* Card */}
-                  <div style={{ width: "100%", position: "relative" }}>
-                    {stage.current && (
-                      <div style={{ position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)", padding: "3px 10px", borderRadius: "20px", background: GREEN, color: "#fff", fontFamily: MONO, fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", whiteSpace: "nowrap", boxShadow: "0 2px 8px rgba(22,163,74,0.3)" }}>
-                        Current Stage
-                      </div>
-                    )}
+              <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                {roadmapStages.map((stage, i) => (
+                  <motion.div
+                    key={stage.title}
+                    initial={{ opacity: 0, x: 16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.55, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                    viewport={{ once: true }}
+                    style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}
+                  >
+                    {/* Node — sits on the left line */}
                     <div style={{
-                      borderRadius: "14px",
-                      padding: "20px",
-                      background: PANEL,
-                      border: `1px solid ${stage.future ? LINE : stage.current ? GREEN + "44" : LINE}`,
-                      boxShadow: stage.current ? "0 4px 20px rgba(22,163,74,0.08)" : "0 2px 8px rgba(0,0,0,0.04)",
+                      position: "relative", zIndex: 10, flexShrink: 0,
+                      marginLeft: "-28px",
+                      width: "54px", height: "54px", borderRadius: "50%",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      background: stage.future ? BG2 : stage.current ? GREEN : PANEL,
+                      border: `2px ${stage.future ? "dashed" : "solid"} ${stage.future ? LINE_STR : stage.current ? GREEN_2 : LINE_STR}`,
+                      boxShadow: stage.current ? "0 0 0 6px rgba(22,163,74,0.12)" : "0 2px 8px rgba(0,0,0,0.06)",
                     }}>
-                      <h3 style={{ fontSize: "14px", fontWeight: 500, color: stage.future ? FAINT : FG, margin: "0 0 12px", letterSpacing: "-0.01em" }}>
-                        {stage.title}
-                      </h3>
-                      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "7px" }}>
-                        {stage.points.map(point => (
-                          <li key={point} style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
-                            <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: stage.future ? FAINT : GREEN, flexShrink: 0, marginTop: "5px" }} />
-                            <span style={{ fontSize: "12px", color: stage.future ? FAINT : MUTED, lineHeight: 1.5 }}>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {stage.current && (
+                        <motion.div style={{ position: "absolute", inset: "-6px", borderRadius: "50%", background: "radial-gradient(circle, rgba(22,163,74,0.2), transparent)" }}
+                          animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
+                          transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                      )}
+                      <stage.icon size={20} color={stage.future ? FAINT : stage.current ? "#fff" : GREEN} />
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+
+                    {/* Content */}
+                    <div style={{ flex: 1, paddingTop: "4px" }}>
+                      {/* Date + badge row */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+                        <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: stage.future ? FAINT : stage.current ? GREEN : MUTED }}>
+                          {stage.date}
+                        </span>
+                        {stage.current && (
+                          <span style={{ padding: "2px 8px", borderRadius: "20px", background: GREEN, color: "#fff", fontFamily: MONO, fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                            Current
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Card */}
+                      <div style={{
+                        borderRadius: "12px", padding: "16px",
+                        background: PANEL,
+                        border: `1px solid ${stage.future ? LINE : stage.current ? GREEN + "44" : LINE}`,
+                        boxShadow: stage.current ? "0 4px 16px rgba(22,163,74,0.08)" : "0 1px 6px rgba(0,0,0,0.04)",
+                      }}>
+                        <h3 style={{ fontSize: "14px", fontWeight: 500, color: stage.future ? FAINT : FG, margin: "0 0 10px", letterSpacing: "-0.01em" }}>
+                          {stage.title}
+                        </h3>
+                        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+                          {stage.points.map(point => (
+                            <li key={point} style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                              <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: stage.future ? FAINT : GREEN, flexShrink: 0, marginTop: "5px" }} />
+                              <span style={{ fontSize: "12px", color: stage.future ? FAINT : MUTED, lineHeight: 1.5 }}>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            /* ── Horizontal timeline (desktop) ── */
+            <div style={{ position: "relative", marginTop: "64px" }}>
+              <div style={{ position: "absolute", top: "27px", left: "12.5%", right: "12.5%", height: "1px", background: LINE_STR }} />
+              <motion.div
+                style={{ position: "absolute", top: "27px", left: "12.5%", height: "1px", background: GREEN }}
+                initial={{ width: 0 }}
+                whileInView={{ width: "50%" }}
+                transition={{ duration: 1.4, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+              />
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }}>
+                {roadmapStages.map((stage, i) => (
+                  <motion.div
+                    key={stage.title}
+                    initial={{ opacity: 0, y: 36 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                    viewport={{ once: true }}
+                    style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+                  >
+                    <div style={{
+                      position: "relative", zIndex: 10,
+                      width: "54px", height: "54px", borderRadius: "50%",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      marginBottom: "20px",
+                      background: stage.future ? BG2 : stage.current ? GREEN : PANEL,
+                      border: `2px ${stage.future ? "dashed" : "solid"} ${stage.future ? LINE_STR : stage.current ? GREEN_2 : LINE_STR}`,
+                      boxShadow: stage.current ? "0 0 0 6px rgba(22,163,74,0.12)" : "0 2px 8px rgba(0,0,0,0.06)",
+                    }}>
+                      {stage.current && (
+                        <motion.div style={{ position: "absolute", inset: "-6px", borderRadius: "50%", background: "radial-gradient(circle, rgba(22,163,74,0.2), transparent)" }}
+                          animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
+                          transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                      )}
+                      <stage.icon size={22} color={stage.future ? FAINT : stage.current ? "#fff" : GREEN} />
+                    </div>
+                    <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: stage.future ? FAINT : stage.current ? GREEN : MUTED, marginBottom: "20px", textAlign: "center" }}>
+                      {stage.date}
+                    </span>
+                    <div style={{ width: "100%", position: "relative" }}>
+                      {stage.current && (
+                        <div style={{ position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)", padding: "3px 10px", borderRadius: "20px", background: GREEN, color: "#fff", fontFamily: MONO, fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", whiteSpace: "nowrap", boxShadow: "0 2px 8px rgba(22,163,74,0.3)" }}>
+                          Current Stage
+                        </div>
+                      )}
+                      <div style={{
+                        borderRadius: "14px", padding: "20px", background: PANEL,
+                        border: `1px solid ${stage.future ? LINE : stage.current ? GREEN + "44" : LINE}`,
+                        boxShadow: stage.current ? "0 4px 20px rgba(22,163,74,0.08)" : "0 2px 8px rgba(0,0,0,0.04)",
+                      }}>
+                        <h3 style={{ fontSize: "14px", fontWeight: 500, color: stage.future ? FAINT : FG, margin: "0 0 12px", letterSpacing: "-0.01em" }}>
+                          {stage.title}
+                        </h3>
+                        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "7px" }}>
+                          {stage.points.map(point => (
+                            <li key={point} style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                              <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: stage.future ? FAINT : GREEN, flexShrink: 0, marginTop: "5px" }} />
+                              <span style={{ fontSize: "12px", color: stage.future ? FAINT : MUTED, lineHeight: 1.5 }}>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
       </section>
@@ -466,25 +573,33 @@ export default function AboutPage() {
 
 // ── Shared section header ─────────────────────────────────────────────────────
 function SectionHeader({ eyebrow, title, right }: { eyebrow: string; title: string; right: string }) {
+  const isMobile = useIsMobile()
   return (
     <motion.div
-      style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px" }}
+      style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "flex-end", justifyContent: "space-between", gap: isMobile ? "8px" : "40px" }}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true }}
     >
       <div>
-        <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
+        <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "12px" }}>
           {eyebrow}
         </div>
-        <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: "#0c0c0a", margin: 0 }}>
+        <h2 style={{ fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: "#0c0c0a", margin: 0 }}>
           {title}
         </h2>
+        {isMobile && (
+          <p style={{ fontSize: "13px", color: FAINT, lineHeight: 1.55, margin: "10px 0 0", maxWidth: "320px" }}>
+            {right}
+          </p>
+        )}
       </div>
-      <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0, textAlign: "right" }}>
-        {right}
-      </p>
+      {!isMobile && (
+        <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0, textAlign: "right" }}>
+          {right}
+        </p>
+      )}
     </motion.div>
   )
 }
