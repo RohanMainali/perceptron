@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion"
 import { HeartPulse, Trophy, Car, Check, ArrowRight } from "lucide-react"
 import { useRef, useState } from "react"
 import WaitlistModal from "@/components/waitlist-modal"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 const FG       = "#0c0c0a"
 const MUTED    = "#5a5a52"
@@ -62,13 +63,14 @@ export default function About() {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-80px" })
   const [waitlistOpen, setWaitlistOpen] = useState(false)
+  const isMobile = useIsMobile()
 
   return (
     <section
       ref={ref}
       id="about"
       style={{
-        padding: "120px 0 110px",
+        padding: isMobile ? "72px 0 64px" : "120px 0 110px",
         background: BG,
         borderBottom: `1px solid ${LINE_STR}`,
         color: FG,
@@ -76,11 +78,11 @@ export default function About() {
         overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
         {/* Header */}
         <motion.div
-          style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "60px" }}
+          style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "flex-end", justifyContent: "space-between", gap: isMobile ? "16px" : "40px", marginBottom: isMobile ? "36px" : "60px" }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -90,17 +92,17 @@ export default function About() {
             <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
               Solutions
             </div>
-            <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+            <h2 style={{ fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
               Annotation across industries.
             </h2>
           </div>
-          <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
+          <p style={{ maxWidth: isMobile ? "100%" : "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
             From saving lives to training autonomous systems — Auta handles it all.
           </p>
         </motion.div>
 
         {/* Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "18px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "18px" }}>
           {useCases.map((uc, i) => {
             const Icon = uc.icon
             return (
