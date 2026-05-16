@@ -5,6 +5,7 @@ import { Check, Minus, X, Zap, Sparkles, MessageSquare } from "lucide-react"
 import { useRef, useState } from "react"
 import Image from "next/image"
 import WaitlistModal from "@/components/waitlist-modal"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 const FG       = "#0c0c0a"
 const MUTED    = "#5a5a52"
@@ -84,13 +85,16 @@ export default function Comparison() {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-80px" })
   const [waitlistOpen, setWaitlistOpen] = useState(false)
+  const isMobile = useIsMobile()
+  const tableCols = isMobile ? "minmax(140px, 1fr) repeat(4, 70px)" : "1fr repeat(4, 130px)"
+  const tableMin  = isMobile ? "420px" : "600px"
 
   return (
     <section
       ref={ref}
       id="projects"
       style={{
-        padding: "120px 0 110px",
+        padding: isMobile ? "72px 0 64px" : "120px 0 110px",
         background: SECTION,
         borderBottom: `1px solid ${LINE_STR}`,
         color: FG,
@@ -98,11 +102,11 @@ export default function Comparison() {
         overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
         {/* Header */}
         <motion.div
-          style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "60px" }}
+          style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "flex-end", justifyContent: "space-between", gap: isMobile ? "16px" : "40px", marginBottom: isMobile ? "36px" : "60px" }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -112,18 +116,18 @@ export default function Comparison() {
             <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
               Why Auta
             </div>
-            <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+            <h2 style={{ fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
               Built different, by design.
             </h2>
           </div>
-          <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
+          <p style={{ maxWidth: isMobile ? "100%" : "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
             A side-by-side look at what makes Auta the smarter choice for modern annotation teams.
           </p>
         </motion.div>
 
         {/* Exclusive callout cards */}
         <motion.div
-          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "48px" }}
+          style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "16px", marginBottom: "48px" }}
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -168,21 +172,21 @@ export default function Comparison() {
           transition={{ duration: 0.65, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
         >
           <div style={{ overflowX: "auto" }}>
-            <div style={{ minWidth: "600px", border: `1px solid ${LINE}`, borderRadius: "14px 14px 0 0", background: PANEL, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
+            <div style={{ minWidth: tableMin, border: `1px solid ${LINE}`, borderRadius: "14px 14px 0 0", background: PANEL, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
 
               {/* Table header */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr repeat(4, 130px)", borderBottom: `1px solid ${LINE}` }}>
-                <div style={{ padding: "18px 20px", fontFamily: MONO, fontSize: "10px", fontWeight: 500, color: FAINT, textTransform: "uppercase", letterSpacing: "0.08em", background: BG2 }}>
+              <div style={{ display: "grid", gridTemplateColumns: tableCols, borderBottom: `1px solid ${LINE}` }}>
+                <div style={{ padding: isMobile ? "12px 10px" : "18px 20px", fontFamily: MONO, fontSize: "10px", fontWeight: 500, color: FAINT, textTransform: "uppercase", letterSpacing: "0.08em", background: BG2 }}>
                   Feature
                 </div>
                 {/* Auta */}
-                <div style={{ padding: "18px 12px", background: GREEN_SOFT, borderLeft: `1px solid ${LINE}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-                  <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: GREEN_SOFT, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Image src="/perceptron-logo.png" alt="Auta" width={20} height={20} />
+                <div style={{ padding: isMobile ? "10px 6px" : "18px 12px", background: GREEN_SOFT, borderLeft: `1px solid ${LINE}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: isMobile ? "4px" : "6px" }}>
+                  <div style={{ width: isMobile ? "22px" : "30px", height: isMobile ? "22px" : "30px", borderRadius: "8px", background: GREEN_SOFT, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Image src="/perceptron-logo.png" alt="Auta" width={isMobile ? 14 : 20} height={isMobile ? 14 : 20} />
                   </div>
                   <div style={{ textAlign: "center" }}>
-                    <p style={{ fontFamily: MONO, fontSize: "11px", fontWeight: 600, color: GREEN, margin: 0 }}>Auta</p>
-                    <p style={{ fontFamily: MONO, fontSize: "9px", color: FAINT, margin: 0 }}>by Perceptron</p>
+                    <p style={{ fontFamily: MONO, fontSize: isMobile ? "9px" : "11px", fontWeight: 600, color: GREEN, margin: 0 }}>Auta</p>
+                    {!isMobile && <p style={{ fontFamily: MONO, fontSize: "9px", color: FAINT, margin: 0 }}>by Perceptron</p>}
                   </div>
                 </div>
                 {/* Competitors */}
@@ -191,14 +195,14 @@ export default function Comparison() {
                   { label: "CVAT", sub: "cvat.ai", logo: "https://www.google.com/s2/favicons?domain=cvat.ai&sz=64" },
                   { label: "Label Studio", sub: "labelstud.io", logo: "https://www.google.com/s2/favicons?domain=labelstud.io&sz=64" },
                 ].map(tool => (
-                  <div key={tool.label} style={{ padding: "18px 12px", background: BG2, borderLeft: `1px solid ${LINE}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-                    <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: PANEL, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                  <div key={tool.label} style={{ padding: isMobile ? "10px 6px" : "18px 12px", background: BG2, borderLeft: `1px solid ${LINE}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: isMobile ? "4px" : "6px" }}>
+                    <div style={{ width: isMobile ? "22px" : "30px", height: isMobile ? "22px" : "30px", borderRadius: "8px", background: PANEL, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={tool.logo} alt={tool.label} width={18} height={18} style={{ objectFit: "contain" }} />
+                      <img src={tool.logo} alt={tool.label} width={isMobile ? 14 : 18} height={isMobile ? 14 : 18} style={{ objectFit: "contain" }} />
                     </div>
                     <div style={{ textAlign: "center" }}>
-                      <p style={{ fontFamily: MONO, fontSize: "11px", fontWeight: 500, color: MUTED, margin: 0 }}>{tool.label}</p>
-                      <p style={{ fontFamily: MONO, fontSize: "9px", color: FAINT, margin: 0 }}>{tool.sub}</p>
+                      <p style={{ fontFamily: MONO, fontSize: isMobile ? "8px" : "11px", fontWeight: 500, color: MUTED, margin: 0, lineHeight: 1.2 }}>{isMobile ? tool.label.replace(" ", "\n") : tool.label}</p>
+                      {!isMobile && <p style={{ fontFamily: MONO, fontSize: "9px", color: FAINT, margin: 0 }}>{tool.sub}</p>}
                     </div>
                   </div>
                 ))}
@@ -208,8 +212,8 @@ export default function Comparison() {
               {categories.map((cat, catIdx) => (
                 <div key={cat}>
                   {/* Category label */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr repeat(4, 130px)", background: BG2, borderBottom: `1px solid ${LINE}` }}>
-                    <div style={{ padding: "8px 20px", gridColumn: "1 / -1", fontFamily: MONO, fontSize: "10px", fontWeight: 600, color: FAINT, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: tableCols, background: BG2, borderBottom: `1px solid ${LINE}` }}>
+                    <div style={{ padding: isMobile ? "6px 10px" : "8px 20px", gridColumn: "1 / -1", fontFamily: MONO, fontSize: "10px", fontWeight: 600, color: FAINT, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                       {cat}
                     </div>
                   </div>
@@ -222,26 +226,26 @@ export default function Comparison() {
                         initial={{ opacity: 0, x: -8 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.4, delay: 0.3 + catIdx * 0.05 + rowIdx * 0.04, ease: [0.22, 1, 0.36, 1] }}
-                        style={{ display: "grid", gridTemplateColumns: "1fr repeat(4, 130px)", borderBottom: `1px solid ${LINE}` }}
+                        style={{ display: "grid", gridTemplateColumns: tableCols, borderBottom: `1px solid ${LINE}` }}
                       >
-                        <div style={{ padding: "14px 20px", display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ fontSize: "13.5px", fontWeight: 500, color: FG }}>{row.feature}</span>
-                          {isExclusive && (
+                        <div style={{ padding: isMobile ? "11px 10px" : "14px 20px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px" }}>
+                          <span style={{ fontSize: isMobile ? "11.5px" : "13.5px", fontWeight: 500, color: FG, lineHeight: 1.35 }}>{row.feature}</span>
+                          {isExclusive && !isMobile && (
                             <span style={{ fontFamily: MONO, fontSize: "9px", fontWeight: 700, padding: "2px 6px", borderRadius: "3px", background: GREEN_SOFT, color: GREEN, textTransform: "uppercase", letterSpacing: "0.05em", flexShrink: 0 }}>
                               Only Auta
                             </span>
                           )}
                         </div>
                         {/* Auta */}
-                        <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px", background: GREEN_SOFT, borderLeft: `1px solid ${LINE}` }}>
+                        <div style={{ padding: isMobile ? "11px 6px" : "14px 12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px", background: GREEN_SOFT, borderLeft: `1px solid ${LINE}` }}>
                           <StatusIcon status={row.auta} isAuta={true} />
-                          {row.autaNote && row.autaNote !== "Exclusive" && (
+                          {row.autaNote && row.autaNote !== "Exclusive" && !isMobile && (
                             <span style={{ fontFamily: MONO, fontSize: "9px", fontWeight: 600, color: GREEN }}>{row.autaNote}</span>
                           )}
                         </div>
                         {/* Others */}
                         {[row.roboflow, row.cvat, row.labelstudio].map((val, k) => (
-                          <div key={k} style={{ padding: "14px 12px", display: "flex", alignItems: "center", justifyContent: "center", borderLeft: `1px solid ${LINE}` }}>
+                          <div key={k} style={{ padding: isMobile ? "11px 6px" : "14px 12px", display: "flex", alignItems: "center", justifyContent: "center", borderLeft: `1px solid ${LINE}` }}>
                             <StatusIcon status={val} isAuta={false} />
                           </div>
                         ))}
@@ -295,7 +299,7 @@ export default function Comparison() {
 
         {/* Stat strip */}
         <motion.div
-          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px", marginTop: "40px" }}
+          style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: "14px", marginTop: "40px" }}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.55, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}

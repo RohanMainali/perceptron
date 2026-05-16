@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowUpRight, Linkedin, Youtube, Facebook } from "lucide-react"
 import { SiReddit } from "react-icons/si"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 const FG    = "#0c0c0a"
 const MUTED = "#5a5a52"
@@ -16,23 +17,24 @@ const BG2   = "#f6f6f3"
 
 export default function Footer() {
   const year = new Date().getFullYear()
+  const isMobile = useIsMobile()
 
   return (
     <footer style={{ background: PANEL, borderTop: `1px solid ${LINE}`, color: FG }}>
-      <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "72px 32px 32px" }}>
+      <div style={{ maxWidth: "1160px", margin: "0 auto", padding: isMobile ? "48px 20px 24px" : "72px 32px 32px" }}>
 
         {/* Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1.7fr 1fr 1fr 1fr",
-            gap: "48px",
-            paddingBottom: "48px",
+            gridTemplateColumns: isMobile ? "1fr 1fr" : "1.7fr 1fr 1fr 1fr",
+            gap: isMobile ? "32px 24px" : "48px",
+            paddingBottom: isMobile ? "32px" : "48px",
             borderBottom: `1px solid ${LINE}`,
           }}
         >
           {/* Brand */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "14px", maxWidth: "300px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px", maxWidth: "300px", gridColumn: isMobile ? "1 / -1" : "auto" }}>
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", fontWeight: 600, letterSpacing: "-0.02em", color: FG }}>
               <Image src="/perceptron-logo.png" alt="Perceptron" width={22} height={22} />
               <span>Perceptron</span>
@@ -112,16 +114,18 @@ export default function Footer() {
             ]}
           />
 
-          {/* Community */}
-          <FooterCol
-            heading="Community"
-            links={[
-              { label: "LinkedIn", href: "https://www.linkedin.com/in/perceptronai/" },
-              { label: "YouTube", href: "https://www.youtube.com/@Perceptron-ai-labs" },
-              { label: "Reddit", href: "https://www.reddit.com/user/Intelligent_Cry_3621/" },
-              { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61586580522261" },
-            ]}
-          />
+          {/* Community — hidden on mobile (social icons in brand section suffice) */}
+          {!isMobile && (
+            <FooterCol
+              heading="Community"
+              links={[
+                { label: "LinkedIn", href: "https://www.linkedin.com/in/perceptronai/" },
+                { label: "YouTube", href: "https://www.youtube.com/@Perceptron-ai-labs" },
+                { label: "Reddit", href: "https://www.reddit.com/user/Intelligent_Cry_3621/" },
+                { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61586580522261" },
+              ]}
+            />
+          )}
         </div>
 
         {/* Bottom row */}

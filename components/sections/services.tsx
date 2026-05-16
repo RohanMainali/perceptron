@@ -5,6 +5,7 @@ import { useState } from "react"
 import { MessageSquare, Brain, Layers, ScanLine, Video, Wand2, Package, ArrowRight } from "lucide-react"
 import WaitlistModal from "@/components/waitlist-modal"
 import { FeatureAnimation } from "@/components/feature-animations"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 const FG      = "#0c0c0a"
 const MUTED   = "#5a5a52"
@@ -70,12 +71,13 @@ export default function Services() {
   const [waitlistOpen, setWaitlistOpen] = useState(false)
   const active = FEATURES[activeIdx]
   const ActiveIcon = ICONS[activeIdx]
+  const isMobile = useIsMobile(1024)
 
   return (
     <section
       id="services"
       style={{
-        padding: "120px 0 130px",
+        padding: isMobile ? "72px 0 80px" : "120px 0 130px",
         background: SECTION,
         borderBottom: `1px solid ${LINE_STR}`,
         color: FG,
@@ -83,11 +85,11 @@ export default function Services() {
         overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
         {/* Header */}
         <motion.div
-          style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "56px" }}
+          style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "flex-end", justifyContent: "space-between", gap: isMobile ? "16px" : "40px", marginBottom: isMobile ? "32px" : "56px" }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -97,21 +99,21 @@ export default function Services() {
             <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
               Features
             </div>
-            <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+            <h2 style={{ fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
               The best choice for<br />your vision task.
             </h2>
           </div>
-          <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
+          <p style={{ maxWidth: isMobile ? "100%" : "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
             Works with images, videos, and every annotation type — no config required.
           </p>
         </motion.div>
 
         {/* Two-column layout: sidebar tabs + feature panel */}
-        <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: "24px", alignItems: "start" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "280px 1fr", gap: "24px", alignItems: "start" }}>
 
           {/* Sidebar tabs */}
           <motion.div
-            style={{ display: "flex", flexDirection: "column", gap: "2px", position: "sticky", top: "80px" }}
+            style={{ display: "flex", flexDirection: isMobile ? "row" : "column", flexWrap: isMobile ? "nowrap" : undefined, overflowX: isMobile ? "auto" : undefined, gap: "2px", position: isMobile ? "static" : "sticky", top: "80px", paddingBottom: isMobile ? "4px" : 0 }}
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -128,23 +130,27 @@ export default function Services() {
                     textAlign: "left",
                     background: isActive ? PANEL : "transparent",
                     border: `1px solid ${isActive ? LINE_STR : "transparent"}`,
-                    padding: "13px 16px",
+                    padding: isMobile ? "10px 12px" : "13px 16px",
                     borderRadius: "10px",
                     display: "flex",
                     alignItems: "center",
-                    gap: "10px",
+                    gap: "8px",
                     cursor: "pointer",
                     position: "relative",
                     transition: "background 140ms, border-color 140ms",
-                    width: "100%",
+                    width: isMobile ? "auto" : "100%",
+                    flexShrink: isMobile ? 0 : undefined,
+                    whiteSpace: isMobile ? "nowrap" : undefined,
                   }}
                   onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = BG2 }}
                   onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent" }}
                 >
                   {/* Number */}
-                  <span style={{ position: "absolute", right: "14px", top: "14px", fontFamily: MONO, fontSize: "10px", color: FAINT }}>
-                    {f.id}
-                  </span>
+                  {!isMobile && (
+                    <span style={{ position: "absolute", right: "14px", top: "14px", fontFamily: MONO, fontSize: "10px", color: FAINT }}>
+                      {f.id}
+                    </span>
+                  )}
                   {/* Icon */}
                   <span style={{
                     width: "28px", height: "28px", borderRadius: "7px", flexShrink: 0,
@@ -157,12 +163,20 @@ export default function Services() {
                     <Icon size={13} />
                   </span>
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px", minWidth: 0 }}>
-                    <span style={{ fontSize: "13.5px", fontWeight: 500, color: FG, letterSpacing: "-0.01em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      {f.title}
-                    </span>
-                    <span style={{ fontFamily: MONO, fontSize: "10px", color: FAINT, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                      {f.tag}
-                    </span>
+                    {isMobile ? (
+                      <span style={{ fontSize: "12px", fontWeight: 500, color: FG, letterSpacing: "-0.01em" }}>
+                        {f.tag}
+                      </span>
+                    ) : (
+                      <>
+                        <span style={{ fontSize: "13.5px", fontWeight: 500, color: FG, letterSpacing: "-0.01em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {f.title}
+                        </span>
+                        <span style={{ fontFamily: MONO, fontSize: "10px", color: FAINT, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                          {f.tag}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </button>
               )
@@ -234,13 +248,14 @@ export default function Services() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 style={{
-                  padding: "22px 24px",
+                  padding: isMobile ? "18px 16px" : "22px 24px",
                   borderTop: `1px solid ${LINE}`,
                   background: PANEL,
                   display: "flex",
-                  alignItems: "flex-start",
+                  flexDirection: isMobile ? "column" : "row",
+                  alignItems: isMobile ? "flex-start" : "flex-start",
                   justifyContent: "space-between",
-                  gap: "24px",
+                  gap: "16px",
                 }}
               >
                 <div>

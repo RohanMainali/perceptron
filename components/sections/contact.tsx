@@ -4,6 +4,7 @@ import type React from "react"
 import { motion } from "framer-motion"
 import { Mail, Linkedin, Facebook, Send, ChevronDown, CheckCircle2, Loader2 } from "lucide-react"
 import { useState } from "react"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 const FG       = "#0c0c0a"
 const MUTED    = "#5a5a52"
@@ -22,6 +23,7 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const isMobile = useIsMobile()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,7 +65,7 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
     <section
       id="contact"
       style={{
-        padding: "120px 0 110px",
+        padding: isMobile ? "72px 0 64px" : "120px 0 110px",
         background: SECTION,
         borderBottom: `1px solid ${LINE_STR}`,
         color: FG,
@@ -71,12 +73,12 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
         overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
 
         {/* Header */}
         {!hideHeader && (
           <motion.div
-            style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "40px", marginBottom: "64px" }}
+            style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "flex-end", justifyContent: "space-between", gap: isMobile ? "16px" : "40px", marginBottom: isMobile ? "36px" : "64px" }}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -86,22 +88,22 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
               <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase", marginBottom: "14px" }}>
                 Let&apos;s Connect
               </div>
-              <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
+              <h2 style={{ fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.02, color: FG, margin: 0 }}>
                 Get in touch.
               </h2>
             </div>
-            <p style={{ maxWidth: "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
+            <p style={{ maxWidth: isMobile ? "100%" : "360px", fontSize: "15px", color: MUTED, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
               Have a project in mind? Let&apos;s collaborate and build something amazing together.
             </p>
           </motion.div>
         )}
 
         {/* Two-column layout */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: "56px", alignItems: "start" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 420px", gap: isMobile ? "32px" : "56px", alignItems: "start" }}>
 
           {/* Form */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: isMobile ? 0 : -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
@@ -126,7 +128,7 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
               </motion.div>
             ) : (
               <form style={{ display: "flex", flexDirection: "column", gap: "22px" }} onSubmit={handleSubmit}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "16px" }}>
                   {[
                     { label: "Name", type: "text", field: "name" as const, placeholder: "Your name" },
                     { label: "Email", type: "email", field: "email" as const, placeholder: "your@email.com" },
@@ -217,7 +219,7 @@ export default function Contact({ hideHeader = false }: { hideHeader?: boolean }
           {/* Sidebar info */}
           <motion.div
             style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: isMobile ? 0 : 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}

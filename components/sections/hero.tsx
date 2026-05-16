@@ -5,6 +5,7 @@ import { ArrowRight, Play } from "lucide-react"
 import { useState } from "react"
 import WaitlistModal from "@/components/waitlist-modal"
 import MeshCanvas from "@/components/mesh-canvas"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 /* ─────────────────────────────────────────────
    Tiny inline-style constants (mirrors reference
@@ -24,6 +25,7 @@ const PANEL2   = "#f6f6f3"
 
 export default function Hero() {
   const [waitlistOpen, setWaitlistOpen] = useState(false)
+  const isMobile = useIsMobile()
 
   const centerDemoVideo = () => {
     const target =
@@ -48,10 +50,9 @@ export default function Hero() {
         position: "relative",
         overflow: "hidden",
         background: PANEL,
-        paddingTop: "148px",
-        paddingBottom: "96px",
+        paddingTop: isMobile ? "100px" : "148px",
+        paddingBottom: isMobile ? "64px" : "96px",
         borderBottom: `1px solid ${LINE}`,
-        /* reset all text to dark so nothing bleeds from dark body */
         color: FG,
       }}
     >
@@ -82,7 +83,7 @@ export default function Hero() {
           zIndex: 2,
           maxWidth: "1160px",
           margin: "0 auto",
-          padding: "0 32px",
+          padding: isMobile ? "0 20px" : "0 32px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -320,31 +321,36 @@ export default function Hero() {
               <span
                 style={{
                   fontFamily: MONO,
-                  fontSize: "11px",
+                  fontSize: isMobile ? "10px" : "11px",
                   color: "#7a7a72",
                   marginLeft: "10px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                 }}
               >
-                auta — chest-xray-pneumonia.parquet
+                {isMobile ? "auta — chest-xray.parquet" : "auta — chest-xray-pneumonia.parquet"}
               </span>
-              {/* Tabs */}
-              <div style={{ display: "flex", gap: "2px", marginLeft: "auto" }}>
-                {["Annotate", "Plan", "Export"].map((tab, i) => (
-                  <span
-                    key={tab}
-                    style={{
-                      fontFamily: MONO,
-                      fontSize: "11px",
-                      padding: "4px 9px",
-                      borderRadius: "5px",
-                      color: i === 0 ? FG : "#7a7a72",
-                      background: i === 0 ? BG2 : "transparent",
-                    }}
-                  >
-                    {tab}
-                  </span>
-                ))}
-              </div>
+              {/* Tabs — hidden on mobile */}
+              {!isMobile && (
+                <div style={{ display: "flex", gap: "2px", marginLeft: "auto" }}>
+                  {["Annotate", "Plan", "Export"].map((tab, i) => (
+                    <span
+                      key={tab}
+                      style={{
+                        fontFamily: MONO,
+                        fontSize: "11px",
+                        padding: "4px 9px",
+                        borderRadius: "5px",
+                        color: i === 0 ? FG : "#7a7a72",
+                        background: i === 0 ? BG2 : "transparent",
+                      }}
+                    >
+                      {tab}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Demo video */}
