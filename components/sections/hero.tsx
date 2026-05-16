@@ -227,52 +227,13 @@ export default function Hero() {
             {/* Divider */}
             <div style={{ width: "1px", height: "44px", background: LINE_STR }} />
 
-            {/* AWS Activate */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px", justifySelf: "start" }}>
-              <span style={{ fontSize: "17px", fontWeight: 700, color: "#232f3e", letterSpacing: "-0.02em", lineHeight: 1 }}>
-                amazon
-              </span>
-              <span style={{ fontFamily: MONO, fontSize: "9.5px", letterSpacing: "0.1em", textTransform: "uppercase", color: FAINT, whiteSpace: "nowrap" }}>
-                Web Services · Activate
-              </span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Industry proof row */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.75 }}
-          style={{
-            marginTop: "44px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "14px",
-          }}
-        >
-          <span style={{ fontSize: "12px", color: FAINT }}>Trusted by research teams in</span>
-          <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-            {["Medical Imaging", "Sports Analytics", "Autonomous Driving"].map((label, i) => (
-              <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{
-                  padding: "5px 12px",
-                  borderRadius: "100px",
-                  border: `1px solid ${LINE}`,
-                  background: PANEL2,
-                  fontFamily: MONO,
-                  fontSize: "10px",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: MUTED,
-                  whiteSpace: "nowrap",
-                }}>
-                  {label}
-                </span>
-                {i < 2 && <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: LINE_STR, display: "block" }} />}
-              </div>
-            ))}
+            {/* Powered by AWS */}
+            <img
+              src="/powered-by-aws.png"
+              alt="Powered by AWS"
+              height={80}
+              style={{ display: "block", justifySelf: "start" }}
+            />
           </div>
         </motion.div>
 
