@@ -9,6 +9,7 @@ import Navigation from "@/components/navigation"
 import Footer from "@/components/sections/footer"
 import MeshCanvas from "@/components/mesh-canvas"
 import type { BlogPost } from "@/lib/blog-posts"
+import { useIsMobile } from "@/lib/hooks/use-is-mobile"
 
 const FG       = "#0c0c0a"
 const MUTED    = "#5a5a52"
@@ -57,6 +58,7 @@ interface BlogPageClientProps {
 
 export default function BlogPageClient({ posts }: BlogPageClientProps) {
   const [scrollY, setScrollY] = useState(0)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -75,8 +77,8 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
       <section style={{
         position: "relative",
         background: PANEL,
-        paddingTop: "140px",
-        paddingBottom: "80px",
+        paddingTop: isMobile ? "96px" : "140px",
+        paddingBottom: isMobile ? "48px" : "80px",
         overflow: "hidden",
         borderBottom: `1px solid ${LINE_STR}`,
       }}>
@@ -88,17 +90,17 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
           pointerEvents: "none",
         }} />
 
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px", position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px", position: "relative", zIndex: 1 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             style={{ maxWidth: "680px" }}
           >
-            <h1 style={{ fontSize: "clamp(42px, 6vw, 72px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.0, color: FG, margin: "0 0 20px" }}>
+            <h1 style={{ fontSize: isMobile ? "clamp(32px, 8vw, 48px)" : "clamp(42px, 6vw, 72px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1.0, color: FG, margin: "0 0 16px" }}>
               Blog &amp; <em style={{ fontStyle: "italic", color: GREEN }}>Insights</em>
             </h1>
-            <p style={{ fontSize: "17px", color: MUTED, lineHeight: 1.65, margin: 0 }}>
+            <p style={{ fontSize: isMobile ? "15px" : "17px", color: MUTED, lineHeight: 1.65, margin: 0 }}>
               Deep dives, implementation guides, and research highlights from the Perceptron team.
             </p>
           </motion.div>
@@ -107,14 +109,14 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
 
       {/* Featured Post */}
       {featured && (
-        <section style={{ padding: "80px 0", background: PANEL, borderBottom: `1px solid ${LINE_STR}` }}>
-          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+        <section style={{ padding: isMobile ? "48px 0" : "80px 0", background: PANEL, borderBottom: `1px solid ${LINE_STR}` }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
-              style={{ marginBottom: "32px" }}
+              style={{ marginBottom: "24px" }}
             >
               <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase" }}>
                 Featured Article
@@ -128,7 +130,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
               viewport={{ once: true }}
             >
               <Link href={`/blog/${featured.slug}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "56px", alignItems: "center" }}>
+                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? "24px" : "56px", alignItems: "center" }}>
                   {/* Image / Video */}
                   <div style={{
                     position: "relative", borderRadius: "14px", overflow: "hidden",
@@ -153,28 +155,28 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
                   </div>
 
                   {/* Content */}
-                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px", fontFamily: MONO, fontSize: "12px", color: FAINT }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                    <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: isMobile ? "10px" : "16px", fontFamily: MONO, fontSize: "11px", color: FAINT }}>
                       <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                        <Calendar size={12} /> {featured.date}
+                        <Calendar size={11} /> {featured.date}
                       </span>
                       <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                        <User size={12} /> {featured.author}
+                        <User size={11} /> {featured.author}
                       </span>
                       <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                        <Clock size={12} /> {Math.max(1, Math.ceil((featured.content?.length || 0) / 1200))} min
+                        <Clock size={11} /> {Math.max(1, Math.ceil((featured.content?.length || 0) / 1200))} min
                       </span>
                     </div>
 
-                    <h2 style={{ fontSize: "clamp(24px, 2.5vw, 34px)", fontWeight: 500, letterSpacing: "-0.03em", lineHeight: 1.15, color: FG, margin: 0 }}>
+                    <h2 style={{ fontSize: isMobile ? "clamp(20px, 5vw, 28px)" : "clamp(24px, 2.5vw, 34px)", fontWeight: 500, letterSpacing: "-0.03em", lineHeight: 1.15, color: FG, margin: 0 }}>
                       {featured.title}
                     </h2>
 
-                    <p style={{ fontSize: "15px", color: MUTED, lineHeight: 1.65, margin: 0 }}>
+                    <p style={{ fontSize: isMobile ? "14px" : "15px", color: MUTED, lineHeight: 1.65, margin: 0 }}>
                       {featured.excerpt}
                     </p>
 
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: GREEN, fontSize: "14px", fontWeight: 500, marginTop: "8px" }}>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: GREEN, fontSize: "14px", fontWeight: 500 }}>
                       Read Article <ArrowRight size={15} />
                     </div>
                   </div>
@@ -187,23 +189,23 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
 
       {/* Post Grid */}
       {rest.length > 0 && (
-        <section style={{ padding: "80px 0 100px", background: BG2 }}>
-          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px" }}>
+        <section style={{ padding: isMobile ? "48px 0 64px" : "80px 0 100px", background: BG2 }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
-              style={{ marginBottom: "40px" }}
+              style={{ marginBottom: "32px" }}
             >
               <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: GREEN, textTransform: "uppercase" }}>
                 More Articles
               </div>
             </motion.div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: isMobile ? "16px" : "24px" }}>
               {rest.map((post, index) => (
-                <PostCard key={post.slug} post={post} index={index} />
+                <PostCard key={post.slug} post={post} index={index} isMobile={isMobile} />
               ))}
             </div>
           </div>
@@ -213,7 +215,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
       {/* Empty State */}
       {posts.length === 0 && (
         <section style={{ padding: "120px 0", background: PANEL }}>
-          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px", textAlign: "center" }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px", textAlign: "center" }}>
             <p style={{ color: MUTED, fontSize: "16px", fontFamily: MONO }}>No articles published yet. Check back soon.</p>
           </div>
         </section>
@@ -224,7 +226,7 @@ export default function BlogPageClient({ posts }: BlogPageClientProps) {
   )
 }
 
-function PostCard({ post, index }: { post: BlogPost; index: number }) {
+function PostCard({ post, index, isMobile }: { post: BlogPost; index: number; isMobile: boolean }) {
   const [hovered, setHovered] = useState(false)
   const readingTime = Math.max(1, Math.ceil((post.content?.length || 0) / 1200))
   const thumb = isVideoUrl(post.image) ? getVideoThumbnail(post.image!) : null
@@ -233,7 +235,7 @@ function PostCard({ post, index }: { post: BlogPost; index: number }) {
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, delay: isMobile ? 0 : index * 0.07, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true }}
     >
       <Link href={`/blog/${post.slug}`} style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
@@ -244,14 +246,20 @@ function PostCard({ post, index }: { post: BlogPost; index: number }) {
             background: PANEL,
             transition: "border-color 160ms, box-shadow 160ms",
             boxShadow: hovered ? "0 4px 20px rgba(22,163,74,0.08)" : "none",
-            height: "100%", display: "flex", flexDirection: "column",
+            height: "100%", display: "flex", flexDirection: isMobile ? "row" : "column",
           }}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
           {/* Image */}
-          <div style={{ position: "relative", aspectRatio: "16/10", overflow: "hidden", background: BG2, flexShrink: 0 }}>
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: GREEN, zIndex: 2 }} />
+          <div style={{
+            position: "relative", overflow: "hidden", background: BG2, flexShrink: 0,
+            ...(isMobile
+              ? { width: "110px", minHeight: "100px" }
+              : { aspectRatio: "16/10" }
+            ),
+          }}>
+            <div style={{ position: "absolute", top: 0, left: 0, ...(isMobile ? { bottom: 0, width: "3px" } : { right: 0, height: "3px" }), background: GREEN, zIndex: 2 }} />
             <img
               src={thumb || post.image || "/placeholder.svg"}
               alt={post.title}
@@ -263,39 +271,41 @@ function PostCard({ post, index }: { post: BlogPost; index: number }) {
             />
             {isVideoUrl(post.image) && (
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
                 </div>
               </div>
             )}
           </div>
 
           {/* Content */}
-          <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", gap: "10px", flexGrow: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: MONO, fontSize: "11px", color: FAINT }}>
+          <div style={{ padding: isMobile ? "14px 16px" : "20px 22px 22px", display: "flex", flexDirection: "column", gap: isMobile ? "6px" : "10px", flexGrow: 1, minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontFamily: MONO, fontSize: "10px", color: FAINT }}>
               <span>{post.date}</span>
               <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: FAINT, display: "inline-block" }} />
               <span>{readingTime} min read</span>
             </div>
 
-            <h3 style={{ fontSize: "17px", fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 1.3, color: FG, margin: 0 }}
+            <h3 style={{ fontSize: isMobile ? "14px" : "17px", fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 1.3, color: FG, margin: 0 }}
               className="line-clamp-2"
             >
               {post.title}
             </h3>
 
-            <p style={{ fontSize: "13.5px", color: MUTED, lineHeight: 1.6, margin: 0 }}
-              className="line-clamp-2"
-            >
-              {post.excerpt}
-            </p>
+            {!isMobile && (
+              <p style={{ fontSize: "13.5px", color: MUTED, lineHeight: 1.6, margin: 0 }}
+                className="line-clamp-2"
+              >
+                {post.excerpt}
+              </p>
+            )}
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: "12px", borderTop: `1px solid ${LINE}` }}>
-              <span style={{ fontSize: "13px", color: MUTED, fontWeight: 500 }}>{post.author}</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: isMobile ? "8px" : "12px", borderTop: `1px solid ${LINE}` }}>
+              <span style={{ fontSize: "12px", color: MUTED, fontWeight: 500 }}>{post.author}</span>
               <ArrowRight
-                size={15}
+                size={13}
                 color={hovered ? GREEN : FAINT}
-                style={{ transition: "color 160ms, transform 160ms", transform: hovered ? "translateX(3px)" : "none" }}
+                style={{ transition: "color 160ms, transform 160ms", transform: hovered ? "translateX(3px)" : "none", flexShrink: 0 }}
               />
             </div>
           </div>
