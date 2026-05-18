@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
-import { MessageSquare, Brain, Layers, ScanLine, Video, Wand2, Package, ArrowRight } from "lucide-react"
+import { MessageSquare, Brain, Crosshair, Layers, ScanLine, Video, Wand2, Package, ArrowRight } from "lucide-react"
 import WaitlistModal from "@/components/waitlist-modal"
 import { FeatureAnimation } from "@/components/feature-animations"
 import { useIsMobile } from "@/lib/hooks/use-is-mobile"
@@ -19,7 +19,7 @@ const PANEL   = "#ffffff"
 const BG2     = "#f6f6f3"
 const SECTION = "#ffffff"   // light
 
-const ICONS = [MessageSquare, Brain, Layers, ScanLine, Video, Wand2, Package]
+const ICONS = [MessageSquare, Brain, Crosshair, Layers, ScanLine, Video, Wand2, Package]
 
 const FEATURES = [
   {
@@ -29,37 +29,43 @@ const FEATURES = [
     file: "auta › task › chest-xray",
   },
   {
-    id: "02", tag: "Smart Planning",
-    title: "AI Dataset Planner",
-    description: "Upload raw images and describe your goal. The AI analyzes the request, suggests the label schema, picks the right annotation type, and immediately starts processing your dataset.",
+    id: "02", tag: "Plan + Execute",
+    title: "Agentic AI Workflow",
+    description: "Tell Auta what you want to build. It plans the dataset workflow, selects the right annotation approach and starts processing your data with minimal manual setup.",
     file: "auta › plan › preview",
   },
   {
-    id: "03", tag: "AI Segmentation",
+    id: "03", tag: "One Box to Labels",
+    title: "Exemplar Box Learning",
+    description: "Draw one box around an example object. Auta learns the visual pattern, identifies similar objects across your dataset, and generates precise masks or labels without complex prompts or manual configuration.",
+    file: "auta › exemplar › object-match",
+  },
+  {
+    id: "04", tag: "AI Segmentation",
     title: "Polygon Segmentation",
     description: "Pixel-perfect segmentation masks powered by state-of-the-art AI. Automated brush and polygon tools for precise object delineation across thousands of images — no manual effort.",
     file: "auta › segment › lesion-001",
   },
   {
-    id: "04", tag: "Bounding Boxes",
+    id: "05", tag: "Bounding Boxes",
     title: "Object Detection",
     description: "Automatic bounding box annotations using state-of-the-art detection models. From simple objects to dense urban scenes — detect and label everything in a single prompt.",
     file: "auta › detect › urban-scene",
   },
   {
-    id: "05", tag: "Video + NLP",
+    id: "06", tag: "Video + NLP",
     title: "Video Annotation & Tracking",
     description: "Upload raw MP4 files and use natural language prompts to annotate entire videos. Integrated tracking pipeline keeps object IDs consistent and movement smooth across the timeline.",
     file: "auta › video › match-clip",
   },
   {
-    id: "06", tag: "No Images Needed",
+    id: "07", tag: "No Images Needed",
     title: "Zero-Shot Dataset Generation",
     description: "You don't even need images. Describe the dataset you need — the tool sources images, generates masks, bounding boxes, and labels entirely on its own. Just review and export.",
     file: "auta › generate › retail-v1",
   },
   {
-    id: "07", tag: "20+ Formats",
+    id: "08", tag: "20+ Formats",
     title: "Multi-Format Export",
     description: "Export in COCO, PASCAL VOC, YOLO, Ultralytics YOLO, CVAT XML, Datumaro, LabelMe, ImageNet, MOT, KITTI, CamVid, Cityscapes, Open Images, WIDER Face, and more.",
     file: "auta › export › formats",
@@ -224,7 +230,7 @@ export default function Services() {
             </div>
 
             {/* Animation */}
-            <div style={{ position: "relative", minHeight: "380px" }}>
+            <div style={{ position: "relative", minHeight: ["01", "02", "03"].includes(active.id) ? 0 : "380px" }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIdx}
@@ -232,7 +238,7 @@ export default function Services() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.35 }}
-                  style={{ position: "absolute", inset: 0 }}
+                  style={["01", "02", "03"].includes(active.id) ? { width: "100%" } : { position: "absolute", inset: 0 }}
                 >
                   <FeatureAnimation featureId={active.id} color={GREEN} />
                 </motion.div>

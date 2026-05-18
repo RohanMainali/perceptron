@@ -48,254 +48,51 @@ function CarSVG({ color, opacity = 1 }: { color: string; opacity?: number }) {
   )
 }
 
-// ── 01 · Conversational Annotation ────────────────────────────────────────────
-function ConversationalAnimation({ color }: { color: string }) {
-  const [step, setStep] = useState(0)
-  const [typing, setTyping] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-    async function run() {
-      while (!cancelled) {
-        setStep(0); setTyping(false)
-        await delay(600); if (cancelled) return
-        setStep(1)
-        await delay(1400); if (cancelled) return
-        setTyping(true)
-        await delay(900); if (cancelled) return
-        setTyping(false); setStep(2)
-        await delay(600); if (cancelled) return
-        setStep(3)
-        await delay(3500)
-      }
-    }
-    run()
-    return () => { cancelled = true }
-  }, [])
-
-  const detectedObjs = [
-    { Icon: Car,  label: "Car"   },
-    { Icon: Car,  label: "Car"   },
-    { Icon: Truck, label: "Truck" },
-  ]
-
+// ── 01 · Conversational Annotation (video) ────────────────────────────────────
+function Feature01Video(_: { color: string }) {
   return (
-    <div className="w-full h-full flex bg-slate-950">
-      {/* Left — scene with detected boxes */}
-      <div className="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
-        {/* Street scene lines */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-slate-700/30" />
-        <div className="absolute bottom-[33%] left-6 w-5 h-12 bg-slate-600/40 rounded-t" />
-        <div className="absolute bottom-[33%] left-18 w-4 h-8 bg-slate-600/40 rounded-t" />
-        <div className="absolute bottom-[33%] right-10 w-7 h-14 bg-slate-600/40 rounded-t" />
-        <div className="absolute bottom-[33%] right-28 w-3 h-6 bg-slate-600/40 rounded-t" />
-
-        {/* Object boxes */}
-        {[
-          { left: "5%",  top: "22%", w: "26%", h: "50%", Icon: Car,   label: "Car"   },
-          { left: "37%", top: "28%", w: "22%", h: "44%", Icon: Car,   label: "Car"   },
-          { left: "65%", top: "20%", w: "28%", h: "52%", Icon: Truck, label: "Truck" },
-        ].map((obj, i) => (
-          <div key={i} className="absolute" style={{ left: obj.left, top: obj.top, width: obj.w, height: obj.h }}>
-            <div className="w-full h-full rounded-lg overflow-hidden">
-              <ObjCard Icon={obj.Icon} label={obj.label} color="#64748b" size={22} />
-            </div>
-            {step >= 3 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.18, duration: 0.3 }}
-                className="absolute inset-0 border-2 rounded-lg"
-                style={{ borderColor: color, background: `${color}15` }}
-              >
-                <motion.div
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  transition={{ delay: i * 0.18 + 0.2 }}
-                  className="absolute -top-6 left-0 px-2 py-0.5 text-[10px] font-bold text-white rounded-sm whitespace-nowrap"
-                  style={{ background: color }}
-                >
-                  {obj.label}
-                </motion.div>
-              </motion.div>
-            )}
-          </div>
-        ))}
-
-        <AnimatePresence>
-          {step >= 3 && (
-            <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-              className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold text-white"
-              style={{ background: color }}>
-              3 objects segmented
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Right — chat */}
-      <div className="w-52 flex flex-col border-l border-slate-800 bg-slate-950">
-        <div className="px-4 py-3 border-b border-slate-800 flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: color }}>A</div>
-          <div>
-            <div className="text-xs font-semibold text-slate-200">AUTA</div>
-            <div className="flex items-center gap-1 mt-0.5">
-              <motion.div className="w-1.5 h-1.5 rounded-full" style={{ background: color }}
-                animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
-              <span className="text-[9px] text-slate-500">Online</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 p-3 space-y-2.5 overflow-hidden">
-          <AnimatePresence>
-            {step >= 1 && (
-              <motion.div key="u1" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex justify-end">
-                <div className="px-3 py-2 rounded-2xl rounded-br-sm bg-slate-700 text-slate-100 text-[11px] leading-snug">
-                  Segment all vehicles
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence>
-            {typing && (
-              <motion.div key="t" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex justify-start">
-                <div className="px-3 py-2 rounded-2xl rounded-bl-sm border border-slate-800 bg-slate-900 flex gap-1 items-center">
-                  {[0, 1, 2].map(i => (
-                    <motion.div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: color }}
-                      animate={{ y: [0, -4, 0] }} transition={{ duration: 0.45, repeat: Infinity, delay: i * 0.12 }} />
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence>
-            {step >= 2 && (
-              <motion.div key="a1" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
-                <div className="px-3 py-2 rounded-2xl rounded-bl-sm border border-slate-800 bg-slate-900 text-slate-300 text-[11px] leading-snug">
-                  Task created ✓
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence>
-            {step >= 3 && (
-              <motion.div key="a2" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
-                <div className="px-3 py-2 rounded-2xl rounded-bl-sm border border-slate-800 bg-slate-900 text-slate-300 text-[11px] leading-snug">
-                  3 vehicles segmented
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
+    <video
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      style={{ width: "100%", height: "auto", display: "block" }}
+    >
+      <source src="/videos/feature-1.mp4" type="video/mp4" />
+    </video>
   )
 }
 
-// ── 02 · AI Dataset Planner ────────────────────────────────────────────────────
-function DatasetPlannerAnimation({ color }: { color: string }) {
-  const [phase, setPhase] = useState(0)
-
-  useEffect(() => {
-    const iv = setInterval(() => setPhase(p => (p + 1) % 5), 1200)
-    return () => clearInterval(iv)
-  }, [])
-
-  const inputIcons = [Car, User, Bike]
-  const rows = [
-    { label: "Annotation type", value: "Object Detection" },
-    { label: "Classes",         value: "Car · Person · Bike" },
-    { label: "Format",          value: "YOLO v8"             },
-    { label: "Images",          value: "1,247"               },
-  ]
-
+// ── 02 · Agentic AI Workflow (video) ──────────────────────────────────────────
+function Feature02Video(_: { color: string }) {
   return (
-    <div className="w-full h-full flex items-center justify-center p-8 bg-white">
-      <div className="w-full max-w-2xl flex items-center gap-5">
+    <video
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      style={{ width: "100%", height: "auto", display: "block" }}
+    >
+      <source src="/videos/feature-2.mp4" type="video/mp4" />
+    </video>
+  )
+}
 
-        {/* Input: icon cards stacked */}
-        <div className="flex-1">
-          <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">Raw images</div>
-          <div className="relative" style={{ height: 130 }}>
-            {[2, 1, 0].map(i => {
-              const Icon = inputIcons[i]
-              return (
-                <motion.div
-                  key={i}
-                  className="absolute inset-x-0 rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white"
-                  style={{ top: i * 7, height: `calc(100% - ${i * 14}px)`, zIndex: 3 - i }}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                >
-                  <div className="h-full flex flex-col">
-                    <div className="flex-1 flex items-center justify-center bg-slate-50">
-                      <Icon size={32} style={{ color }} strokeWidth={1.2} />
-                    </div>
-                    <div className="px-2 py-1 flex gap-1 border-t border-slate-100">
-                      <div className="h-1.5 bg-slate-200 rounded flex-1" />
-                      <div className="h-1.5 bg-slate-200 rounded w-1/3" />
-                    </div>
-                  </div>
-                </motion.div>
-              )
-            })}
-          </div>
-          <div className="mt-2 text-[10px] text-slate-400 text-center">1,247 images</div>
-        </div>
-
-        {/* Arrow */}
-        <div className="flex-shrink-0">
-          <svg width="32" height="16" viewBox="0 0 32 16" fill="none">
-            <motion.path d="M0 8 H22 M16 2 L22 8 L16 14" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5 }} />
-          </svg>
-        </div>
-
-        {/* AI hub */}
-        <div className="flex-shrink-0 flex flex-col items-center gap-2">
-          <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">AI</div>
-          <motion.div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
-            style={{ background: `linear-gradient(135deg, ${color}20, ${color}40)`, border: `2px solid ${color}50` }}
-            animate={{ boxShadow: [`0 0 16px ${color}20`, `0 0 32px ${color}40`, `0 0 16px ${color}20`] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <motion.svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"
-              animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }}>
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </motion.svg>
-          </motion.div>
-          <div className="flex gap-1">
-            {[0, 1, 2].map(i => (
-              <motion.div key={i} className="w-1 h-1 rounded-full" style={{ background: color }}
-                animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.1, repeat: Infinity, delay: i * 0.28 }} />
-            ))}
-          </div>
-        </div>
-
-        {/* Arrow */}
-        <div className="flex-shrink-0">
-          <svg width="32" height="16" viewBox="0 0 32 16" fill="none">
-            <motion.path d="M0 8 H22 M16 2 L22 8 L16 14" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: 0.4 }} />
-          </svg>
-        </div>
-
-        {/* Schema output */}
-        <div className="flex-1">
-          <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">Schema</div>
-          <div className="rounded-xl border border-slate-200 bg-white shadow-md overflow-hidden">
-            {rows.map((r, i) => (
-              <motion.div key={r.label} animate={{ opacity: phase > i ? 1 : 0.15 }} transition={{ duration: 0.3 }}
-                className="flex items-center justify-between px-3 py-2 border-b border-slate-100 last:border-0">
-                <span className="text-[10px] text-slate-400">{r.label}</span>
-                <span className="text-[10px] font-semibold text-slate-700">{r.value}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+// ── 03 · Exemplar Box Learning (video) ────────────────────────────────────────
+function Feature03Video(_: { color: string }) {
+  return (
+    <video
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      style={{ width: "100%", height: "auto", display: "block" }}
+    >
+      <source src="/videos/feature-exemplar.mp4" type="video/mp4" />
+    </video>
   )
 }
 
@@ -804,13 +601,14 @@ function ExportAnimation({ color }: { color: string }) {
 
 // ── Export mapping ─────────────────────────────────────────────────────────────
 const featureAnimations: Record<string, React.FC<{ color: string }>> = {
-  "01": ConversationalAnimation,
-  "02": DatasetPlannerAnimation,
-  "03": PolygonSegmentationAnimation,
-  "04": ObjectDetectionAnimation,
-  "05": VideoAnnotationAnimation,
-  "06": ZeroShotAnimation,
-  "07": ExportAnimation,
+  "01": Feature01Video,
+  "02": Feature02Video,
+  "03": Feature03Video,
+  "04": PolygonSegmentationAnimation,
+  "05": ObjectDetectionAnimation,
+  "06": VideoAnnotationAnimation,
+  "07": ZeroShotAnimation,
+  "08": ExportAnimation,
 }
 
 export function FeatureAnimation({ featureId, color }: { featureId: string; color: string }) {
