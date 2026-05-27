@@ -142,8 +142,8 @@ export default function Footer() {
           }}
         >
           <span>© {year} Perceptron AI Labs Inc.</span>
-          <div style={{ display: "flex", gap: "18px" }}>
-            {[{ label: "Privacy Policy", href: "/privacy" }, { label: "Terms", href: "/terms" }].map(l => (
+          <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+            {[{ label: "Privacy Policy", href: "/privacy" }, { label: "Terms", href: "/terms" } /*, { label: "Acceptable Use", href: "/acceptable-use" }, { label: "Copyright/DMCA", href: "/copyright" }*/].map(l => (
               <Link
                 key={l.label}
                 href={l.href}
